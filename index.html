@@ -3476,7 +3476,9 @@
     function renderRaceCard(race) {
       const wear = tireWearLabel(race.tire);
       const resultCls = race.result === 'win' ? 'race-win' : race.result === 'loss' ? 'race-loss' : 'race-pending';
-      const phaseLab = PHASE_TYPES.find(p => p.id === race.phaseType)?.label || '';
+      const phase = PHASE_TYPES.find(p => p.id === race.phaseType) || null;
+      const phaseLab = phase?.label || '';
+      const phaseColor = phase?.color || '#a1a1aa';
       const showDecisions = !race.result;
       const i = race.n - 1;
 
@@ -3493,7 +3495,7 @@
           ${trackOutlineImg(race.n)}
           <div class="race-card-head flex justify-between items-start gap-3 mb-3">
             <div class="min-w-0">
-              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="text-zinc-400 font-normal text-[11px]">· ${phaseLab}</span>` : ''}</div>
+              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="font-normal text-[12px]" style="color:${phaseColor}">· ${phaseLab}</span>` : ''}</div>
               <div class="font-display text-lg text-white leading-tight mt-0.5 flex items-center gap-0">
                 ${flagImg(race.flag)}<span>${race.name}</span>
               </div>
@@ -3580,7 +3582,7 @@
           <div class="flex justify-between"><span>Spike / Hole</span><span class="text-zinc-200">${eraSpikeHole(era).spike.label} / ${eraSpikeHole(era).hole.label}</span></div>
           <div class="flex justify-between"><span>Line-up</span><span class="text-zinc-200">${state.primary.name} / ${state.teammate.name}</span></div>
           <div class="flex justify-between"><span>Lead</span><span class="text-zinc-200">${state.principal.name}</span></div>
-          <div class="flex justify-between"><span>Season arc</span><span class="text-zinc-200">${scheduleSummary()}</span></div>
+          <div class="flex justify-between gap-2"><span>Season arc</span><span class="text-right font-medium">${scheduleSummaryHtml()}</span></div>
           <div class="flex justify-between"><span>Season redos</span><span class="text-zinc-200">${state.redosLeft} remaining of ${SEASON_REDOS} · taxed</span></div>
         </div>
 
