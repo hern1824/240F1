@@ -243,13 +243,14 @@
     }
     .lb-chip {
       cursor: pointer;
-      transition: border-color 0.12s, color 0.12s, background 0.12s;
+      border: none;
+      background: transparent;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      transition: color 0.12s, opacity 0.12s;
     }
-    .lb-chip:hover {
-      border-color: #e4e4e7 !important;
-      color: #fafafa !important;
-      background: #18181b;
-    }
+    .lb-chip:hover { opacity: 0.85; }
     #lb-modal.hidden { display: none; }
     #lb-modal { display: flex; }
     .fade-in { animation: fadeIn 0.2s ease-out; }
@@ -3067,9 +3068,8 @@
             <span class="px-1.5 py-0.5 border" style="color:#D4AF37;border-color:#D4AF37">God Tier ×${tc.god}</span>
             <span class="px-1.5 py-0.5 border border-zinc-400 text-zinc-300">Strong ×${tc.strong}</span>
             <span class="px-1.5 py-0.5 border" style="color:#CD7F32;border-color:#CD7F32">Underdog ×${tc.underdog} · Folklore</span>
-            <button type="button" onclick="openLeaderboard()" class="lb-chip px-1.5 py-0.5 border border-zinc-500 text-zinc-300"
+            <button type="button" onclick="openLeaderboard()" class="lb-chip ml-auto px-0 py-0.5 text-[#3B82F6] hover:text-[#60A5FA]"
               title="Season leaderboard">Leaderboard</button>
-            ${helpBtn('leaderboard')}
           </div>
           <div class="mt-3">
             <div class="flex items-center gap-2 mb-2">
