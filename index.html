@@ -3934,8 +3934,7 @@
 
       ctx.fillStyle = zeroRedos ? gold : '#A1A1AA';
       ctx.font = `500 21px ${body}`;
-      let metaLine = `${state.principal.name}  ·  Redos ${redosUsed}/${SEASON_REDOS}`;
-      if (zeroRedos) metaLine = `${state.principal.name}  ·  Redos 0/${SEASON_REDOS}  ·  CLEAN SHEET`;
+      let metaLine = `${state.principal.name}  ·  Redos ${redosUsed}/${SEASON_REDOS}${zeroRedos ? '!' : ''}`;
       const sched = scheduleSummary();
       if (ctx.measureText(`${metaLine}  ·  ${sched}`).width < W - pad * 2) metaLine += `  ·  ${sched}`;
       ctx.fillText(metaLine, pad, 612);
@@ -4254,7 +4253,7 @@
         return {
           key: 'perfect',
           cardClass: 'lb-perfect',
-          badge: '24–0 PERFECT',
+          badge: '24–0 PERFECT!',
           badgeColor: '#F5D76E',
           blurb: 'Clean sweep · folklore territory',
         };
@@ -4263,13 +4262,13 @@
         return {
           key: 'elite',
           cardClass: 'lb-elite',
-          badge: w >= 22 ? 'ELITE SWEEP' : 'DOMINANT',
+          badge: w >= 22 ? 'ELITE SWEEP!' : 'DOMINANT!',
           badgeColor: '#60A5FA',
           blurb: w >= 22 ? 'Near-perfect campaign' : 'Championship iron · 20+ wins',
         };
       }
       if (w >= 14) {
-        return { key: 'solid', cardClass: '', badge: 'RACE WINNING', badgeColor: '#A1A1AA', blurb: '' };
+        return { key: 'solid', cardClass: '', badge: 'RACE-WINNING!', badgeColor: '#A1A1AA', blurb: '' };
       }
       return { key: 'run', cardClass: '', badge: '', badgeColor: '#71717a', blurb: '' };
     }
@@ -4298,7 +4297,7 @@
         const rare = lbRarity(r);
         const redos = r.redos_used ?? 0;
         const redoCls = redos === 0 ? 'lb-redo-gold' : 'lb-redo-muted';
-        const redoTxt = redos === 0 ? 'redos 0' : `redos ${redos}`;
+        const redoTxt = redos === 0 ? `Redos 0/${SEASON_REDOS}!` : `Redos ${redos}/${SEASON_REDOS}`;
         const when = lbFormatWhen(r.created_at);
         const lineup = [r.primary_driver, r.teammate].filter(Boolean).join(' / ') || '—';
         const principal = r.principal || '';
