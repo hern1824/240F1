@@ -2757,12 +2757,8 @@
       return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
 
-    // Wikimedia only allows fixed thumb widths; 128px returns 400. Prefer 120px.
     function personPhotoSrc(name) {
-      let src = PERSON_PHOTOS[name] || '';
-      if (!src) return '';
-      src = src.replace(/\/\d+px-/, '/120px-');
-      return src;
+      return PERSON_PHOTOS[name] || '';
     }
 
     function personAvatarHtml(name) {
