@@ -3833,7 +3833,7 @@
       ctx.fillRect(0, 0, W, 8);
       ctx.fillRect(0, 0, 8, H);
 
-      // ── Race map: white wins / dim white losses ──
+      // ── Race map: green wins · red losses ──
       const mapLabel = 'YOUR RACE MAP';
       ctx.font = `600 18px ${display}`;
       ctx.fillStyle = '#FAFAFA';
@@ -3851,12 +3851,12 @@
       state.races.forEach((r, i) => {
         const x = mapX + i * (cell + mapGap);
         const win = r.result === 'win';
-        ctx.fillStyle = win ? 'rgba(250,250,250,0.22)' : 'rgba(250,250,250,0.06)';
+        ctx.fillStyle = win ? 'rgba(16,185,129,0.42)' : 'rgba(225,6,0,0.42)';
         ctx.fillRect(x, mapY, cell, cell);
-        ctx.strokeStyle = win ? '#FAFAFA' : 'rgba(250,250,250,0.35)';
+        ctx.strokeStyle = win ? '#34D399' : '#E10600';
         ctx.lineWidth = 1.5;
         ctx.strokeRect(x + 0.5, mapY + 0.5, cell - 1, cell - 1);
-        ctx.fillStyle = win ? '#FAFAFA' : 'rgba(250,250,250,0.45)';
+        ctx.fillStyle = win ? '#6EE7B7' : '#FCA5A5';
         ctx.font = `600 ${Math.max(11, Math.floor(cell * 0.45))}px ${display}`;
         ctx.textAlign = 'center';
         ctx.fillText(String(r.n), x + cell / 2, mapY + cell / 2 + Math.floor(cell * 0.18));
