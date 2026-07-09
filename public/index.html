@@ -252,10 +252,19 @@
     }
     .lb-chip:hover { opacity: 0.85; }
     #lb-modal.hidden { display: none; }
-    #lb-modal { display: flex; }
+    #lb-modal {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: max(12px, env(safe-area-inset-top, 0px)) 12px max(12px, env(safe-area-inset-bottom, 0px));
+      box-sizing: border-box;
+    }
     .lb-sheet {
-      max-height: min(94vh, 900px);
-      height: min(92vh, 860px);
+      max-height: min(88vh, 820px);
+      height: min(88vh, 820px);
+      width: 100%;
+      max-width: 28rem;
+      margin: 0 auto;
     }
     .lb-tabs {
       display: flex;
@@ -561,9 +570,9 @@
   </div>
 
   <!-- Leaderboard -->
-  <div id="lb-modal" class="hidden fixed inset-0 z-50 items-end sm:items-center justify-center p-3 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+  <div id="lb-modal" class="hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-labelledby="lb-title">
     <div class="absolute inset-0 bg-black/80" onclick="closeLeaderboard()"></div>
-    <div class="relative w-full max-w-md lb-sheet flex flex-col bg-zinc-900 border border-zinc-700 shadow-2xl">
+    <div class="relative lb-sheet flex flex-col bg-zinc-900 border border-zinc-700 shadow-2xl">
       <div class="flex items-start justify-between gap-3 px-5 py-4 border-b border-zinc-800 shrink-0">
         <div>
           <div class="text-[10px] tracking-widest uppercase text-f1-red font-display mb-1">Records</div>
@@ -3603,13 +3612,13 @@
       const perfect = state.wins === 24;
       const folklore = perfect && state.era?.tier === 'underdog';
       // Labels / thresholds used on debrief + share card
-      if (folklore) return { label: 'FOLKLORE 24–0', color: '#CD7F32', sub: 'Underdog · Same rules · No gifts' };
-      if (perfect) return { label: 'PERFECT SEASON', color: '#34D399', sub: 'Clean sweep · 24 wins' };
-      if (state.wins >= 22) return { label: 'ELITE SWEEP', color: '#60A5FA', sub: 'Near-perfect package' };
-      if (state.wins >= 20) return { label: 'DOMINANT CAMPAIGN', color: '#93C5FD', sub: 'Championship iron' };
-      if (state.wins >= 14) return { label: 'RACE-WINNING YEAR', color: '#A1A1AA', sub: 'Competitive package' };
-      if (state.wins >= 8) return { label: 'COMPETITIVE SEASON', color: '#A1A1AA', sub: 'Windows of pace' };
-      return { label: 'SEASON COMPLETE', color: '#A1A1AA', sub: 'Classification locked' };
+      if (folklore) return { label: 'FOLKLORE 24–0!', color: '#CD7F32', sub: 'Underdog · Same rules · No gifts' };
+      if (perfect) return { label: 'PERFECT SEASON!', color: '#34D399', sub: 'Clean sweep · 24 wins' };
+      if (state.wins >= 22) return { label: 'ELITE SWEEP!', color: '#60A5FA', sub: 'Near-perfect package' };
+      if (state.wins >= 20) return { label: 'DOMINANT CAMPAIGN!', color: '#93C5FD', sub: 'Championship iron' };
+      if (state.wins >= 14) return { label: 'RACE-WINNING YEAR!', color: '#A1A1AA', sub: 'Competitive package' };
+      if (state.wins >= 8) return { label: 'COMPETITIVE SEASON!', color: '#A1A1AA', sub: 'Windows of pace' };
+      return { label: 'SEASON COMPLETE!', color: '#A1A1AA', sub: 'Classification locked' };
     }
 
     async function goDebrief() {
@@ -3645,7 +3654,6 @@
           <div class="bg-zinc-800 p-8 text-center ${boxExtra}">
             <div class="label-gold mb-3" style="font-size:11px">Final Record</div>
             ${perfect ? `<div class="text-[11px] tracking-[0.2em] uppercase font-display mb-2" style="color:#F5D76E">★ Perfect season ★</div>` : ''}
-            ${!perfect && zeroRedos ? `<div class="text-[11px] tracking-[0.2em] uppercase font-display mb-2" style="color:#D4AF37">★ Zero redos ★</div>` : ''}
             ${elite && !zeroRedos ? `<div class="text-[11px] tracking-[0.2em] uppercase font-display mb-2 text-blue-400">Dominant campaign · 20+</div>` : ''}
             <div class="font-display tracking-tight ${recCls}" style="font-size:3.85rem;line-height:1">
               <span>${state.wins}</span>
@@ -3656,11 +3664,11 @@
               ${badge.label}
             </div>
             <div class="mt-2 font-display tracking-wide" style="color:${badge.color};font-size:15px;opacity:0.95">${badge.sub}</div>
-            <div class="mt-2.5" style="font-size:13px;color:#a1a1aa">${state.era.team} ${state.era.era} · <span style="color: ${tierInfo(state.era).color}">${tierInfo(state.era).label}</span> · <span class="${zeroRedos ? 'lb-redo-gold' : ''}" style="${zeroRedos ? 'color:#D4AF37' : ''}">Redos used ${redosUsed}/${SEASON_REDOS}</span></div>
+            <div class="mt-2.5 font-display tracking-wide" style="font-size:13px;${zeroRedos ? 'color:#D4AF37' : 'color:#a1a1aa'}">Redos ${redosUsed}/${SEASON_REDOS}${zeroRedos ? '!' : ''}</div>
+            <div style="font-size:13px;color:#a1a1aa;margin-top:6px">${state.era.team} ${state.era.era} · <span style="color: ${tierInfo(state.era).color}">${tierInfo(state.era).label}</span></div>
             <div style="font-size:13px;color:#71717a;margin-top:4px">Schedule: ${scheduleSummary()}</div>
             ${perfect && state.era.tier === 'underdog' ? `<div class="mt-3 font-display tracking-widest uppercase" style="color: #CD7F32;font-size:12px">Folklore confirmed · No gifts · Same rules</div>`: ''}
             ${perfect && state.era.tier !== 'underdog' ? `<div class="mt-3 font-display tracking-widest uppercase" style="color:#F5D76E;font-size:12px">24–0 locked · Share it</div>` : ''}
-            ${!perfect && zeroRedos ? `<div class="mt-3 font-display tracking-widest uppercase" style="color:#D4AF37;font-size:12px">Clean sheet · no redos spent</div>` : ''}
           </div>
 
           <button onclick="openShare()"
@@ -3899,11 +3907,7 @@
       ctx.font = `700 141px ${display}`;
       ctx.fillText(`${state.wins}–${state.losses}`, W / 2, 360);
 
-      if (zeroRedos && !perfect) {
-        ctx.fillStyle = gold;
-        ctx.font = `600 18px ${display}`;
-        ctx.fillText('★ ZERO REDOS ★', W / 2, 300);
-      }
+
 
       // Main classification label (was 34 → 38)
       ctx.fillStyle = goldAccent ? gold : (badge.color || brandOnDark);
