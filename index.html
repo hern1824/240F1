@@ -209,7 +209,7 @@
       font-size: 9px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #a1a1aa;
+      color: #fafafa;
       font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 600;
     }
@@ -3665,13 +3665,13 @@
         ${header('Season Classification')}
         <section class="space-y-5 fade-in">
           <div class="bg-zinc-800 p-8 text-center ${boxExtra}">
-            <div class="label-gold mb-3" style="font-size:15px">Final Record</div>
+            <div class="font-display tracking-widest uppercase text-white mb-3" style="font-size:15px">Final Record</div>
             ${perfect ? `<div class="tracking-[0.2em] uppercase font-display mb-2" style="color:#F5D76E;font-size:15px">★ Perfect season ★</div>` : ''}
             ${elite ? `<div class="tracking-[0.2em] uppercase font-display mb-2 text-blue-400" style="font-size:15px">Dominant campaign · 20+</div>` : ''}
             <div class="font-display tracking-tight ${recCls}" style="font-size:3.85rem;line-height:1">
               <span>${state.wins}</span>
               <span class="text-zinc-600">–</span>
-              <span class="${state.losses ? (perfect || elite ? 'opacity-80' : 'text-f1-red') : 'text-zinc-600'}">${state.losses}</span>
+              <span class="text-f1-red">${state.losses}</span>
             </div>
             <div class="mt-3 font-display tracking-widest uppercase" style="color: ${badge.color};font-size:1.15rem">
               ${badge.label}
@@ -3707,7 +3707,7 @@
           ` : ''}
 
           <div>
-            <div class="label-gold mb-2">Debrief</div>
+            <div class="font-display tracking-widest uppercase text-white mb-2" style="font-size:10px">Debrief</div>
             <div class="space-y-2">
               ${state.debrief.map(o => `
                 <div class="bg-zinc-800 p-4 text-sm text-zinc-300 leading-relaxed">${o}</div>
@@ -3716,7 +3716,7 @@
           </div>
 
           <div>
-            <div class="label-gold mb-2">Race Map</div>
+            <div class="font-display tracking-widest uppercase text-white mb-2" style="font-size:10px">Race Map</div>
             <div class="grid grid-cols-8 gap-1.5">
               ${state.races.map(r => `
                 <div class="aspect-square flex items-center justify-center text-[10px] font-display ${
@@ -3819,7 +3819,6 @@
       const badge = resultBadgeMeta();
       const perfect = state.wins === 24;
       const brand = era.color || '#E10600';
-      const brandOnDark = brandIsLight(brand) ? '#E4E4E7' : brand; // readable on black
       const redosUsed = SEASON_REDOS - state.redosLeft;
       const zeroRedos = redosUsed === 0;
       const gold = '#D4AF37';
@@ -3912,17 +3911,34 @@
       ctx.fillStyle = chipColor;
       ctx.fillText(chipLabel, chipX + 18, chipY + 29);
 
-      // ── Record (white; gold only for 24–0 score) ──
+      // ── Record: wins white/gold · dash muted · losses red ──
       ctx.textAlign = 'center';
-      ctx.fillStyle = perfect ? '#F5D76E' : '#FAFAFA';
       ctx.font = `700 141px ${display}`;
-      ctx.fillText(`${state.wins}–${state.losses}`, W / 2, 355);
+      const winStr = String(state.wins);
+      const dashStr = '–';
+      const lossStr = String(state.losses);
+      const winW = ctx.measureText(winStr).width;
+      const dashW = ctx.measureText(dashStr).width;
+      const lossW = ctx.measureText(lossStr).width;
+      const recTotal = winW + dashW + lossW;
+      let recX = W / 2 - recTotal / 2;
+      const recY = 355;
+      ctx.textAlign = 'left';
+      ctx.fillStyle = perfect ? '#F5D76E' : '#FAFAFA';
+      ctx.fillText(winStr, recX, recY);
+      recX += winW;
+      ctx.fillStyle = '#52525B';
+      ctx.fillText(dashStr, recX, recY);
+      recX += dashW;
+      ctx.fillStyle = f1Red;
+      ctx.fillText(lossStr, recX, recY);
 
+      ctx.textAlign = 'center';
       ctx.fillStyle = badge.color || '#FAFAFA';
       ctx.font = `600 40px ${display}`;
       ctx.fillText(badge.label, W / 2, 415);
 
-      ctx.fillStyle = '#C4C4C8';
+      ctx.fillStyle = '#FAFAFA';
       ctx.font = `600 30px ${body}`;
       ctx.fillText(badge.sub, W / 2, 456);
 
@@ -3955,8 +3971,8 @@
         ctx.fillText(`  ·  ${sched}`, pad + principalW + redoW, 612);
       }
 
-      // ── Debrief: 3 rows ──
-      ctx.fillStyle = brandOnDark;
+      // ── Debrief: 3 rows (label white) ──
+      ctx.fillStyle = '#FAFAFA';
       ctx.font = `600 22px ${display}`;
       ctx.fillText('DEBRIEF', pad, 650);
 
@@ -3965,27 +3981,40 @@
         : ['Season classification locked.'];
       while (items.length < 3) items.push('');
 
-      const rowH = 66;
+      const rowH = 60;
       const rowTop = 666;
       const rowW = W - pad * 2;
       items.forEach((text, i) => {
         if (!text) return;
-        const y = rowTop + i * (rowH + 6);
+        const y = rowTop + i * (rowH + 5);
         ctx.fillStyle = 'rgba(24,24,27,0.92)';
         ctx.fillRect(pad, y, rowW, rowH);
         ctx.fillStyle = brand;
         ctx.fillRect(pad, y, 4, rowH);
 
         ctx.fillStyle = '#D4D4D8';
-        ctx.font = `400 24px ${body}`;
+        ctx.font = `400 22px ${body}`;
         const lines = wrapCanvasText(ctx, text, rowW - 32).slice(0, 2);
         lines.forEach((ln, li) => {
-          ctx.fillText(ln, pad + 18, y + 28 + li * 28);
+          ctx.fillText(ln, pad + 18, y + 26 + li * 26);
         });
       });
 
-      // ── Footer: CTA left, URL center, logo right ──
+      // ── URL INSIDE the card (content zone, not footer chrome) ──
       const siteUrl = String(_cfg.siteUrl || 'https://240-f1.vercel.app').replace(/\/+$/, '');
+      const urlDisplay = siteUrl.replace(/^https?:\/\//, '');
+      const urlY = 900;
+      ctx.fillStyle = 'rgba(24,24,27,0.95)';
+      ctx.fillRect(pad, urlY - 28, rowW, 48);
+      ctx.strokeStyle = 'rgba(250,250,250,0.22)';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(pad + 0.5, urlY - 27.5, rowW - 1, 47);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FAFAFA';
+      ctx.font = `700 28px ${display}`;
+      ctx.fillText(urlDisplay, W / 2, urlY + 6);
+
+      // ── Footer strip: CTA left · logo right (URL already in body above) ──
       const footH = 88;
       ctx.fillStyle = '#18181b';
       ctx.fillRect(0, H - footH, W, footH);
@@ -4000,12 +4029,6 @@
       ctx.fillStyle = '#A1A1AA';
       ctx.font = `500 22px ${body}`;
       ctx.fillText('Spin an era · Draft the line-up · Hunt the perfect season', pad, H - 14);
-
-      // URL bottom-center of card
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#FAFAFA';
-      ctx.font = `600 24px ${display}`;
-      ctx.fillText(siteUrl.replace(/^https?:\/\//, ''), W / 2, H - 18);
 
       ctx.textAlign = 'right';
       ctx.font = `700 30px ${display}`;
