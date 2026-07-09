@@ -3984,9 +3984,14 @@
       ctx.fillText('Spin an era · Draft the line-up · Hunt the perfect season', pad, H - 12);
 
       ctx.textAlign = 'right';
-      ctx.fillStyle = brandOnDark;
       ctx.font = `700 30px ${display}`;
-      ctx.fillText('24-0 F1', right, H - 28);
+      const footMark = '24-0';
+      const footF1 = ' F1';
+      const footF1W = ctx.measureText(footF1).width;
+      ctx.fillStyle = f1Red;
+      ctx.fillText(footF1, right, H - 28);
+      ctx.fillStyle = '#FAFAFA';
+      ctx.fillText(footMark, right - footF1W, H - 28);
       ctx.textAlign = 'left';
     }
 
