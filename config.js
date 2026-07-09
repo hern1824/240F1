@@ -11,7 +11,10 @@
  */
 window.SITE_CONFIG = {
   siteName: '24-0 F1',
-  siteUrl: 'https://240-f1.vercel.app/', // e.g. https://240f1.vercel.app — set after first deploy for absolute OG/share links
+  // After a public Production deploy, set this to the domain under Project → Settings → Domains
+  // (usually https://240-f1.vercel.app). Do NOT use the long *-hernkim-7652s-projects* URL if
+  // Deployment Protection / SSO login is on — that is not the public game.
+  siteUrl: 'https://240-f1.vercel.app',
   tagline: 'Spin an era. Draft the line-up. Hunt 24–0.',
 
   // Google Analytics 4 (optional) — Measurement ID G-XXXXXXXX
