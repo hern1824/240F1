@@ -4233,23 +4233,25 @@
       ctx.font = `600 22px ${display}`;
       ctx.fillText('DEBRIEF', pad, 650);
 
-      const items = (state.debrief && state.debrief.length)
+      const rawItems = (state.debrief && state.debrief.length)
         ? state.debrief.slice(0, 3)
-        : ['Season classification locked.'];
-      while (items.length < 3) items.push('');
+        : [{ text: 'Season classification locked.', tone: 'neutral' }];
+      while (rawItems.length < 3) rawItems.push({ text: '', tone: 'neutral' });
 
       const rowH = 60;
       const rowTop = 666;
       const rowW = W - pad * 2;
-      items.forEach((text, i) => {
+      rawItems.forEach((item, i) => {
+        const text = debriefText(item);
         if (!text) return;
+        const tone = debriefTone(item);
         const y = rowTop + i * (rowH + 5);
         ctx.fillStyle = 'rgba(24,24,27,0.92)';
         ctx.fillRect(pad, y, rowW, rowH);
         ctx.fillStyle = brand;
         ctx.fillRect(pad, y, 4, rowH);
 
-        ctx.fillStyle = '#D4D4D8';
+        ctx.fillStyle = tone === 'gold' ? '#D4AF37' : tone === 'red' ? '#E10600' : '#D4D4D8';
         ctx.font = `400 22px ${body}`;
         const lines = wrapCanvasText(ctx, text, rowW - 32).slice(0, 2);
         lines.forEach((ln, li) => {
