@@ -19,7 +19,7 @@ window.SITE_CONFIG = {
   siteName: '24-0: Perfect Season',
   // After a public Production deploy, set this to the domain under Project → Settings → Domains.
   // Keep the current Vercel URL until a rename/custom domain is live.
-  siteUrl: 'https://240-f1.vercel.app',
+  siteUrl: 'https://24-0ps.vercel.app',
   tagline: 'Spin an era. Draft the line-up. Hunt 24–0.',
 
   // Google Analytics 4 — paste Measurement ID from analytics.google.com (G-XXXXXXXX)
