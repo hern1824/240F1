@@ -11,7 +11,7 @@
  */
 window.SITE_CONFIG = {
   siteName: '24-0 F1',
-  siteUrl: '', // e.g. https://240f1.vercel.app — set after first deploy for absolute OG/share links
+  siteUrl: 'https://240-f1.vercel.app/', // e.g. https://240f1.vercel.app — set after first deploy for absolute OG/share links
   tagline: 'Spin an era. Draft the line-up. Hunt 24–0.',
 
   // Google Analytics 4 (optional) — Measurement ID G-XXXXXXXX
