@@ -1,11 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#09090b"/>
-  <rect x="0" y="0" width="1200" height="12" fill="#E10600"/>
-  <rect x="0" y="0" width="16" height="630" fill="#E10600"/>
-  <text x="80" y="160" fill="#E10600" font-family="system-ui,sans-serif" font-size="28" font-weight="700" letter-spacing="6">F1 ROSTER PROTOCOL</text>
-  <text x="80" y="280" fill="#fafafa" font-family="system-ui,sans-serif" font-size="120" font-weight="800">24-0</text>
-  <text x="480" y="280" fill="#E10600" font-family="system-ui,sans-serif" font-size="120" font-weight="800"> F1</text>
-  <text x="80" y="360" fill="#a1a1aa" font-family="system-ui,sans-serif" font-size="36">Perfect Season Builder</text>
-  <text x="80" y="480" fill="#d4d4d8" font-family="system-ui,sans-serif" font-size="28">Spin an era · Draft the line-up · Hunt 24–0</text>
-  <text x="80" y="560" fill="#71717a" font-family="system-ui,sans-serif" font-size="22">Unofficial fan game · Not affiliated with F1 / FIA</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#141418"/>
+      <stop offset="1" stop-color="#09090b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- checkered motif top-right -->
+  <g fill="#161616">
+    <!-- generated grid -->
+    <rect x="760" y="40" width="38" height="38"/><rect x="836" y="40" width="38" height="38"/><rect x="912" y="40" width="38" height="38"/><rect x="988" y="40" width="38" height="38"/><rect x="1064" y="40" width="38" height="38"/><rect x="1140" y="40" width="38" height="38"/>
+    <rect x="798" y="78" width="38" height="38"/><rect x="874" y="78" width="38" height="38"/><rect x="950" y="78" width="38" height="38"/><rect x="1026" y="78" width="38" height="38"/><rect x="1102" y="78" width="38" height="38"/>
+    <rect x="760" y="116" width="38" height="38"/><rect x="836" y="116" width="38" height="38"/><rect x="912" y="116" width="38" height="38"/><rect x="988" y="116" width="38" height="38"/><rect x="1064" y="116" width="38" height="38"/><rect x="1140" y="116" width="38" height="38"/>
+    <rect x="798" y="154" width="38" height="38"/><rect x="874" y="154" width="38" height="38"/><rect x="950" y="154" width="38" height="38"/><rect x="1026" y="154" width="38" height="38"/><rect x="1102" y="154" width="38" height="38"/>
+  </g>
+  <rect width="1200" height="10" fill="#E10600"/>
+  <rect width="10" height="630" fill="#E10600"/>
+  <rect y="620" width="1200" height="10" fill="#E10600"/>
+  <text x="70" y="112" font-family="'Space Grotesk',sans-serif" font-size="28" fill="#A1A1AA" letter-spacing="3">ROSTER PROTOCOL</text>
+  <text x="66" y="258" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="150" fill="#FAFAFA">24-0</text>
+  <text x="70" y="350" font-family="'Space Grotesk',sans-serif" font-weight="600" font-size="62" fill="#E10600">PERFECT SEASON</text>
+  <text x="70" y="418" font-family="Inter,sans-serif" font-size="33" fill="#D4D4D8">Spin an era. Draft the line-up. Hunt the sweep.</text>
+  <g font-family="'Space Grotesk',sans-serif" font-size="24" font-weight="600">
+    <rect x="70" y="466" width="150" height="44" fill="none" stroke="#D4AF37" stroke-width="2"/>
+    <text x="87" y="496" fill="#D4AF37">GOD ×8</text>
+    <rect x="235" y="466" width="196" height="44" fill="none" stroke="#C0C0C0" stroke-width="2"/>
+    <text x="252" y="496" fill="#C0C0C0">STRONG ×15</text>
+    <rect x="446" y="466" width="236" height="44" fill="none" stroke="#CD7F32" stroke-width="2"/>
+    <text x="463" y="496" fill="#CD7F32">UNDERDOG ×13</text>
+  </g>
+  <text x="70" y="580" font-family="Inter,sans-serif" font-size="27" fill="#71717A">24 races · 36 eras · one perfect season</text>
 </svg>

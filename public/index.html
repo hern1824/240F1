@@ -22,18 +22,18 @@
   <!-- AdSense + auto-loads Google certified CMP message when published in AdSense → Privacy & messaging -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7522159512030116"
        crossorigin="anonymous"></script>
-  <title>24-0 F1: Perfect Season Builder</title>
-  <meta name="description" content="Spin a constructor era, draft the line-up, hunt a perfect 24–0 F1 season. Unofficial fan game." />
+  <title>24-0: Perfect Season</title>
+  <meta name="description" content="Spin a constructor era, draft the line-up, hunt a perfect 24–0 season. Unofficial motorsport fan game." />
   <meta name="theme-color" content="#09090b" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="24-0 F1 — Perfect Season Builder" />
+  <meta property="og:title" content="24-0: Perfect Season" />
   <meta property="og:description" content="Spin an era. Draft the line-up. Hunt 24–0." />
   <meta property="og:image" content="https://240-f1.vercel.app/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:url" content="https://240-f1.vercel.app/" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="24-0 F1 — Perfect Season Builder" />
+  <meta name="twitter:title" content="24-0: Perfect Season" />
   <meta name="twitter:description" content="Spin an era. Draft the line-up. Hunt 24–0." />
   <meta name="twitter:image" content="https://240-f1.vercel.app/og.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23E10600' width='100' height='100'/><text y='.9em' font-size='70' x='8' fill='white' font-family='sans-serif' font-weight='700'>24</text></svg>" />
@@ -600,6 +600,11 @@
         <button type="button" onclick="closeShare()" class="text-zinc-400 hover:text-white text-sm px-2 py-1 border border-zinc-700" aria-label="Close">✕</button>
       </div>
       <div class="px-5 py-4 overflow-y-auto space-y-3">
+        <div id="share-theme-row" class="flex gap-2">
+          <button type="button" data-t="classic" onclick="setShareTheme('classic')" class="seg-btn is-on flex-1">Classic</button>
+          <button type="button" data-t="carbon" onclick="setShareTheme('carbon')" class="seg-btn flex-1">Carbon</button>
+          <button type="button" data-t="gold" onclick="setShareTheme('gold')" class="seg-btn flex-1">Gold ★</button>
+        </div>
         <canvas id="share-canvas" width="1080" height="1080" aria-label="Shareable season result card"></canvas>
         <p id="share-status" class="text-[11px] text-zinc-400 min-h-[1.25rem]"></p>
         <div class="grid grid-cols-2 gap-2">
@@ -629,6 +634,7 @@
       </div>
       <div class="lb-tabs shrink-0 px-2" role="tablist">
         <button type="button" id="lb-tab-public" class="lb-tab is-on" role="tab" aria-selected="true" onclick="setLeaderboardTab('public')">Public</button>
+        <button type="button" id="lb-tab-daily" class="lb-tab" role="tab" aria-selected="false" onclick="setLeaderboardTab('daily')">Daily</button>
         <button type="button" id="lb-tab-device" class="lb-tab" role="tab" aria-selected="false" onclick="setLeaderboardTab('device')">Device</button>
       </div>
       <div id="lb-body" class="px-4 py-3 overflow-y-auto flex-1 min-h-0 text-sm text-zinc-300 space-y-2.5"></div>
@@ -683,13 +689,13 @@
       god: {
         label: 'God Tier',
         color: '#D4AF37',
-        stakes: 'Dominant packages. 24–0 is rare (~5–10% skilled) but the fantasy is expected.',
+        stakes: 'Dominant packages. 24–0 is genuinely live (~10–15% with sharp calls) — the fantasy is real here.',
         path: 'Margin absorbs some mistakes. Still needs reliability and race craft for a clean sweep.',
       },
       strong: {
         label: 'Strong',
         color: '#C0C0C0',
-        stakes: 'Race-winning years. 24–0 is hard (~0.5–2% skilled): gaps show under weather and SC.',
+        stakes: 'Race-winning years. 24–0 is hard (~2–4% with sharp calls): gaps show under weather and SC.',
         path: 'Patch the soft axis, lean schedule into the strong axis, execute cleanly.',
       },
       underdog: {
@@ -1333,7 +1339,7 @@
       { n: 15, name: 'Dutch Grand Prix',          loc: 'Zandvoort, Netherlands',     flag: 'NL', tire: 'High',   sc: 14, baseRain: 35, fact: 'North Sea dunes · banked T3/T14 · sand on track · high lateral load · Manage compounds · aero over pure power' },
       { n: 16, name: 'Italian Grand Prix',        loc: 'Monza, Italy',               flag: 'IT', tire: 'Low',    sc: 16, baseRain: 20, fact: 'Temple of Speed · royal park Monza · since 1922 · PU stress · slipstream · Push on low wear · Attack only if Reli funded' },
       { n: 17, name: 'Azerbaijan Grand Prix',     loc: 'Baku, Azerbaijan',           flag: 'AZ', tire: 'Low',    sc: 40, baseRain: 8,  fact: 'Baku old city + Caspian waterfront · longest straight · castle walls · SC among highest · 2-stop · Overcut yellows' },
-      { n: 18, name: 'Singapore Grand Prix',      loc: 'Marina Bay, Singapore',      flag: 'SG', tire: 'High',   sc: 32, baseRain: 40, fact: 'Marina Bay night street · first F1 night race (2008) · heat humidity · SC dense · Manage + 2-stop · fatigue kills free risk' },
+      { n: 18, name: 'Singapore Grand Prix',      loc: 'Marina Bay, Singapore',      flag: 'SG', tire: 'High',   sc: 32, baseRain: 40, fact: 'Marina Bay night street · first grand prix night race (2008) · heat humidity · SC dense · Manage + 2-stop · fatigue kills free risk' },
       { n: 19, name: 'United States Grand Prix',  loc: 'Austin, USA',                flag: 'US', tire: 'High',   sc: 15, baseRain: 20, fact: 'COTA Texas hill country · Tilke + Hermann Tilke S1 · elevation · aero balance · Manage long runs' },
       { n: 20, name: 'Mexico City Grand Prix',    loc: 'Mexico City, Mexico',        flag: 'MX', tire: 'Medium', sc: 14, baseRain: 15, fact: 'Autódromo Hermanos Rodríguez · 2,200m altitude · thin air starves PU · stadium Foro Sol · Conserve if Reli soft' },
       { n: 21, name: 'São Paulo Grand Prix',      loc: 'Interlagos, Brazil',         flag: 'BR', tire: 'High',   sc: 22, baseRain: 50, fact: 'Interlagos · Senna’s home soil · anti-clockwise · weather + slipstream · title theatre · wet ready · flexible strategy' },
@@ -1417,8 +1423,10 @@
     // Override via config.js (SITE_CONFIG.ads / adsense). Demo until AdSense is live.
     const _cfg = window.SITE_CONFIG || {};
     const _cfgAds = _cfg.ads || {};
+    let _supporter = false;
+    try { _supporter = localStorage.getItem('240_supporter') === '1'; } catch (_) {}
     const ADS = {
-      enabled: _cfgAds.enabled !== false,
+      enabled: _cfgAds.enabled !== false && !_supporter,
       demo: _cfgAds.demo !== false, // true until you set ads.demo = false in config.js
       freeEraSpins: _cfgAds.freeEraSpins ?? 3,
       interstitialMs: 2200,
@@ -1429,9 +1437,24 @@
       interstitialOnSeasonComplete: _cfgAds.interstitialOnSeasonComplete !== false,
       rewardedEraRespin: _cfgAds.rewardedEraRespin !== false,
       rewardedShareClean: _cfgAds.rewardedShareClean !== false,
+      rewardedExtraRedo: _cfgAds.rewardedExtraRedo !== false,
       adsenseClient: (_cfg.adsense && _cfg.adsense.client) || '',
       adsenseSlots: (_cfg.adsense && _cfg.adsense.slots) || {},
     };
+
+    // ── H5 Games Ads (Ad Placement API) ──
+    // Interstitials + rewarded on the web come from AdSense's H5 Games Ads
+    // (adBreak/adConfig), NOT from display units wrapped in a modal — that
+    // pattern violates AdSense placement policy. Banner stays a display unit.
+    function h5Ready() { return !ADS.demo && !!ADS.adsenseClient && typeof window.adBreak === 'function'; }
+    function h5Init() {
+      if (ADS.demo || !ADS.adsenseClient) return;
+      window.adsbygoogle = window.adsbygoogle || [];
+      if (typeof window.adBreak !== 'function') {
+        window.adBreak = window.adConfig = function (o) { window.adsbygoogle.push(o); };
+        window.adConfig({ preloadAdBreaks: 'on', sound: 'off' });
+      }
+    }
 
     // Optional GA4 — set SITE_CONFIG.ga4Id = 'G-XXXXXXXX' in config.js
     if (_cfg.ga4Id && /^G-/.test(_cfg.ga4Id)) {
@@ -1471,7 +1494,7 @@
       } catch (_) { /* ignore */ }
     })();
 
-    // ─────────────────────────────────────────────
+    // ���────────────────────────────────────────────
     // STATE
     // ─────────────────────────────────────────────
     const state = {
@@ -1499,6 +1522,19 @@
       seasonComplete: false,
       redoFeedback: null, // { n, name, outcome, margin, notes, remaining }
       lbSubmitted: false,
+      // Run modes / progression
+      mode: 'free',            // free | daily
+      seed: null,              // season seed (set for daily; recorded for verification)
+      _rng: null,              // seeded PRNG when seed set
+      tokens: 0,               // upgrade tokens earned at 6/12/18 wins
+      tokensGranted: 0,
+      upgrades: { power: 0, aero: 0 },
+      rival: null,             // { team, era, driver, color, wins }
+      redosUsedCount: 0,
+      extraRedoUsed: false,    // one rewarded emergency redo per season
+      recorded: false,         // season written to history
+      flashReason: null,       // why the auto-run paused
+      shareTheme: 'classic',
       // Ads session flags
       eraSpinsUsed: 0,
       ads: {
@@ -1511,7 +1547,22 @@
     // UTILS
     // ─────────────────────────────────────────────
     function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-    function rand() { return Math.random(); }
+    // Seeded PRNG (mulberry32) — daily challenge + verifiable seasons
+    function mulberry32(a) {
+      return function () {
+        a |= 0; a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function rand() { return state._rng ? state._rng() : Math.random(); }
+    // ── Field model: ABSOLUTE anchor. The old field tracked strength.pace 1:1,
+    // which cancelled era tier, budget, drivers — every era averaged ~16 wins and
+    // 24–0 was ~0.05% for everyone. Now strong packages genuinely out-pace the field.
+    const FIELD_ANCHOR = 12.8;  // tuned via Monte Carlo (see docs/BALANCE.md)
+    const FIELD_CARRY = 0.808;  // portion of your pace the field keeps up with
+    const SPRINT_ROUNDS = [5, 6, 11, 19, 21, 23]; // sprint-format weekends: extra jeopardy
     function randInt(a, b) { return Math.floor(rand() * (b - a + 1)) + a; }
     function pick(arr) { return arr[Math.floor(rand() * arr.length)]; }
     function budgetTotal() {
@@ -1884,11 +1935,16 @@
       const draw = getSeasonDraw();
       const scBoost = SC_CLIMATES.find(x => x.id === (draw?.sc || 'normal')).scBoost;
       const wxExtra = WEATHER_CLIMATES.find(x => x.id === (draw?.weather || 'normal')).weatherMod;
+      // Daily challenge: race conditions come from a dedicated seed stream so
+      // every player faces the identical calendar regardless of setup order.
+      const condRng = state.seed != null ? mulberry32(state.seed ^ 0x9E3779B9) : null;
+      const cRand = condRng ? () => condRng() : rand;
+      const cInt = (a, b) => Math.floor(cRand() * (b - a + 1)) + a;
       state.races = RACES.map(r => {
         const mods = phaseMods(r.n);
         const tire = applyWearBias(r.tire, draw?.wear || 'mixed');
         const sc = clamp(r.sc + scBoost + (tire === 'High' ? 2 : 0), 4, 55);
-        const predRain = clamp(r.baseRain + randInt(-8, 8) + Math.floor(mods.weatherMod * 0.35) + Math.floor(wxExtra * 0.5), 0, 92);
+        const predRain = clamp(r.baseRain + cInt(-8, 8) + Math.floor(mods.weatherMod * 0.35) + Math.floor(wxExtra * 0.5), 0, 92);
         const smart = raceSmartDefaults({ tire, sc, predRain });
         return {
           ...r,
@@ -1896,12 +1952,17 @@
           sc,
           predRain,
           actualRain: null,
-          airTemp: randInt(18, 34),
-          trackTemp: randInt(28, 52),
+          airTemp: cInt(18, 34),
+          trackTemp: cInt(28, 52),
           strategy: smart.strategy,
           tirePlan: smart.tirePlan,
           engineMode: smart.engineMode,
           pitWindow: smart.pitWindow,
+          quali: 'safe',
+          wetCall: 'auto',
+          lead: 'primary',
+          isSprint: SPRINT_ROUNDS.includes(r.n),
+          sprintWin: null,
           result: null,
           margin: null,
           notes: [],
@@ -1991,8 +2052,9 @@
       const sponAero = state.sponsor === 'tech' ? 3: 0;
       const sponReli = state.sponsor === 'title' ? 6: 0;
 
-      const power = clamp((b.power + (pb.power || 0)) * era.powerBias * 2.1 + avgPower + sponPower, 0, 100);
-      const aero = clamp((b.aero + (pb.aero || 0)) * era.aeroBias * 2.1 + avgAero + sponAero, 0, 100);
+      const up = state.upgrades || { power: 0, aero: 0 };
+      const power = clamp((b.power + (pb.power || 0) + up.power) * era.powerBias * 2.1 + avgPower + sponPower, 0, 100);
+      const aero = clamp((b.aero + (pb.aero || 0) + up.aero) * era.aeroBias * 2.1 + avgAero + sponAero, 0, 100);
       const reliability = clamp((b.reliability + (pb.reliability || 0)) * era.reliabilityBias * 2.1 + sponReli, 0, 100);
       const strategy = clamp((b.strategy + (pb.strategy || 0)) * era.strategyBias * 2.1, 0, 100);
       const driver = state.primary.rating * 0.70 + state.teammate.rating * 0.15 + state.primary.consistency * 0.15;
@@ -2011,7 +2073,7 @@
     }
 
     function raceCallFingerprint(race) {
-      return [race.tirePlan || 'standard', race.strategy, race.engineMode, race.pitWindow].join('|');
+      return [race.tirePlan || 'standard', race.strategy, race.engineMode, race.pitWindow, race.quali || 'safe', race.wetCall || 'auto', race.lead || 'primary'].join('|');
     }
 
     function simulateRace(race, strength, opts = {}) {
@@ -2146,13 +2208,55 @@
         notes.push(safetyCar ? 'Overcut paid off around SC.': 'Overcut executed.');
       }
 
+      // Team orders: hand the lead car to Driver 2 (usually for a wet specialist)
+      const leadDriver = (race.lead === 'teammate' && state.teammate) ? state.teammate : state.primary;
+      let ordersMod = 0;
+      if (leadDriver !== state.primary) {
+        ordersMod = (leadDriver.rating - state.primary.rating) * 0.10;
+        notes.push(`Team orders: ${leadDriver.name} leads this weekend.`);
+      }
+
       let wetMod = 0;
       if (isWet) {
-        wetMod = (state.primary.wet - 88) * 0.22;
-        notes.push(`Wet race: primary wet rating ${state.primary.wet}.`);
+        wetMod = (leadDriver.wet - 88) * 0.22;
+        notes.push(`Wet race: lead car wet rating ${leadDriver.wet}.`);
       } else if (isDamp) {
-        wetMod = (state.primary.wet - 88) * 0.1;
+        wetMod = (leadDriver.wet - 88) * 0.1;
         notes.push('Damp conditions. Grip windows unstable.');
+      }
+
+      // Qualifying gamble: pole push banks track position but risks a shunt
+      let qualiMod = 0;
+      if (race.quali === 'pole') {
+        if (rand() < 0.08) {
+          qualiMod = -5.5;
+          notes.push('Quali shunt: pole push overcooked, compromised grid slot.');
+        } else {
+          qualiMod = 1.8;
+          notes.push('Pole push landed: track position banked.');
+        }
+      }
+
+      // Crossover call: pre-commit to slicks or inters against the forecast
+      let wetCallMod = 0;
+      if (race.wetCall === 'slicks') {
+        if (isWet) { wetCallMod = -6; notes.push('Slicks gamble drowned: full wet race.'); }
+        else if (isDamp) { wetCallMod = 2.6; notes.push('Slicks gamble paid: track dried under you.'); }
+        else { wetCallMod = 0.4; }
+      } else if (race.wetCall === 'inters') {
+        if (isWet) { wetCallMod = 2.8; notes.push('Inters call ready when the rain came.'); }
+        else if (isDamp) { wetCallMod = 0.6; }
+        else { wetCallMod = -4; notes.push('Inters call on a dry track: pace given away.'); }
+      }
+
+      // Sprint weekend: Saturday result carries into Sunday (extra jeopardy, not a season loss)
+      let sprintMod = 0;
+      if (race.isSprint) {
+        const sScore = strength.pace + opsMod * 0.6 + (rand() - 0.5) * 10;
+        const sField = FIELD_ANCHOR + strength.pace * FIELD_CARRY + 1.0 + (rand() - 0.5) * 10;
+        race.sprintWin = sScore >= sField;
+        if (race.sprintWin) { sprintMod = 0.8; notes.push('Sprint win: momentum into Sunday.'); }
+        else { sprintMod = -2.0; notes.push('Sprint setback: grid and confidence dented.'); }
       }
 
       let trackMod = mods.powerMod * 0.15 + mods.aeroMod * 0.15;
@@ -2168,7 +2272,8 @@
       // Package pace is typically ~58–75 (even split) to ~72–88 (strong build).
       // Field must sit in that band or every race is a structural loss.
       const execScale = strength.pace < 62 ? 1.25 : strength.pace < 70 ? 1.1 : 1.0;
-      let score = strength.pace + opsMod + (stratFit + engMod + pitMod) * execScale + wetMod + trackMod + forecastMod;
+      let score = strength.pace + opsMod + (stratFit + engMod + pitMod) * execScale + wetMod + trackMod + forecastMod
+        + ordersMod + qualiMod + wetCallMod + sprintMod;
       const noiseScale = clamp(1.05 - strength.consist / 180, 0.45, 1.05);
       const glass = strength.reliability < 50 ? 1.1 : 1.0;
       score += (rand() - 0.5) * 11 * noiseScale * glass;
@@ -2192,13 +2297,16 @@
         return race;
       }
 
-      // Relative field: package-scaled, slightly above baseline.
+      // Absolute field: a real grid your package can genuinely out-run.
       // Redos always pay a tax — not free re-rolls of close losses.
-      const pressure = state.wins >= 18 ? 2.0 : state.wins >= 14 ? 1.1 : state.wins >= 10 ? 0.5 : 0;
+      // Title pressure: a small, visible late-sweep lift — drama, not a rubber band
+      // (the old +2.0 at 18 wins punished streaks exactly when they mattered).
+      const pressure = state.wins >= 20 ? 0.8 : 0;
       let redoTax = 0;
       if (isRedo) {
         // Escalating season cost: later charges are harder (fixes 1–2 maybe, not 4)
-        redoTax = 3.4 + (redoNumber - 1) * 1.9; // ~3.4 / 5.3 / 7.2
+        redoTax = 3.4 + (redoNumber - 1) * 1.9; // ~3.4 / 5.3 / 7.2 / 9.1 (emergency)
+        if (redoNumber >= 4) { redoTax += 1.5; notes.push('Emergency charge: the heaviest tax in the book.'); }
         if (sameCallRedo) {
           redoTax += 4.5;
           notes.push('Same weekend call as the loss: field already had your number.');
@@ -2224,7 +2332,7 @@
       }
       // Slightly less lottery on redos (compress free coin-flip variance)
       const fieldNoise = isRedo ? (rand() - 0.5) * 9 : (rand() - 0.5) * 12;
-      const field = strength.pace + 1.4 + fieldNoise + pressure + redoTax;
+      const field = FIELD_ANCHOR + strength.pace * FIELD_CARRY + fieldNoise + pressure + redoTax;
       const won = score >= field;
       race.result = won ? 'win' : 'loss';
       race.margin = Math.round((score - field) * 10) / 10;
@@ -2233,13 +2341,63 @@
       if (won && race.margin < 1.5) notes.push('Narrow victory. Margins thin.');
       if (!won && race.margin > -2.5) notes.push('Lost in the details: pace was close.');
       if (!won && race.margin <= -7) notes.push('Pace deficit was structural today.');
-      if (pressure > 0 && !won) notes.push('Late-season pressure visible in execution.');
+      if (pressure > 0 && !won) notes.push('Title pressure: the field lifts late in a sweep.');
       if (isRedo && sameCallRedo && !won) notes.push('Unchanged call failed the redo.');
       if (isRedo && sameCallRedo && won) notes.push('Same call converted despite the tax.');
       if (isRedo && !sameCallRedo && won) notes.push('Changed call cleared the redo tax.');
       if (isRedo && !sameCallRedo && !won) notes.push('Changed call still lost under redo pressure.');
       race.notes = notes;
       return race;
+    }
+
+    /** Deterministic pre-race win estimate — mirrors simulateRace without rolls. */
+    function estimateWin(race, strength) {
+      const s = strength || teamStrength();
+      const mods = phaseMods(race.n);
+      const phase = phaseForRace(race.n);
+      const pWet = clamp(race.predRain / 100, 0, 0.92);
+      let m = 0;
+      // tire plan expectation
+      const plan = race.tirePlan || 'standard';
+      if (plan === 'push') m += race.tire === 'Low' ? 3.4 : race.tire === 'High' ? -4.0 : 1.2, m -= 2.6 * pWet;
+      else if (plan === 'manage') m += race.tire === 'High' ? 3.2 : race.tire === 'Low' ? -2.4 : 0.6, m += 2.0 * pWet;
+      if (state.tirePhil === 'aggressive') m += (race.tire === 'Low' ? 1.2 : race.tire === 'High' ? -1.4 : 0) - 0.9 * pWet;
+      else if (state.tirePhil === 'conservative') m += (race.tire === 'High' ? 1.1 : race.tire === 'Low' ? -0.9 : 0) + 0.8 * pWet;
+      if (state.devCutoff === 'early') m += phase === 'opening' ? 3.4 : phase === 'close' ? -3.6 : 0.4;
+      else if (state.devCutoff === 'late') m += phase === 'opening' ? -3.4 : phase === 'close' ? 3.8 : 0.6;
+      if (state.lobbying === 'active') m += 1.6 - 0.33;
+      else if (state.lobbying === 'aggressive') m += 3.4 - 1.4;
+      if (state.sponsor === 'tech') m += 1.2 + ((POWER_TRACK_NS.includes(race.n) || AERO_TRACK_NS.includes(race.n)) ? 1.8 : 0);
+      else if (state.sponsor === 'title') m -= 0.9;
+      else if (state.sponsor === 'regional') m += 2.8 * pWet + 0.8;
+      const scP = clamp(race.sc / 100, 0, 0.6);
+      if (race.strategy === '1-stop') m += (race.tire === 'Low' ? 3.5 : 0) + (race.tire === 'High' ? -4.5 : 0) - 2 * scP;
+      else m += (race.tire === 'High' ? 2.5 : 0) + (race.tire === 'Low' ? -1.5 : 0) + 2.5 * scP;
+      if (race.engineMode === 'attack') m += 2.5 - 18 * clamp(0.10 - s.reliability / 900, 0.03, 0.12);
+      else if (race.engineMode === 'conserve') m -= 1.5;
+      if (race.pitWindow === 'undercut') m += 2 * (1 - scP) - 1.5 * scP;
+      else if (race.pitWindow === 'overcut') m += 0.5 * (1 - scP) + 2.5 * scP;
+      const lead = (race.lead === 'teammate' && state.teammate) ? state.teammate : state.primary;
+      if (lead !== state.primary) m += (lead.rating - state.primary.rating) * 0.10;
+      m += (lead.wet - 88) * 0.22 * pWet;
+      if (race.quali === 'pole') m += 1.8 * 0.92 - 5.5 * 0.08;
+      if (race.wetCall === 'slicks') m += -6 * pWet + 0.4 * (1 - pWet);
+      else if (race.wetCall === 'inters') m += 2.8 * pWet - 4 * (1 - pWet) * 0.7;
+      if (race.isSprint) m -= 0.6; // sprint jeopardy expectation
+      let t = mods.powerMod * 0.15 + mods.aeroMod * 0.15;
+      if (POWER_TRACK_NS.includes(race.n)) t += (s.power - 55) * 0.06;
+      if (AERO_TRACK_NS.includes(race.n)) t += (s.aero - 55) * 0.06;
+      const execScale = s.pace < 62 ? 1.25 : s.pace < 70 ? 1.1 : 1.0;
+      const pressure = state.wins >= 20 ? 0.8 : 0;
+      const margin = s.pace + m * execScale + t - (FIELD_ANCHOR + s.pace * FIELD_CARRY) - pressure;
+      const noiseScale = clamp(1.05 - s.consist / 180, 0.45, 1.05);
+      const sd = Math.sqrt(Math.pow(12, 2) / 12 + Math.pow(11 * noiseScale, 2) / 12);
+      const p = 1 / (1 + Math.exp(-margin / (sd * 0.62)));
+      let dnf = 0.028 - s.reliability / 2800;
+      if (race.engineMode === 'attack') dnf += 0.02;
+      if (state.sponsor === 'title') dnf -= 0.012;
+      dnf = clamp(dnf, 0.006, 0.09);
+      return clamp(p * (1 - dnf), 0.02, 0.985);
     }
 
     function debriefText(item) {
@@ -2326,6 +2484,11 @@
       if (dnfs > 0) push(`${dnfs} retirement(s) on record. Mechanical risk remains a perfect-season killer.`, 'red');
       if (state.redosLeft === 0 && state.wins < 24) {
         push('All redos exhausted. Final classification is locked.', state.wins < 14 ? 'red' : 'neutral');
+      }
+      if (state.rival && state.losses > 0) {
+        push(`Rival watch: ${state.rival.driver} (${state.rival.team} ${state.rival.era}) took ${state.rival.wins} of your ${state.losses} defeats.`, state.rival.wins >= 4 ? 'red' : 'neutral');
+      } else if (state.rival && state.wins === 24) {
+        push(`${state.rival.driver} never got one. Rival shut out for the whole season.`, 'gold');
       }
       push(`Schedule profile: ${scheduleSummary()}.`, 'neutral');
       push(`Team reference: ${state.era.team} ${state.era.era} · ${state.primary.name} / ${state.teammate.name} · ${state.principal.name}.`, 'neutral');
@@ -2466,10 +2629,48 @@
         closeAdModal();
       }
 
-      const live = !ADS.demo && !!ADS.adsenseClient && !!pickAdSlot(kind);
-      const duration = live
-        ? (kind === 'rewarded' ? 5500 : 4000)
-        : (kind === 'rewarded' ? ADS.rewardedMs : ADS.interstitialMs);
+      // Live path: hand off to H5 Games Ads and let Google own the UI.
+      if (!ADS.demo && ADS.adsenseClient) {
+        h5Init();
+        trackEvent(kind === 'rewarded' ? 'ad_rewarded_open' : 'ad_interstitial_open', { placement: opts.placement || kind, live: 1 });
+        return new Promise((resolve) => {
+          let settled = false;
+          const done = (result) => {
+            if (settled) return; settled = true;
+            trackEvent(kind === 'rewarded' ? 'ad_rewarded_result' : 'ad_interstitial_result', { placement: opts.placement || kind, result, live: 1 });
+            setTimeout(() => resolve(result), 0);
+          };
+          try {
+            if (kind === 'rewarded') {
+              window.adBreak({
+                type: 'reward',
+                name: opts.placement || 'reward',
+                beforeReward: (showAdFn) => showAdFn(),
+                adViewed: () => done('completed'),
+                adDismissed: () => done('skipped'),
+                adBreakDone: (info) => {
+                  // No fill / not shown: grant anyway so the feature never hard-locks
+                  if (!settled && info && info.breakStatus !== 'viewed') done('completed');
+                },
+              });
+            } else {
+              window.adBreak({
+                type: 'next',
+                name: opts.placement || 'interstitial',
+                adBreakDone: () => done('completed'),
+              });
+            }
+            // Safety valve: if the SDK never calls back (blocked, offline)
+            setTimeout(() => done('completed'), 12000);
+          } catch (err) {
+            console.error('adBreak error', err);
+            done('failed');
+          }
+        });
+      }
+
+      const live = false; // demo modal below — live traffic uses the H5 path above
+      const duration = kind === 'rewarded' ? ADS.rewardedMs : ADS.interstitialMs;
       const modal = document.getElementById('ad-modal');
       const kindEl = document.getElementById('ad-modal-kind');
       const titleEl = document.getElementById('ad-modal-title');
@@ -2695,161 +2896,8 @@
 
     // Portraits: Wikimedia thumbs keyed by display name (built offline; initials if missing)
     // Local avatars under /avatars/ (downloaded; no hotlink)
-    const PERSON_PHOTOS = {
-  "Adrian Newey": "avatars/adrian-newey.jpg",
-  "Alain Prost": "avatars/alain-prost.jpg",
-  "Alan Jones": "avatars/alan-jones.jpg",
-  "Alfred Neubauer": "avatars/alfred-neubauer.jpg",
-  "Anthony Davidson": "avatars/anthony-davidson.jpg",
-  "Ayrton Senna": "avatars/ayrton-senna.jpg",
-  "Colin Chapman": "avatars/colin-chapman.jpg",
-  "Elio de Angelis": "avatars/elio-de-angelis.jpg",
-  "Emerson Fittipaldi": "avatars/emerson-fittipaldi.jpg",
-  "Enzo Ferrari": "avatars/enzo-ferrari.jpg",
-  "Felipe Massa": "avatars/felipe-massa.jpg",
-  "Gerhard Berger": "avatars/gerhard-berger.jpg",
-  "Jarno Trulli": "avatars/jarno-trulli.jpg",
-  "Jean-Pierre Jarier": "avatars/jean-pierre-jarier.jpg",
-  "John Barnard": "avatars/john-barnard.jpg",
-  "Jos Verstappen": "avatars/jos-verstappen.jpg",
-  "Ken Tyrrell": "avatars/ken-tyrrell.jpg",
-  "Kimi Räikkönen": "avatars/kimi-raikkonen.jpg",
-  "Lance Stroll": "avatars/lance-stroll.jpg",
-  "Lewis Hamilton": "avatars/lewis-hamilton.jpg",
-  "Luca di Montezemolo": "avatars/luca-di-montezemolo.jpg",
-  "Max Verstappen": "avatars/max-verstappen.jpg",
-  "Michael Schumacher": "avatars/michael-schumacher.jpg",
-  "Nelson Piquet": "avatars/nelson-piquet.jpg",
-  "Nico Rosberg": "avatars/nico-rosberg.jpg",
-  "Niki Lauda": "avatars/niki-lauda.jpg",
-  "Paddy Lowe": "avatars/paddy-lowe.jpg",
-  "Pedro de la Rosa": "avatars/pedro-de-la-rosa.jpg",
-  "Pierre Gasly": "avatars/pierre-gasly.png",
-  "Riccardo Patrese": "avatars/riccardo-patrese.jpg",
-  "Ronnie Peterson": "avatars/ronnie-peterson.jpg",
-  "Rubens Barrichello": "avatars/rubens-barrichello.jpg",
-  "Sebastian Vettel": "avatars/sebastian-vettel.jpg",
-  "Tom Walkinshaw": "avatars/tom-walkinshaw.jpg",
-  "Toto Wolff": "avatars/toto-wolff.jpg",
-  "Bernie Ecclestone": "avatars/bernie-ecclestone.jpg",
-  "Bob Bell": "avatars/bob-bell.jpg",
-  "Bruce McLaren": "avatars/bruce-mclaren.jpg",
-  "Carlos Reutemann": "avatars/carlos-reutemann.jpg",
-  "Christian Horner": "avatars/christian-horner.jpg",
-  "Claire Williams": "avatars/claire-williams.jpg",
-  "Clay Regazzoni": "avatars/clay-regazzoni.jpg",
-  "David Brown": "avatars/david-brown.jpg",
-  "David Coulthard": "avatars/david-coulthard.jpg",
-  "David Richards": "avatars/david-richards.jpg",
-  "Eddie Irvine": "avatars/eddie-irvine.jpg",
-  "Eddie Jordan": "avatars/eddie-jordan.jpg",
-  "Fernando Alonso": "avatars/fernando-alonso.jpg",
-  "Flavio Briatore": "avatars/flavio-briatore.jpg",
-  "Frank Williams": "avatars/frank-williams.jpg",
-  "François Cevert": "avatars/francois-cevert.jpg",
-  "Giancarlo Fisichella": "avatars/giancarlo-fisichella.jpg",
-  "Gilles Villeneuve": "avatars/gilles-villeneuve.jpg",
-  "Gioacchino Colombo": "avatars/gioacchino-colombo.jpg",
-  "Giuseppe Farina": "avatars/giuseppe-farina.jpg",
-  "Hannah Schmitz": "avatars/hannah-schmitz.jpg",
-  "Heinz-Harald Frentzen": "avatars/heinz-harald-frentzen.jpg",
-  "Helmut Marko": "avatars/helmut-marko.jpg",
-  "Héctor Rebaque": "avatars/hector-rebaque.jpg",
-  "JJ Lehto": "avatars/jj-lehto.jpg",
-  "Jack Brabham": "avatars/jack-brabham.jpg",
-  "Jackie Stewart": "avatars/jackie-stewart.jpg",
-  "Jacky Ickx": "avatars/jacky-ickx.jpg",
-  "Jacques Villeneuve": "avatars/jacques-villeneuve.jpg",
-  "James Allison": "avatars/james-allison.jpg",
-  "Jean Todt": "avatars/jean-todt.jpg",
-  "Jenson Button": "avatars/jenson-button.jpg",
-  "Jim Clark": "avatars/jim-clark.jpg",
-  "Jock Clear": "avatars/jock-clear.jpg",
-  "Jody Scheckter": "avatars/jody-scheckter.jpg",
-  "John Watson": "avatars/john-watson.jpg",
-  "Johnny Cecotto": "avatars/johnny-cecotto.jpg",
-  "Johnny Dumfries": "avatars/johnny-dumfries.jpg",
-  "Johnny Herbert": "avatars/johnny-herbert.jpg",
-  "Juan Pablo Montoya": "avatars/juan-pablo-montoya.jpg",
-  "Karl Kling": "avatars/karl-kling.jpg",
-  "Keke Rosberg": "avatars/keke-rosberg.jpg",
-  "Luca Badoer": "avatars/luca-badoer.jpg",
-  "Luigi Fagioli": "avatars/luigi-fagioli.jpg",
-  "Marco Piccinini": "avatars/marco-piccinini.jpg",
-  "Martin Whitmarsh": "avatars/martin-whitmarsh.jpg",
-  "Mauro Forghieri": "avatars/mauro-forghieri.jpg",
-  "Mika Häkkinen": "avatars/mika-hakkinen.jpg",
-  "Mike Gascoyne": "avatars/mike-gascoyne.jpg",
-  "Nick Fry": "avatars/nick-fry.jpg",
-  "Nico Hülkenberg": "avatars/nico-hulkenberg.jpg",
-  "Nigel Mansell": "avatars/nigel-mansell.jpg",
-  "Norbert Haug": "avatars/norbert-haug.jpg",
-  "Orazio Satta": "avatars/orazio-satta.jpg",
-  "Otmar Szafnauer": "avatars/otmar-szafnauer.jpg",
-  "Owen Maddock": "avatars/owen-maddock.png",
-  "Pastor Maldonado": "avatars/pastor-maldonado.jpg",
-  "Peter Arundell": "avatars/peter-arundell.jpg",
-  "Peter Warr": "avatars/peter-warr.jpg",
-  "Roger Penske": "avatars/roger-penske.jpg",
-  "Ron Dennis": "avatars/ron-dennis.jpg",
-  "Rory Byrne": "avatars/rory-byrne.jpg",
-  "Ross Brawn": "avatars/ross-brawn.jpg",
-  "Rudolf Uhlenhaut": "avatars/rudolf-uhlenhaut.jpg",
-  "Satoru Nakajima": "avatars/satoru-nakajima.jpg",
-  "Sergio Pérez": "avatars/sergio-perez.jpg",
-  "Shuhei Nakamoto": "avatars/shuhei-nakamoto.jpg",
-  "Stefan Johansson": "avatars/stefan-johansson.jpg",
-  "Stefano Domenicali": "avatars/stefano-domenicali.jpg",
-  "Takuma Sato": "avatars/takuma-sato.jpg",
-  "Tony Rudd": "avatars/tony-rudd.jpg",
-  "Valtteri Bottas": "avatars/valtteri-bottas.jpg",
-  "Aldo Costa": "avatars/aldo-costa.jpg",
-  "Aleardo Buzzi": "avatars/aleardo-buzzi.jpg",
-  "Alex Hawkridge": "avatars/alex-hawkridge.png",
-  "Andy Cowell": "avatars/andy-cowell.jpg",
-  "Bernard Boyer": "avatars/bernard-boyer.jpg",
-  "Bernard Dudot": "avatars/bernard-dudot.jpg",
-  "Charles Cooper": "avatars/charles-cooper.png",
-  "Damon Hill": "avatars/damon-hill.jpg",
-  "Daniel Ricciardo": "avatars/daniel-ricciardo.jpg",
-  "Derek Gardner": "avatars/derek-gardner.jpg",
-  "Fritz Nallinger": "avatars/fritz-nallinger.jpg",
-  "Gary Anderson": "avatars/gary-anderson.jpg",
-  "Geoff Willis": "avatars/geoff-willis.jpg",
-  "George Russell": "avatars/george-russell.jpg",
-  "Gordon Murray": "avatars/gordon-murray.jpg",
-  "Gérard Ducarouge": "avatars/gerard-ducarouge.jpg",
-  "Hans Herrmann": "avatars/hans-herrmann.jpg",
-  "Hans Mezger": "avatars/hans-mezger.jpg",
-  "Jean-Luc Lagardère": "avatars/jean-luc-lagardere.jpg",
-  "Jean-Pierre Beltoise": "avatars/jean-pierre-beltoise.jpg",
-  "John Cooper": "avatars/john-cooper.jpg",
-  "Johnny Servoz-Gavin": "avatars/johnny-servoz-gavin.png",
-  "Juan Manuel Fangio": "avatars/juan-manuel-fangio.jpg",
-  "Keith Duckworth": "avatars/keith-duckworth.jpg",
-  "Loïc Bigois": "avatars/loic-bigois.jpg",
-  "Mario Almondo": "avatars/mario-almondo.jpg",
-  "Mario Andretti": "avatars/mario-andretti.jpg",
-  "Mark Webber": "avatars/mark-webber.jpg",
-  "Maurice Philippe": "avatars/maurice-philippe.jpg",
-  "Mike Coughlan": "avatars/mike-coughlan.png",
-  "Mike Elliott": "avatars/mike-elliott.jpg",
-  "Mike Spence": "avatars/mike-spence.jpg",
-  "Neil Oatley": "avatars/neil-oatley.jpg",
-  "Paolo Martinelli": "avatars/paolo-martinelli.jpg",
-  "Pat Symonds": "avatars/pat-symonds.png",
-  "Patrick Depailler": "avatars/patrick-depailler.jpg",
-  "Patrick Head": "avatars/patrick-head.jpg",
-  "Paul Rosche": "avatars/paul-rosche.png",
-  "Peter Wright": "avatars/peter-wright.jpg",
-  "Ralf Schumacher": "avatars/ralf-schumacher.png",
-  "Ralph Bellamy": "avatars/ralph-bellamy.jpg",
-  "Rob White": "avatars/rob-white.jpg",
-  "Steve Nichols": "avatars/steve-nichols.jpg",
-  "Stirling Moss": "avatars/stirling-moss.jpg",
-  "Tim Goss": "avatars/tim-goss.jpg",
-  "Trevor Taylor": "avatars/trevor-taylor.jpg"
-};
+    // Real-person photos removed: likeness/right-of-publicity risk under ads.
+    // Stylized initials only (see personAvatarHtml).
 
     function personInitials(name) {
       if (!name) return '?';
@@ -2859,17 +2907,9 @@
       return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
 
-    function personPhotoSrc(name) {
-      return PERSON_PHOTOS[name] || '';
-    }
-
     function personAvatarHtml(name) {
-      const src = personPhotoSrc(name);
       const ini = personInitials(name);
       const safe = String(name || '').replace(/"/g, '&quot;');
-      if (src) {
-        return `<span class="person-av" title="${safe}"><img src="${src}" alt="" width="48" height="48" loading="lazy" decoding="async" onerror="this.parentElement.classList.add('is-fail')" /><span class="person-av-fb" aria-hidden="true">${ini}</span></span>`;
-      }
       return `<span class="person-av no-src" title="${safe}"><span class="person-av-fb" aria-hidden="true">${ini}</span></span>`;
     }
 
@@ -3028,7 +3068,14 @@
       if (!state.era || !state.primary || !state.teammate || !state.principal) return;
       if (budgetTotal() !== 100) return;
       if (!state.seasonDraw?.locked) return;
+      // Seed the season: daily gets the date seed (set in startDaily); free play
+      // gets a random recorded seed so runs are verifiable later.
+      if (state.mode !== 'daily') {
+        state.seed = (Math.random() * 0x7fffffff) | 0;
+      }
+      state._rng = mulberry32(state.seed);
       prepareRaces();
+      pickRival();
       state.phase = 'season';
       state.wins = 0;
       state.losses = 0;
@@ -3037,7 +3084,16 @@
       state.debrief = [];
       state.redoFeedback = null;
       state.lbSubmitted = false;
+      state.tokens = 0;
+      state.tokensGranted = 0;
+      state.upgrades = { power: 0, aero: 0 };
+      state.redosUsedCount = 0;
+      state.extraRedoUsed = false;
+      state.recorded = false;
+      state.flashReason = null;
       state.ads.seasonInterstitialShown = false;
+      if (state.mode === 'daily') markDailyUsed();
+      saveGame();
       trackEvent('season_start', {
         era_id: state.era?.id || '',
         team: state.era?.team || '',
@@ -3047,35 +3103,60 @@
       window.scrollTo(0, 0);
     }
 
-    async function simulateSeason() {
-      if (state.simulating) return;
-      state.simulating = true;
-      state.wins = 0;
-      state.losses = 0;
-      const strength = teamStrength();
-      for (let i = 0; i < state.races.length; i++) {
-        const race = state.races[i];
-        if (race.locked && race.result) {
-          if (race.result === 'win') state.wins++;
-          else state.losses++;
-          continue;
-        }
-        simulateRace(race, strength);
-        if (race.result === 'win') state.wins++;
-        else state.losses++;
-        render();
-        const el = document.getElementById(`race-${race.n}`);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        await new Promise(r => setTimeout(r, 120));
+    function nextUnresolved() {
+      return state.races.find(r => !r.result) || null;
+    }
+
+    function recountRecord() {
+      state.wins = state.races.filter(r => r.result === 'win').length;
+      state.losses = state.races.filter(r => r.result === 'loss').length;
+    }
+
+    /** Resolve one race + all season side-effects (rival, tokens). */
+    function resolveRace(race) {
+      simulateRace(race, teamStrength());
+      recountRecord();
+      // Named rival hoovers up most of your defeats
+      if (race.result === 'loss' && state.rival) {
+        if (rand() < 0.65) { state.rival.wins++; race.wonBy = 'rival'; race.notes.push(`${state.rival.driver} took the win.`); }
+        else race.wonBy = 'field';
       }
+      // Upgrade tokens at 6 / 12 / 18 wins
+      const marks = [6, 12, 18];
+      for (const m of marks) {
+        if (state.wins >= m && state.tokensGranted < marks.indexOf(m) + 1) {
+          state.tokensGranted = marks.indexOf(m) + 1;
+          state.tokens++;
+          race.notes.push('Upgrade token earned: spend it from the season header.');
+        }
+      }
+    }
+
+    /** Should the auto-runner pause before this race for a human call? */
+    function flashpointReason(race) {
+      if (!race) return null;
+      const p = Math.round(estimateWin(race) * 100);
+      if (p < 78) return `Win estimate ${p}% — tough weekend, check the calls`;
+      if (race.predRain >= 35) return `Rain ${race.predRain}% — crossover + lead-car call live`;
+      if (race.sc >= 28) return `SC ${race.sc}% — pit window decides this one`;
+      if (race.isSprint) return 'Sprint weekend — double jeopardy';
+      if (race.n === 9 || race.n === 17) return `${phaseMeta(phaseForRace(race.n)).label} phase begins`;
+      if (race.n === 24) return 'Season finale';
+      return null;
+    }
+
+    async function finishSeason() {
       state.simulating = false;
       state.seasonComplete = true;
       buildDebrief();
+      recordSeasonToHistory();
+      clearSave();
       trackEvent('season_complete', {
         wins: state.wins,
         losses: state.losses,
         redos_used: SEASON_REDOS - state.redosLeft,
         era_id: state.era?.id || '',
+        mode: state.mode,
         perfect: state.wins === 24 ? 1 : 0,
       });
       await showSeasonCompleteInterstitial();
@@ -3083,6 +3164,48 @@
       render();
       window.scrollTo(0, 0);
     }
+
+    async function runRaces({ count = Infinity, stopAtFlashpoints = false } = {}) {
+      if (state.simulating) return;
+      state.simulating = true;
+      state.flashReason = null;
+      render();
+      let done = 0;
+      while (done < count) {
+        const race = nextUnresolved();
+        if (!race) break;
+        if (stopAtFlashpoints && done > 0) {
+          const reason = flashpointReason(race);
+          if (reason) { state.flashReason = { n: race.n, reason }; break; }
+        }
+        resolveRace(race);
+        done++;
+        saveGame();
+        render();
+        const el = document.getElementById(`race-${race.n}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        await new Promise(r => setTimeout(r, count === 1 ? 60 : 150));
+        // A loss is always a stopping point in flashpoint mode: redo decision is live
+        if (stopAtFlashpoints && race.result === 'loss') {
+          state.flashReason = { n: race.n, reason: race.margin === -99 ? 'Retirement — redo decision live' : 'Defeat — redo decision live' };
+          break;
+        }
+      }
+      state.simulating = false;
+      if (!nextUnresolved()) {
+        await finishSeason();
+        return;
+      }
+      render();
+      if (state.flashReason) {
+        const el = document.getElementById(`race-${state.flashReason.n}`);
+        if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 60);
+      }
+    }
+
+    function raceNext() { void runRaces({ count: 1 }); }
+    function raceToFlashpoint() { void runRaces({ stopAtFlashpoints: true }); }
+    async function simulateSeason() { await runRaces({}); }
 
     function dismissRedoFeedback() {
       state.redoFeedback = null;
@@ -3138,9 +3261,10 @@
       if (race.redoAttempted) return;
       // One charge from the season pool when you open a redo re-plan
       state.redosLeft--;
+      state.redosUsedCount++;
       race.lossCall = raceCallFingerprint(race);
       race.lossMargin = race.margin; // for structural redo tax
-      race.redoNumber = SEASON_REDOS - state.redosLeft; // 1..SEASON_REDOS
+      race.redoNumber = state.redosUsedCount; // 1..3, 4 = emergency
       race.locked = false;
       race.result = null;
       race.notes = [];
@@ -3158,19 +3282,26 @@
 
     function applyRedoSim(n) {
       const race = state.races.find(r => r.n === n);
-      if (!race || race.result) return;
+      if (!race || race.result || !race.redoOpen) return;
       const sameCall = race.lossCall && race.lossCall === raceCallFingerprint(race);
       simulateRace(race, teamStrength(), {
         isRedo: true,
         sameCallRedo: sameCall,
-        redoNumber: race.redoNumber || (SEASON_REDOS - state.redosLeft),
+        redoNumber: race.redoNumber || state.redosUsedCount,
         lossMargin: race.lossMargin,
       });
       race.locked = true;
       race.redoOpen = false;
       race.redoAttempted = true;
-      state.wins = state.races.filter(r => r.result === 'win').length;
-      state.losses = state.races.filter(r => r.result === 'loss').length;
+      recountRecord();
+      if (race.result === 'loss' && state.rival && race.wonBy !== 'rival') {
+        if (rand() < 0.65) { state.rival.wins++; race.wonBy = 'rival'; }
+      }
+      if (race.result === 'win' && race.wonBy === 'rival') {
+        state.rival.wins = Math.max(0, state.rival.wins - 1);
+        race.wonBy = null;
+      }
+      saveGame();
 
       const outcome = race.margin === -99 ? 'dnf' : race.result;
       state.redoFeedback = {
@@ -3193,6 +3324,200 @@
       setTimeout(() => {
         document.getElementById('redo-feedback')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 40);
+    }
+
+    function pickRival() {
+      const pool = ERAS.filter(e => e.id !== state.era?.id && (
+        state.era?.tier === 'god' ? e.tier === 'god' : e.tier !== 'underdog'
+      ));
+      const r = pick(pool.length ? pool : ERAS.filter(e => e.id !== state.era?.id));
+      const drv = r.drivers.slice().sort((a, b) => b.rating - a.rating)[0];
+      state.rival = { team: r.team, era: r.era, driver: drv.name, color: r.color, wins: 0 };
+    }
+
+    function spendToken(kind) {
+      if (state.tokens <= 0) return;
+      if (kind !== 'power' && kind !== 'aero') return;
+      state.tokens--;
+      state.upgrades[kind] = (state.upgrades[kind] || 0) + 2;
+      saveGame();
+      render();
+    }
+
+    async function requestExtraRedo() {
+      if (state.extraRedoUsed || state.redosLeft > 0) return;
+      if (!state.races.some(r => r.result === 'loss' && !r.redoAttempted)) return;
+      const grant = () => {
+        state.extraRedoUsed = true;
+        state.redosLeft = 1;
+        state.redosUsedCount = 3; // next charge is #4: the emergency tax
+        if (state.phase === 'result') state.phase = 'season';
+        saveGame();
+        render();
+      };
+      if (!ADS.enabled || !ADS.rewardedExtraRedo) { grant(); return; }
+      try {
+        const result = await playAd('rewarded', {
+          placement: 'extra_redo',
+          title: 'Emergency redo',
+          rewardText: 'Reward: one extra redo · heaviest tax in the book · once per season',
+        });
+        if (result === 'completed') grant();
+      } catch (_) { closeAdModal(); }
+    }
+
+    // ── Daily challenge: same seed for everyone, one attempt per day ──
+    function dailySeed() {
+      const d = new Date();
+      return d.getUTCFullYear() * 10000 + (d.getUTCMonth() + 1) * 100 + d.getUTCDate();
+    }
+    function dailyKey() { return `240_daily_${dailySeed()}`; }
+    function dailyUsed() { try { return localStorage.getItem(dailyKey()) === '1'; } catch (_) { return false; } }
+    function markDailyUsed() { try { localStorage.setItem(dailyKey(), '1'); } catch (_) {} }
+
+    function startDaily() {
+      if (dailyUsed()) {
+        alert("Today's attempt is used. New seed at midnight UTC — see the Daily tab on the leaderboard.");
+        return;
+      }
+      const seed = dailySeed();
+      state.mode = 'daily';
+      state.seed = seed;
+      state._rng = mulberry32(seed);
+      // Era + season draw locked from the seed: identical hand for every player
+      const dr = mulberry32(seed ^ 0x51ed2701);
+      state.era = ERAS[Math.floor(dr() * ERAS.length)];
+      state.primary = null; state.teammate = null; state.principal = null;
+      state.lineupOpen = 'primary';
+      state.seasonDraw = {
+        opening: PHASE_TYPES[Math.floor(dr() * PHASE_TYPES.length)].id,
+        mid: PHASE_TYPES[Math.floor(dr() * PHASE_TYPES.length)].id,
+        close: PHASE_TYPES[Math.floor(dr() * PHASE_TYPES.length)].id,
+        wear: WEAR_CLIMATES[Math.floor(dr() * WEAR_CLIMATES.length)].id,
+        sc: SC_CLIMATES[Math.floor(dr() * SC_CLIMATES.length)].id,
+        weather: WEATHER_CLIMATES[Math.floor(dr() * WEATHER_CLIMATES.length)].id,
+        travel: TRAVEL_CLIMATES[Math.floor(dr() * TRAVEL_CLIMATES.length)].id,
+        reg: REG_CLIMATES[Math.floor(dr() * REG_CLIMATES.length)].id,
+        locked: true,
+      };
+      trackEvent('daily_start', { seed, era_id: state.era.id });
+      render();
+      window.scrollTo(0, 0);
+    }
+
+    function exitDaily() {
+      state.mode = 'free';
+      state.seed = null;
+      state._rng = null;
+      state.era = null; state.primary = null; state.teammate = null; state.principal = null;
+      state.seasonDraw = null;
+      render();
+    }
+
+    // ── Persistence: refresh-proof in-progress season ──
+    const SAVE_KEY = '240_save_v1';
+    function saveGame() {
+      if (state.phase !== 'season') return;
+      try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify({
+          v: 1,
+          eraId: state.era?.id,
+          primary: state.primary?.name,
+          teammate: state.teammate?.name,
+          principal: state.principal?.name,
+          budget: state.budget,
+          tirePhil: state.tirePhil, devCutoff: state.devCutoff,
+          lobbying: state.lobbying, sponsor: state.sponsor,
+          seasonDraw: state.seasonDraw,
+          races: state.races,
+          redosLeft: state.redosLeft, redosUsedCount: state.redosUsedCount,
+          extraRedoUsed: state.extraRedoUsed,
+          tokens: state.tokens, tokensGranted: state.tokensGranted, upgrades: state.upgrades,
+          rival: state.rival, mode: state.mode, seed: state.seed,
+          seasonComplete: state.seasonComplete,
+        }));
+      } catch (_) {}
+    }
+    function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (_) {} }
+    function restoreGame() {
+      let s = null;
+      try { s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); } catch (_) {}
+      if (!s || s.v !== 1 || !s.eraId || !s.races?.length) return false;
+      const era = ERAS.find(e => e.id === s.eraId);
+      if (!era) return false;
+      state.era = era;
+      state.primary = era.drivers.find(d => d.name === s.primary) || era.drivers[0];
+      state.teammate = era.drivers.find(d => d.name === s.teammate) || era.drivers[1] || era.drivers[0];
+      state.principal = era.principals.find(p => p.name === s.principal) || era.principals[0];
+      state.budget = s.budget; state.tirePhil = s.tirePhil; state.devCutoff = s.devCutoff;
+      state.lobbying = s.lobbying; state.sponsor = s.sponsor;
+      state.seasonDraw = s.seasonDraw; state.races = s.races;
+      state.redosLeft = s.redosLeft; state.redosUsedCount = s.redosUsedCount || 0;
+      state.extraRedoUsed = !!s.extraRedoUsed;
+      state.tokens = s.tokens || 0; state.tokensGranted = s.tokensGranted || 0;
+      state.upgrades = s.upgrades || { power: 0, aero: 0 };
+      state.rival = s.rival || null; state.mode = s.mode || 'free'; state.seed = s.seed ?? null;
+      if (state.seed != null) state._rng = mulberry32((state.seed ^ 0xABCD) >>> 0);
+      state.seasonComplete = !!s.seasonComplete;
+      recountRecord();
+      state.phase = 'season';
+      return true;
+    }
+
+    // ── History + trophies (localStorage) ──
+    const HISTORY_KEY = '240_history_v1';
+    function historyLoad() {
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (_) { return []; }
+    }
+    function historySave(rows) {
+      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(rows.slice(0, 200))); } catch (_) {}
+    }
+    function recordSeasonToHistory() {
+      if (state.recorded || !state.era) return;
+      if (state.wins + state.losses !== 24) return;
+      state.recorded = true;
+      const rows = historyLoad();
+      rows.unshift({
+        ts: Date.now(),
+        era_id: state.era.id, team: state.era.team, era_label: state.era.era, tier: state.era.tier,
+        wins: state.wins, losses: state.losses,
+        redos: state.redosUsedCount, mode: state.mode, seed: state.seed,
+        map: state.races.map(r => (r.result === 'win' ? '1' : '0')).join(''),
+        wet_wins: state.races.filter(r => r.actualRain >= 25 && r.result === 'win').length,
+        wet_races: state.races.filter(r => r.actualRain >= 25).length,
+        dnfs: state.races.filter(r => r.margin === -99).length,
+        primary: state.primary?.name || '', rival: state.rival ? `${state.rival.driver} ${state.rival.wins}W` : '',
+      });
+      historySave(rows);
+    }
+    function bestByEra() {
+      const best = {};
+      for (const h of historyLoad()) {
+        if (!best[h.era_id] || h.wins > best[h.era_id].wins || (h.wins === best[h.era_id].wins && h.redos < best[h.era_id].redos)) {
+          best[h.era_id] = h;
+        }
+      }
+      return best;
+    }
+    const TROPHIES = [
+      { id: 'first', label: 'Lights Out', desc: 'Complete your first season.', test: hs => hs.length >= 1 },
+      { id: 'winning', label: 'Race Winner', desc: 'A 14+ win season.', test: hs => hs.some(h => h.wins >= 14) },
+      { id: 'dominant', label: 'Championship Iron', desc: 'A 20+ win season.', test: hs => hs.some(h => h.wins >= 20) },
+      { id: 'elite', label: 'Elite Sweep', desc: 'A 22+ win season.', test: hs => hs.some(h => h.wins >= 22) },
+      { id: 'perfect', label: 'Perfect Season', desc: '24–0. The whole point.', test: hs => hs.some(h => h.wins === 24) },
+      { id: 'folklore', label: 'Folklore', desc: '24–0 with an Underdog era.', test: hs => hs.some(h => h.wins === 24 && h.tier === 'underdog') },
+      { id: 'noredo', label: 'No Safety Net', desc: '20+ wins without spending a redo.', test: hs => hs.some(h => h.wins >= 20 && h.redos === 0) },
+      { id: 'rainmaster', label: 'Rainmaster', desc: 'Win every wet race in a season (3+ wet).', test: hs => hs.some(h => h.wet_races >= 3 && h.wet_wins === h.wet_races) },
+      { id: 'ironclad', label: 'Ironclad', desc: 'A season with zero retirements.', test: hs => hs.some(h => h.dnfs === 0) },
+      { id: 'daily', label: 'Daily Driver', desc: 'Complete a Daily Challenge.', test: hs => hs.some(h => h.mode === 'daily') },
+      { id: 'collector5', label: 'Garage Keys', desc: 'Complete seasons with 5 different eras.', test: hs => new Set(hs.map(h => h.era_id)).size >= 5 },
+      { id: 'collector12', label: 'Era Collector', desc: 'Complete seasons with 12 different eras.', test: hs => new Set(hs.map(h => h.era_id)).size >= 12 },
+      { id: 'tourist', label: 'World Tour', desc: 'Complete 10 seasons.', test: hs => hs.length >= 10 },
+      { id: 'giantkiller', label: 'Giant Killer', desc: '20+ wins with an Underdog era.', test: hs => hs.some(h => h.wins >= 20 && h.tier === 'underdog') },
+    ];
+    function earnedTrophies() {
+      const hs = historyLoad();
+      return TROPHIES.map(t => ({ ...t, earned: t.test(hs) }));
     }
 
     function resetAll() {
@@ -3221,11 +3546,23 @@
         redoFeedback: null,
         lbSubmitted: false,
         eraSpinsUsed: 0,
+        mode: 'free',
+        seed: null,
+        _rng: null,
+        tokens: 0,
+        tokensGranted: 0,
+        upgrades: { power: 0, aero: 0 },
+        rival: null,
+        redosUsedCount: 0,
+        extraRedoUsed: false,
+        recorded: false,
+        flashReason: null,
         ads: {
           seasonInterstitialShown: false,
           shareClean: false,
         },
       });
+      clearSave();
       render();
       window.scrollTo(0, 0);
     }
@@ -3241,7 +3578,7 @@
           <p>The reality benchmark. A true 24–0 is rarer still. This shows what historically elite packages looked like (e.g. McLaren 15/16, Red Bull 21/22). It has never happened in history and the algorithm has been developed to reflect this.</p>
           <p class="text-white font-display text-xs tracking-wide mt-2">PERFECT SEASON DIFFICULTY</p>
           <ul class="list-disc pl-4 space-y-1.5">
-            <li>Base win probability per race: ~65–75% even with a strong setup.</li>
+            <li>Per-race win probability by package: roughly ~90% (God), ~85% (Strong), ~75% (Underdog) with clean calls.</li>
             <li>Small mistakes or bad luck compound across 24 weekends.</li>
             <li>Only truly optimized builds + good decisions + lucky breaks + smart redo usage reach 24–0.</li>
           </ul>
@@ -3297,7 +3634,7 @@
             <li><strong class="text-white">Reliability</strong>: finish rate, mechanical robustness — one DNF ends 24–0</li>
             <li><strong class="text-white">Strategy</strong>: race ops, pit calls, race craft — pays when SC and chaos spike</li>
           </ul>
-          <p><strong class="text-white">Real F1 shape</strong>: elite cars still have a bigger margin on their strong track type (e.g. 1988 McLaren on power tracks; turbo Ferrari at Monza). Balanced gods still win technical races — they just work harder for them.</p>
+          <p><strong class="text-white">Real grand prix shape</strong>: elite cars still have a bigger margin on their strong track type (e.g. 1988 McLaren on power tracks; turbo Ferrari at Monza). Balanced gods still win technical races — they just work harder for them.</p>
           <p><strong class="text-white">Underdogs are spiky by design</strong>: one elite axis, one fatal hole. Flat 25s fails. Read the path line on the card.</p>
           <p class="text-xs text-zinc-400">See Stakes ?. See Season Draw ?.</p>
         `,
@@ -3369,7 +3706,7 @@
           <p><strong class="text-white">Weather climate</strong>: Dry bias, Standard, or Unstable rain variance.</p>
           <p><strong class="text-white">Travel</strong>: Compact vs Flyaway heavy (Regional activation).</p>
           <p><strong class="text-white">Regs</strong>: Quiet, Standard, or Reg heat (scales lobbying risk).</p>
-          <p class="font-display text-xs tracking-wide mt-2" style="color:#D4AF37">KEY INSIGHTS FROM REAL F1 DATA</p>
+          <p class="font-display text-xs tracking-wide mt-2" style="color:#D4AF37">KEY INSIGHTS FROM REAL GRAND PRIX DATA</p>
           <p>Race location and order have a massive impact on season outcomes:</p>
           <ul class="list-disc pl-4 space-y-1.5">
             <li><strong class="text-white">Track characteristics</strong> — Power tracks (Monza, Spa, Jeddah, Baku) favor engines. Technical tracks (Monaco, Singapore, Hungary, Zandvoort) favor chassis/aero and driver skill.</li>
@@ -3378,7 +3715,7 @@
             <li><strong class="text-white">Back-to-back races</strong> — Fatigue, logistics, and limited setup time favor well-resourced ops (reliability + strategy axes).</li>
             <li><strong class="text-white">Calendar clustering</strong> — European blocks vs flyaways affect development windows and part risk — modeled here as Arc + Travel + Dev cut-off interaction.</li>
           </ul>
-          <p class="font-display text-xs tracking-wide mt-2" style="color:#D4AF37">HOW THIS MAPS IN 24-0 F1</p>
+          <p class="font-display text-xs tracking-wide mt-2" style="color:#D4AF37">HOW THIS MAPS IN 24-0</p>
           <ul class="list-disc pl-4 space-y-1.5">
             <li>Power / Technical / Weather <strong class="text-white">arc chips</strong> tilt whole calendar blocks toward those stresses.</li>
             <li>Fixed venues still carry tire wear, SC, and base rain (card facts).</li>
@@ -3391,7 +3728,7 @@
       ads: {
         title: 'Ads & free play',
         body: `
-          <p><strong class="text-white">24-0 F1 is free to play.</strong> Ads fund the game. They never buy wins.</p>
+          <p><strong class="text-white">24-0: Perfect Season is free to play.</strong> Ads fund the game. They never buy wins.</p>
           <p class="text-white font-display text-xs tracking-wide mt-2">SOFT PLACEMENTS ONLY</p>
           <ul class="list-disc pl-4 space-y-1.5">
             <li><strong class="text-white">Banner</strong> on setup / season screens (not mid-race cards).</li>
@@ -3489,7 +3826,7 @@
       }
     });
 
-    // ─────────────────────────────────────────────
+    // ───────────────────────────────────────────��─
     // RENDER
     // ─────────────────────────────────────────────
     function sectionTitle(label, helpKey, rightHtml = '') {
@@ -3518,8 +3855,8 @@
         <header class="mb-5 border-b border-zinc-800 pb-4">
           <div class="flex items-end justify-between gap-3">
             <div>
-              <div class="text-xs text-zinc-300 tracking-widest uppercase mb-1">F1 Roster Protocol · ${ERAS.length} Eras</div>
-              <h1 class="font-display text-2xl text-white tracking-tight">24-0<span class="text-f1-red"> F1</span></h1>
+              <div class="text-xs text-zinc-300 tracking-widest uppercase mb-1">Roster Protocol · ${ERAS.length} Eras</div>
+              <h1 class="font-display text-2xl text-white tracking-tight">24-0<span class="text-f1-red"> Perfect Season</span></h1>
               ${sub ? `<p class="text-sm text-zinc-300 mt-1">${sub}</p>`: ''}
             </div>
             <div class="text-right">
@@ -3535,7 +3872,9 @@
             <span class="px-1.5 py-0.5 border" style="color:#D4AF37;border-color:#D4AF37">God Tier ×${tc.god}</span>
             <span class="px-1.5 py-0.5 border border-zinc-400 text-zinc-300">Strong ×${tc.strong}</span>
             <span class="px-1.5 py-0.5 border" style="color:#CD7F32;border-color:#CD7F32">Underdog ×${tc.underdog} · Folklore</span>
-            <button type="button" onclick="openLeaderboard()" class="lb-chip ml-auto px-0 py-0.5 text-[#3B82F6] hover:text-[#60A5FA]"
+            <button type="button" onclick="openGarage()" class="lb-chip ml-auto px-0 py-0.5" style="color:#D4AF37"
+              title="Eras · history · trophies">⌂ Garage</button>
+            <button type="button" onclick="openLeaderboard()" class="lb-chip px-0 py-0.5 text-[#3B82F6] hover:text-[#60A5FA]"
               title="Season leaderboard">★ Leaderboard ★</button>
           </div>
           <div class="mt-3">
@@ -3642,10 +3981,23 @@
         ${header('Spin an era. Draft the line-up. Hunt 24–0.')}
         <div class="space-y-5 fade-in">
 
+          <!-- DAILY CHALLENGE -->
+          <section class="border p-3 flex items-center justify-between gap-3 ${state.mode === 'daily' ? 'border-sky-500/60 bg-sky-500/10' : 'border-zinc-700 bg-zinc-900'}">
+            <div class="min-w-0">
+              <div class="font-display text-[10px] tracking-widest uppercase text-sky-400">Daily Challenge</div>
+              <div class="text-[11px] text-zinc-300 mt-0.5">${state.mode === 'daily'
+                ? `Locked hand · seed #${dailySeed()} · one attempt · same for everyone`
+                : dailyUsed() ? 'Today\'s attempt used · new seed at midnight UTC' : 'Same era + season for everyone · one attempt · daily board'}</div>
+            </div>
+            ${state.mode === 'daily'
+              ? `<button type="button" onclick="exitDaily()" class="shrink-0 px-3 py-2 border border-zinc-600 text-zinc-300 text-[10px] tracking-widest uppercase font-display">Exit</button>`
+              : `<button type="button" onclick="startDaily()" ${dailyUsed() ? 'disabled' : ''} class="shrink-0 px-3 py-2 text-[10px] tracking-widest uppercase font-display ${dailyUsed() ? 'bg-zinc-800 text-zinc-500' : 'bg-sky-600 text-white'}">Play</button>`}
+          </section>
+
           <!-- ERA SPIN -->
           <section class="bg-zinc-800 p-5">
             <div id="era-card" class="min-h-[320px]">${eraCardInner(era)}</div>
-            <button id="spin-btn" onclick="spinEra()" ${state.spinning ? 'disabled': ''}
+            ${state.mode === 'daily' ? '<div class="mt-2 text-center text-[10px] text-sky-400 uppercase tracking-wider font-display py-2 border border-sky-500/40">Era locked by daily seed</div>' : `<button id="spin-btn" onclick="spinEra()" ${state.spinning ? 'disabled': ''}
               class="w-full mt-2 py-3.5 bg-f1-red text-white font-display text-xs tracking-widest uppercase hover:bg-red-700 transition disabled:opacity-50">
               ${(() => {
                 if (!era) return 'Spin Era';
@@ -3653,8 +4005,8 @@
                 if (ADS.enabled && ADS.rewardedEraRespin) return 'Watch ad · Re-spin Era';
                 return 'Re-spin Era';
               })()}
-            </button>
-            ${era && freeEraSpinsLeft() === 0 && ADS.enabled && ADS.rewardedEraRespin ? `
+            </button>`}
+            ${state.mode !== 'daily' && era && freeEraSpinsLeft() === 0 && ADS.enabled && ADS.rewardedEraRespin ? `
               <p class="text-[10px] text-zinc-500 mt-1.5 text-center">Optional rewarded ad · free spins used · never changes race odds</p>
             ` : ''}
           </section>
@@ -3869,15 +4221,16 @@
           ${trackOutlineImg(race.n)}
           <div class="race-card-head flex justify-between items-start gap-3 mb-3">
             <div class="min-w-0">
-              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="font-normal text-[12px]" style="color:${phaseColor}">· ${phaseLab}</span>` : ''}</div>
+              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="font-normal text-[12px]" style="color:${phaseColor}">· ${phaseLab}</span>` : ''}${race.isSprint ? ' <span class="font-normal text-[11px] text-amber-400">· SPRINT</span>' : ''}</div>
               <div class="font-display text-lg text-white leading-tight mt-0.5 flex items-center gap-0">
                 ${flagImg(race.flag)}<span>${race.name}</span>
               </div>
               <div class="text-[11px] text-zinc-400">${race.loc}</div>
             </div>
             <div class="text-right shrink-0 relative z-[1]">
+              ${!race.result && state.phase === 'season' ? `<div class="font-display text-xs tracking-widest ${estimateWin(race) >= 0.85 ? 'text-emerald-400' : estimateWin(race) >= 0.72 ? 'text-amber-400' : 'text-f1-red'}">${Math.round(estimateWin(race) * 100)}%</div><div class="text-[9px] text-zinc-600 uppercase tracking-wider">Win est</div>` : ''}
               ${race.result === 'win' ? '<div class="font-display text-emerald-400 text-xs tracking-widest">WIN</div>' : ''}
-              ${race.result === 'loss' ? '<div class="font-display text-f1-red text-xs tracking-widest">LOSS</div>' : ''}
+              ${race.result === 'loss' ? `<div class="font-display text-f1-red text-xs tracking-widest">LOSS${race.wonBy === 'rival' && state.rival ? `</div><div class="text-[9px] uppercase tracking-wider" style="color:${state.rival.color}">${state.rival.driver.split(' ').slice(-1)[0]} won` : ''}</div>` : ''}
               ${race.result && race.margin !== -99 ? `<div class="text-[10px] text-zinc-500">Δ ${race.margin > 0 ? '+' : ''}${race.margin}</div>` : ''}
               ${race.margin === -99 ? '<div class="text-[10px] text-zinc-500">DNF</div>' : ''}
             </div>
@@ -3890,7 +4243,11 @@
             <span class="${wear.cls}">Wear ${wear.text}</span>
             <span class="text-amber-500/90">SC ${race.sc}%</span>
           </div>
-          <p class="race-fact">${race.fact}</p>
+          ${state.flashReason && state.flashReason.n === race.n ? `
+            <div class="mb-2 px-2.5 py-2 border border-amber-500/50 bg-amber-500/10 text-[11px] text-amber-300 fade-in">
+              <span class="font-display uppercase tracking-wider text-[9px]">Flashpoint</span> · ${state.flashReason.reason}
+            </div>` : ''}
+          <p class="race-fact line-clamp-2" style="cursor:pointer" title="Tap to expand" onclick="this.classList.toggle('line-clamp-2')">${race.fact}</p>
 
           ${showDecisions ? `
             <div class="race-opts">
@@ -3902,8 +4259,18 @@
               ${optRow('engineMode', [['conserve', 'Cons'], ['balanced', 'Bal'], ['attack', 'Atk']], race.engineMode)}
               <div class="opt-lab">Pit</div>
               ${optRow('pitWindow', [['undercut', 'Under'], ['standard', 'Std'], ['overcut', 'Over']], race.pitWindow)}
+              <div class="opt-lab">Quali</div>
+              ${optRow('quali', [['safe', 'Safe'], ['pole', 'Pole push']], race.quali || 'safe')}
+              ${race.predRain >= 10 ? `
+                <div class="opt-lab">Wet call</div>
+                ${optRow('wetCall', [['auto', 'Auto'], ['slicks', 'Slicks'], ['inters', 'Inters']], race.wetCall || 'auto')}
+              ` : ''}
+              ${race.predRain >= 30 && state.teammate && state.teammate.wet > state.primary.wet ? `
+                <div class="opt-lab">Lead</div>
+                ${optRow('lead', [['primary', state.primary.name.split(' ').slice(-1)[0]], ['teammate', state.teammate.name.split(' ').slice(-1)[0]]], race.lead || 'primary')}
+              ` : ''}
             </div>
-            ${race.redoOpen || state.races.some(r => r.result) ? `
+            ${race.redoOpen ? `
               <button onclick="applyRedoSim(${race.n})"
                 class="w-full mt-3 py-2.5 bg-zinc-100 text-zinc-900 text-[10px] tracking-widest uppercase font-display">
                 Run redo
@@ -3937,16 +4304,28 @@
       const anyResult = state.races.some(r => r.result);
       return `
         ${header(`${era.team} · ${state.primary.name}`)}
-        <div class="sticky top-0 z-20 -mx-4 px-4 py-3 mb-5 bg-zinc-950/95 backdrop-blur border-b border-zinc-800 flex items-center justify-between">
-          <div class="text-sm">
-            <span class="text-emerald-400 font-display">${state.wins}</span>
-            <span class="text-zinc-600 mx-1">–</span>
-            <span class="text-f1-red font-display">${state.losses}</span>
-            <span class="text-zinc-600 text-xs ml-2">W–L</span>
+        <div class="sticky top-0 z-20 -mx-4 px-4 py-3 mb-5 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+          <div class="flex items-center justify-between">
+            <div class="text-sm">
+              <span class="text-emerald-400 font-display">${state.wins}</span>
+              <span class="text-zinc-600 mx-1">–</span>
+              <span class="text-f1-red font-display">${state.losses}</span>
+              <span class="text-zinc-600 text-xs ml-2">W–L</span>
+              ${state.mode === 'daily' ? '<span class="ml-2 text-[9px] uppercase tracking-wider px-1.5 py-0.5 border border-sky-500/60 text-sky-400 font-display">Daily</span>' : ''}
+            </div>
+            <div class="text-xs text-zinc-400 text-right">
+              <div class="uppercase tracking-wider text-[10px] text-zinc-500">Season redos</div>
+              <div class="font-display text-zinc-200">${state.redosLeft}<span class="text-zinc-600">/${SEASON_REDOS}</span>${state.extraRedoUsed ? '<span class="text-amber-500 text-[10px] ml-1">+E</span>' : ''}</div>
+            </div>
           </div>
-          <div class="text-xs text-zinc-400 text-right">
-            <div class="uppercase tracking-wider text-[10px] text-zinc-500">Season redos</div>
-            <div class="font-display text-zinc-200">${state.redosLeft}<span class="text-zinc-600">/${SEASON_REDOS}</span></div>
+          <div class="flex items-center justify-between mt-1.5 gap-2">
+            ${state.rival ? `<div class="text-[10px] uppercase tracking-wider truncate"><span class="text-zinc-500">Rival</span> <span style="color:${state.rival.color}">${state.rival.driver}</span> <span class="text-zinc-300 font-display">${state.rival.wins}W</span></div>` : '<div></div>'}
+            ${state.tokens > 0 ? `
+              <div class="flex items-center gap-1.5 shrink-0">
+                <span class="text-[9px] uppercase tracking-wider" style="color:#D4AF37">Token ×${state.tokens}</span>
+                <button type="button" onclick="spendToken('power')" class="text-[9px] px-1.5 py-0.5 border border-zinc-600 text-zinc-300 uppercase font-display">+2 PU</button>
+                <button type="button" onclick="spendToken('aero')" class="text-[9px] px-1.5 py-0.5 border border-zinc-600 text-zinc-300 uppercase font-display">+2 Aero</button>
+              </div>` : ''}
           </div>
         </div>
 
@@ -3958,6 +4337,8 @@
           <div class="flex justify-between"><span>Lead</span><span class="text-zinc-200">${state.principal.name}</span></div>
           <div class="flex justify-between gap-2"><span>Season arc</span><span class="text-right font-medium">${scheduleSummaryHtml()}</span></div>
           <div class="flex justify-between"><span>Season redos</span><span class="text-zinc-200">${state.redosLeft} remaining of ${SEASON_REDOS} · taxed</span></div>
+          ${state.rival ? `<div class="flex justify-between"><span>Rival</span><span style="color:${state.rival.color}">${state.rival.driver} · ${state.rival.team} ${state.rival.era}</span></div>` : ''}
+          ${state.seed != null ? `<div class="flex justify-between"><span>Seed</span><span class="text-zinc-500 tabular-nums">${state.mode === 'daily' ? 'Daily · ' : ''}#${state.seed}</span></div>` : ''}
         </div>
 
         ${!anyResult ? `
@@ -3980,11 +4361,27 @@
           ${state.races.map(r => renderRaceCard(r)).join('')}
         </div>
 
-        ${!anyResult ? `
-          <button onclick="simulateSeason()" ${state.simulating ? 'disabled' : ''}
-            class="sticky-cta w-full mt-6 py-4 bg-f1-red text-white font-display text-sm tracking-widest uppercase hover:bg-red-700 disabled:opacity-50 shadow-lg shadow-black/40">
-            ${state.simulating ? 'Simulating…' : 'Simulate Full Season'}
-          </button>
+        ${!state.races.every(r => r.result) ? `
+          <div class="sticky-cta mt-6 grid grid-cols-3 gap-2">
+            <button onclick="raceNext()" ${state.simulating ? 'disabled' : ''}
+              class="py-4 bg-f1-red text-white font-display text-[11px] tracking-widest uppercase hover:bg-red-700 disabled:opacity-50 shadow-lg shadow-black/40">
+              ${state.simulating ? '…' : `Race R${String(nextUnresolved()?.n || 1).padStart(2, '0')} ▶`}
+            </button>
+            <button onclick="raceToFlashpoint()" ${state.simulating ? 'disabled' : ''}
+              class="py-4 bg-zinc-100 text-zinc-900 font-display text-[11px] tracking-widest uppercase disabled:opacity-50 shadow-lg shadow-black/40">
+              To flashpoint ⏩
+            </button>
+            <button onclick="simulateSeason()" ${state.simulating ? 'disabled' : ''}
+              class="py-4 border border-zinc-500 bg-zinc-950/95 text-zinc-200 font-display text-[11px] tracking-widest uppercase disabled:opacity-50 backdrop-blur">
+              Sim rest ⏭
+            </button>
+          </div>
+          ${state.redosLeft === 0 && !state.extraRedoUsed && state.races.some(r => r.result === 'loss' && !r.redoAttempted) && ADS.enabled && ADS.rewardedExtraRedo ? `
+            <button onclick="requestExtraRedo()"
+              class="w-full mt-2 py-2.5 border border-amber-600/60 text-amber-400 text-[10px] tracking-widest uppercase font-display">
+              Watch ad · +1 emergency redo · heaviest tax
+            </button>
+          ` : ''}
         ` : (state.seasonComplete || state.races.every(r => r.result)) ? `
           <div class="sticky-cta mt-6 space-y-2">
             <button onclick="goDebrief()"
@@ -4015,6 +4412,8 @@
 
     async function goDebrief() {
       buildDebrief();
+      recordSeasonToHistory();
+      clearSave();
       state.redoFeedback = null;
       await showSeasonCompleteInterstitial();
       state.phase = 'result';
@@ -4108,6 +4507,12 @@
               Return to Races · ${state.redosLeft} Redo${state.redosLeft > 1 ? 's': ''} Left
             </button>
           `: ''}
+          ${state.redosLeft === 0 && !state.extraRedoUsed && state.races.some(r => r.result === 'loss' && !r.redoAttempted) && ADS.enabled && ADS.rewardedExtraRedo ? `
+            <button onclick="requestExtraRedo()"
+              class="w-full py-2.5 border border-amber-600/60 text-amber-400 text-[10px] tracking-widest uppercase font-display">
+              Watch ad · +1 emergency redo · heaviest tax
+            </button>
+          ` : ''}
 
           <button onclick="openShare()"
             class="w-full py-3 border border-zinc-500 text-zinc-100 text-xs tracking-widest uppercase font-display">
@@ -4118,6 +4523,15 @@
             class="w-full py-4 bg-f1-red text-white font-display text-sm tracking-widest uppercase hover:bg-red-700">
             New Campaign
           </button>
+
+          ${isSupporter() ? `
+            <p class="text-[10px] text-center" style="color:#D4AF37">Supporter ♥ · ads off · gold theme unlocked</p>
+          ` : `
+            <button type="button" onclick="openSupport()"
+              class="w-full py-2 border border-zinc-700 text-[10px] tracking-widest uppercase text-zinc-500 font-display hover:text-zinc-300">
+              Support the game ♥ · remove ads
+            </button>
+          `}
         </section>
       `;
     }
@@ -4137,7 +4551,7 @@
       const tier = tierInfo(state.era);
       const redosUsed = SEASON_REDOS - state.redosLeft;
       const lines = [
-        `${state.wins}–${state.losses} in 24-0 F1`,
+        `${state.wins}–${state.losses} in 24-0: Perfect Season`,
         `${badge.label} · ${tier.label}${state.era.tier === 'underdog' ? ' · Folklore' : ''}`,
         `${state.era.team} ${state.era.era}`,
         `${state.primary.name} / ${state.teammate.name} · ${state.principal.name}`,
@@ -4145,9 +4559,10 @@
       ];
       if (state.debrief?.[0]) lines.push(debriefText(state.debrief[0]));
       lines.push('');
-      lines.push('Can you go 24–0? Play 24-0 F1 — spin an era, draft the line-up, hunt the perfect season.');
+      lines.push('Can you go 24–0? Play 24-0: Perfect Season — spin an era, draft the line-up, hunt the sweep.');
       if (!state.ads.shareClean) lines.push('Supported by ads · free to play');
-      lines.push('#F1 #240F1 #PerfectSeason');
+      if (state.rival) lines.push(`Rival: ${state.rival.driver} took ${state.rival.wins} of the losses.`);
+      lines.push('#240PerfectSeason #PerfectSeason #Motorsport');
       return lines.join('\n');
     }
 
@@ -4184,6 +4599,46 @@
       return (r * 0.299 + g * 0.587 + b * 0.114) > 175;
     }
 
+    const SHARE_THEMES = {
+      classic: { bg1: '#101014', bg2: '#09090b', label: 'Classic' },
+      carbon:  { bg1: '#0d0d11', bg2: '#050507', label: 'Carbon' },
+      gold:    { bg1: '#171204', bg2: '#0a0803', label: 'Gold' },
+    };
+    function isSupporter() { try { return localStorage.getItem('240_supporter') === '1'; } catch (_) { return false; } }
+    function setShareTheme(t) {
+      if (!SHARE_THEMES[t]) return;
+      if (t === 'gold' && !state.ads.goldTheme && !isSupporter()) { void requestGoldTheme(); return; }
+      state.shareTheme = t;
+      const canvas = document.getElementById('share-canvas');
+      if (canvas) paintShareCard(canvas);
+      const row = document.getElementById('share-theme-row');
+      if (row) [...row.querySelectorAll('button')].forEach(b => b.classList.toggle('is-on', b.dataset.t === t));
+    }
+    async function requestGoldTheme() {
+      if (!ADS.enabled) { state.ads.goldTheme = true; setShareTheme('gold'); return; }
+      const result = await playAd('rewarded', {
+        placement: 'gold_theme',
+        title: 'Gold share theme',
+        rewardText: 'Reward: gold card theme this session',
+      });
+      if (result === 'completed') { state.ads.goldTheme = true; setShareTheme('gold'); }
+    }
+    function openSupport() {
+      const url = _cfg.supportUrl || '';
+      if (url) { window.open(url, '_blank', 'noopener'); return; }
+      redeemSupporter();
+    }
+    function redeemSupporter() {
+      const code = (prompt('Supporter code (from the support page):') || '').trim();
+      if (code && _cfg.supporterCode && code === _cfg.supporterCode) {
+        try { localStorage.setItem('240_supporter', '1'); } catch (_) {}
+        alert('Supporter unlocked: ads off, gold theme, gold nameplate. Thank you ♥');
+        location.reload();
+      } else if (code) {
+        alert('Code not recognized.');
+      }
+    }
+
     function paintShareCard(canvas) {
       const W = 1080;
       const H = 1080;
@@ -4204,9 +4659,27 @@
       const pad = 44;
       const right = W - pad;
 
-      // Background
-      ctx.fillStyle = '#09090b';
+      // Background (theme-aware: Classic / Carbon / Gold)
+      const theme = SHARE_THEMES[state.shareTheme] || SHARE_THEMES.classic;
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+      bgGrad.addColorStop(0, theme.bg1);
+      bgGrad.addColorStop(1, theme.bg2);
+      ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, W, H);
+      if (state.shareTheme === 'carbon') {
+        ctx.save();
+        ctx.globalAlpha = 0.05;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        for (let x = -H; x < W; x += 14) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + H, H); ctx.stroke();
+        }
+        ctx.restore();
+      }
+      if (state.shareTheme === 'gold') {
+        ctx.fillStyle = 'rgba(212,175,55,0.05)';
+        ctx.fillRect(0, 0, W, H);
+      }
 
       // Era brand wash only (never gold for zero redos)
       const glow = ctx.createRadialGradient(W * 0.55, 200, 40, W * 0.5, 380, 780);
@@ -4256,22 +4729,19 @@
       });
       ctx.textAlign = 'left';
 
-      // ── Logo: 24-0 white · F1 red ──
+      // ── Logo: 24-0 white · PERFECT SEASON red ──
       ctx.fillStyle = '#A1A1AA';
       ctx.font = `600 24px ${display}`;
-      ctx.fillText('F1 ROSTER PROTOCOL', pad, 52);
+      ctx.fillText('ROSTER PROTOCOL', pad, 52);
 
       ctx.fillStyle = '#FAFAFA';
       ctx.font = `700 54px ${display}`;
       const mark = '24-0';
       ctx.fillText(mark, pad, 108);
-      const markW = ctx.measureText(mark).width;
-      ctx.fillStyle = f1Red;
-      ctx.fillText(' F1', pad + markW, 108);
 
-      ctx.fillStyle = '#A1A1AA';
-      ctx.font = `500 26px ${body}`;
-      ctx.fillText('Perfect Season Builder', pad, 142);
+      ctx.fillStyle = f1Red;
+      ctx.font = `600 26px ${display}`;
+      ctx.fillText('PERFECT SEASON', pad, 142);
 
       // Tier chip — gold / silver / bronze
       const chipLabel = (era.tier === 'underdog' ? 'UNDERDOG · FOLKLORE' : tier.label).toUpperCase();
@@ -4399,7 +4869,7 @@
       ctx.textAlign = 'right';
       ctx.font = `700 30px ${display}`;
       const footMark = '24-0';
-      const footF1 = ' F1';
+      const footF1 = ' PERFECT SEASON';
       const footF1W = ctx.measureText(footF1).width;
       ctx.fillStyle = f1Red;
       ctx.fillText(footF1, right, H - 50);
@@ -4483,8 +4953,8 @@
       if (!navigator.share) return 'unavailable';
       const file = new File([blob], filename, { type: 'image/png' });
       const payload = withCaption
-        ? { files: [file], title: '24-0 F1', text: shareCaption() }
-        : { files: [file], title: '24-0 F1' };
+        ? { files: [file], title: '24-0: Perfect Season', text: shareCaption() }
+        : { files: [file], title: '24-0: Perfect Season' };
 
       // Prefer canShare when available; some mobile browsers are picky
       let canFiles = false;
@@ -4594,7 +5064,7 @@
         }
         // No file share: text-only sheet, then offer download
         if (navigator.share) {
-          await navigator.share({ title: '24-0 F1', text: shareCaption() });
+          await navigator.share({ title: '24-0: Perfect Season', text: shareCaption() });
           setShareStatus('Caption shared. Use Save PNG for the image.');
           return;
         }
@@ -4662,6 +5132,8 @@
         principal: state.principal?.name || '',
         schedule: scheduleSummary(),
         is_perfect: state.wins === 24,
+        mode: state.mode || 'free',
+        seed: state.seed,
       };
     }
 
@@ -4741,6 +5213,7 @@
                 <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span class="lb-record">${rec}</span>
                   ${rare.badge ? `<span class="lb-pill" style="color:${rare.badgeColor};border-color:${rare.badgeColor}">${rare.badge}</span>` : ''}
+                  ${r.mode === 'daily' ? '<span class="lb-pill" style="color:#38BDF8;border-color:#38BDF8">DAILY</span>' : ''}
                 </div>
                 ${rare.blurb ? `<div class="text-[10px] mt-0.5" style="color:${rare.badgeColor}">${rare.blurb}</div>` : ''}
                 <div class="text-xs text-zinc-200 mt-1.5 truncate font-medium">${r.nickname || 'Driver'}</div>
@@ -4762,23 +5235,24 @@
     }
 
     let _lbTab = 'public';
-    let _lbCache = { public: [], device: [] };
+    let _lbCache = { public: [], daily: [], device: [] };
 
     function setLeaderboardTab(tab) {
-      _lbTab = tab === 'device' ? 'device' : 'public';
-      const pub = document.getElementById('lb-tab-public');
-      const dev = document.getElementById('lb-tab-device');
-      if (pub) {
-        pub.classList.toggle('is-on', _lbTab === 'public');
-        pub.setAttribute('aria-selected', _lbTab === 'public' ? 'true' : 'false');
-      }
-      if (dev) {
-        dev.classList.toggle('is-on', _lbTab === 'device');
-        dev.setAttribute('aria-selected', _lbTab === 'device' ? 'true' : 'false');
+      _lbTab = tab === 'device' ? 'device' : tab === 'daily' ? 'daily' : 'public';
+      for (const id of ['public', 'daily', 'device']) {
+        const el = document.getElementById(`lb-tab-${id}`);
+        if (el) {
+          el.classList.toggle('is-on', _lbTab === id);
+          el.setAttribute('aria-selected', _lbTab === id ? 'true' : 'false');
+        }
       }
       const body = document.getElementById('lb-body');
       if (!body) return;
-      const rows = _lbTab === 'device' ? _lbCache.device : _lbCache.public;
+      const rows = _lbCache[_lbTab] || [];
+      if (_lbTab === 'daily' && !rows.length) {
+        body.innerHTML = `<p class="text-zinc-400 text-sm px-1">No results for today's seed (#${dailySeed()}) yet.</p><p class="text-[11px] text-zinc-600 mt-2 px-1">Play the Daily Challenge from the setup screen — one attempt, same hand for everyone, resets at midnight UTC.</p>`;
+        return;
+      }
       body.innerHTML = lbRenderRows(rows);
     }
 
@@ -4801,13 +5275,13 @@
       };
     }
 
-    async function lbFetchRemote() {
+    async function lbFetchRemote(filter) {
       const base = supabaseBaseUrl();
       const key = _cfg.supabaseAnonKey || '';
       if (!base || !key) return [];
       try {
         const res = await fetch(
-          `${base}/rest/v1/season_results?select=*&order=wins.desc,redos_used.asc,created_at.desc&limit=30`,
+          `${base}/rest/v1/season_results?select=*${filter || ''}&order=wins.desc,redos_used.asc,created_at.desc&limit=30`,
           { headers: supabaseHeaders() }
         );
         if (!res.ok) {
@@ -4828,6 +5302,8 @@
           redos_used: r.redos_used ?? 0,
           primary_driver: r.primary_driver || '',
           is_perfect: !!r.is_perfect || r.wins === 24,
+          mode: r.mode || 'free',
+          seed: r.seed ?? null,
           source: 'cloud',
         }));
       } catch (e) {
@@ -4841,25 +5317,37 @@
       const key = _cfg.supabaseAnonKey || '';
       if (!base || !key || !entry) return false;
       try {
-        const res = await fetch(`${base}/rest/v1/season_results`, {
+        const payload = {
+          nickname: entry.nickname,
+          era_id: entry.era_id,
+          team: entry.team,
+          era_label: entry.era_label,
+          tier: entry.tier,
+          wins: entry.wins,
+          losses: entry.losses,
+          redos_used: entry.redos_used,
+          primary_driver: entry.primary_driver,
+          mode: entry.mode || 'free',
+          seed: entry.seed != null ? String(entry.seed) : null,
+          user_agent: (navigator.userAgent || '').slice(0, 180),
+        };
+        let res = await fetch(`${base}/rest/v1/season_results`, {
           method: 'POST',
           headers: supabaseHeaders({
             'Content-Type': 'application/json',
             Prefer: 'return=minimal',
           }),
-          body: JSON.stringify({
-            nickname: entry.nickname,
-            era_id: entry.era_id,
-            team: entry.team,
-            era_label: entry.era_label,
-            tier: entry.tier,
-            wins: entry.wins,
-            losses: entry.losses,
-            redos_used: entry.redos_used,
-            primary_driver: entry.primary_driver,
-            user_agent: (navigator.userAgent || '').slice(0, 180),
-          }),
+          body: JSON.stringify(payload),
         });
+        // Pre-migration schema (no mode/seed columns): retry with the legacy shape
+        if (!res.ok && res.status === 400 && payload.mode !== undefined) {
+          const { mode, seed, ...legacy } = payload;
+          res = await fetch(`${base}/rest/v1/season_results`, {
+            method: 'POST',
+            headers: supabaseHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+            body: JSON.stringify(legacy),
+          });
+        }
         if (!res.ok) {
           console.warn('Leaderboard insert failed', res.status, await res.text().catch(() => ''));
         }
@@ -4871,8 +5359,9 @@
     }
 
     async function submitToLeaderboard() {
-      const nick = (prompt('Nickname for leaderboard (max 24 chars):', 'Driver') || '').trim().slice(0, 24);
+      let nick = (prompt('Nickname for leaderboard (max 24 chars):', 'Driver') || '').trim().slice(0, 24);
       if (!nick) return;
+      if (isSupporter() && !nick.includes('♥')) nick = `${nick.slice(0, 22)} ♥`;
       const entry = currentSeasonEntry(nick);
       if (!entry) {
         alert('Finish all 24 races before submitting.');
@@ -4906,7 +5395,11 @@
       const device = lbSort(lbLocalLoad().map(r => ({ ...r, source: 'device' }))).slice(0, 40);
       const remote = await lbFetchRemote();
       const pub = lbSort(remote.map(r => ({ ...r, source: 'cloud' }))).slice(0, 40);
-      _lbCache = { public: pub, device };
+      // Daily: today's seed only. Server-side filter; falls back to client filter
+      // if the columns don't exist yet (pre-migration schema).
+      let daily = await lbFetchRemote(`&mode=eq.daily&seed=eq.${dailySeed()}`);
+      if (!daily.length) daily = remote.filter(r => r.mode === 'daily' && Number(r.seed) === dailySeed());
+      _lbCache = { public: pub, daily: lbSort(daily).slice(0, 40), device };
 
       // Default tab: Public if cloud has rows, else Device
       _lbTab = pub.length ? 'public' : 'device';
@@ -4922,11 +5415,87 @@
       }
     }
 
+    function openGarage() { state.garageTab = state.garageTab || 'eras'; state.prevPhase = state.phase; state.phase = 'garage'; render(); window.scrollTo(0, 0); }
+    function closeGarage() { state.phase = state.prevPhase && state.prevPhase !== 'garage' ? state.prevPhase : 'setup'; render(); }
+    function setGarageTab(t) { state.garageTab = t; render(); }
+
+    function renderGarage() {
+      const tab = state.garageTab || 'eras';
+      const hs = historyLoad();
+      const best = bestByEra();
+      const trophies = earnedTrophies();
+      const earnedN = trophies.filter(t => t.earned).length;
+      const played = new Set(hs.map(h => h.era_id)).size;
+      const tabBtn = (id, label) => `<button type="button" class="lb-tab ${tab === id ? 'is-on' : ''}" onclick="setGarageTab('${id}')">${label}</button>`;
+      let body = '';
+      if (tab === 'eras') {
+        body = `
+          <p class="text-[11px] text-zinc-500 mb-3">${played}/${ERAS.length} eras raced. Best record per era — collect them all.</p>
+          <div class="space-y-1.5">
+            ${ERAS.map(e => {
+              const b = best[e.id];
+              const tc = tierInfo(e).color;
+              return `
+                <div class="flex items-center gap-3 bg-zinc-800 px-3 py-2 ${b ? '' : 'opacity-50'}">
+                  <span class="w-1.5 h-8 shrink-0" style="background:${e.color}"></span>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-xs text-zinc-100 font-medium truncate">${e.team} <span class="text-zinc-400">${e.era}</span></div>
+                    <div class="text-[10px] uppercase tracking-wider" style="color:${tc}">${tierInfo(e).label}</div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    ${b ? `<div class="font-display text-sm ${b.wins === 24 ? 'text-[#F5D76E]' : b.wins >= 20 ? 'text-[#60A5FA]' : 'text-zinc-200'}">${b.wins}–${b.losses}</div><div class="text-[9px] text-zinc-500">Redos ${b.redos}</div>`
+                        : '<div class="text-[10px] text-zinc-600 uppercase tracking-wider">Unraced</div>'}
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>`;
+      } else if (tab === 'history') {
+        body = !hs.length
+          ? '<p class="text-zinc-400 text-sm px-1">No completed seasons yet. Finish a campaign and it lands here with its race map.</p>'
+          : `<div class="space-y-2">${hs.slice(0, 40).map(h => `
+              <div class="bg-zinc-800 p-3">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="min-w-0">
+                    <span class="font-display text-base ${h.wins === 24 ? 'text-[#F5D76E]' : h.wins >= 20 ? 'text-[#60A5FA]' : 'text-zinc-100'}">${h.wins}–${h.losses}</span>
+                    <span class="text-[11px] text-zinc-400 ml-2">${h.team} ${h.era_label}</span>
+                    ${h.mode === 'daily' ? '<span class="ml-1.5 text-[8px] uppercase tracking-wider px-1 py-0.5 border border-sky-500/60 text-sky-400 font-display">Daily</span>' : ''}
+                  </div>
+                  <div class="text-[10px] text-zinc-500 shrink-0">${lbFormatWhen(h.ts)} · Redos ${h.redos}</div>
+                </div>
+                <div class="grid grid-cols-24 gap-px mt-2" style="grid-template-columns:repeat(24,1fr)">
+                  ${(h.map || '').split('').map((c, i) => `<span class="h-2" title="R${i + 1}" style="background:${c === '1' ? 'rgba(16,185,129,0.75)' : 'rgba(225,6,0,0.75)'}"></span>`).join('')}
+                </div>
+                ${h.rival ? `<div class="text-[10px] text-zinc-500 mt-1.5">Rival · ${h.rival}</div>` : ''}
+              </div>`).join('')}</div>`;
+      } else {
+        body = `
+          <p class="text-[11px] text-zinc-500 mb-3">${earnedN}/${trophies.length} trophies.</p>
+          <div class="space-y-1.5">
+            ${trophies.map(t => `
+              <div class="flex items-center gap-3 bg-zinc-800 px-3 py-2.5 ${t.earned ? '' : 'opacity-45'}">
+                <span class="text-lg shrink-0">${t.earned ? '🏆' : '🔒'}</span>
+                <div class="min-w-0">
+                  <div class="text-xs font-display tracking-wide ${t.earned ? 'text-[#F5D76E]' : 'text-zinc-300'}">${t.label}</div>
+                  <div class="text-[11px] text-zinc-400">${t.desc}</div>
+                </div>
+              </div>`).join('')}
+          </div>`;
+      }
+      return `
+        ${header('Garage · eras, history, trophies')}
+        <section class="fade-in">
+          <div class="lb-tabs mb-4">${tabBtn('eras', `Eras ${played}/${ERAS.length}`)}${tabBtn('history', 'History')}${tabBtn('trophies', `Trophies ${earnedN}`)}</div>
+          ${body}
+          <button type="button" onclick="closeGarage()" class="w-full mt-5 py-3 border border-zinc-600 text-xs tracking-widest uppercase text-zinc-300 font-display">Back</button>
+        </section>`;
+    }
+
     function render() {
       const root = document.getElementById('app');
       if (state.phase === 'setup') root.innerHTML = renderSetup();
       else if (state.phase === 'season') root.innerHTML = renderSeason();
       else if (state.phase === 'result') root.innerHTML = renderResult();
+      else if (state.phase === 'garage') root.innerHTML = renderGarage();
       updateAdBanner();
       // Re-measure after layout (banner height / safe area)
       requestAnimationFrame(updateAdBanner);
@@ -4934,7 +5503,10 @@
 
     Object.assign(window, {
       spinEra, spinSeason, selectDriver, selectPrincipal, setLineupOpen, onDriverChange, onPrincipalChange, setBudget, setMod, setPhase,
-      startSeason, simulateSeason, redoRace, applyRedoSim, dismissRedoFeedback, resetAll,
+      startSeason, simulateSeason, raceNext, raceToFlashpoint, redoRace, applyRedoSim, dismissRedoFeedback, resetAll,
+      startDaily, exitDaily, spendToken, requestExtraRedo,
+      openGarage, closeGarage, setGarageTab,
+      setShareTheme, openSupport, redeemSupporter,
       openHelp, closeHelp, goDebrief,
       openShare, closeShare, downloadShareCard, copyShareImage, copyShareCaption, nativeShareCard,
       unlockShareClean, requestEraSpin, ADS,
@@ -4942,6 +5514,7 @@
       state, render, buildDebrief,
     });
 
+    restoreGame(); // refresh-proof: resume an in-progress season
     render();
   </script>
 </body>
