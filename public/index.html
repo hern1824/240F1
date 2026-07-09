@@ -4044,22 +4044,38 @@
       };
     }
 
-    async function lbFetchRemote() {
-      const url = (_cfg.supabaseUrl || '').replace(/\/$/, '');
+    /** Normalize project URL (strip trailing / and accidental /rest/v1). */
+    function supabaseBaseUrl() {
+      let u = String(_cfg.supabaseUrl || '').trim().replace(/\/+$/, '');
+      u = u.replace(/\/rest\/v1$/i, '');
+      return u;
+    }
+
+    function supabaseHeaders(extra = {}) {
       const key = _cfg.supabaseAnonKey || '';
-      if (!url || !key) return [];
+      // Publishable keys (sb_publishable_…) and legacy anon JWTs both go in apikey.
+      // Authorization mirrors apikey for gateway compatibility.
+      return {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        Accept: 'application/json',
+        ...extra,
+      };
+    }
+
+    async function lbFetchRemote() {
+      const base = supabaseBaseUrl();
+      const key = _cfg.supabaseAnonKey || '';
+      if (!base || !key) return [];
       try {
         const res = await fetch(
-          `${url}/rest/v1/season_results?select=*&order=wins.desc,redos_used.asc,created_at.desc&limit=30`,
-          {
-            headers: {
-              apikey: key,
-              Authorization: `Bearer ${key}`,
-              Accept: 'application/json',
-            },
-          }
+          `${base}/rest/v1/season_results?select=*&order=wins.desc,redos_used.asc,created_at.desc&limit=30`,
+          { headers: supabaseHeaders() }
         );
-        if (!res.ok) return [];
+        if (!res.ok) {
+          console.warn('Leaderboard fetch failed', res.status, await res.text().catch(() => ''));
+          return [];
+        }
         const data = await res.json();
         return (data || []).map(r => ({
           id: r.id,
@@ -4076,24 +4092,23 @@
           is_perfect: !!r.is_perfect || r.wins === 24,
           source: 'cloud',
         }));
-      } catch (_) {
+      } catch (e) {
+        console.warn('Leaderboard fetch error', e);
         return [];
       }
     }
 
     async function lbPushRemote(entry) {
-      const url = (_cfg.supabaseUrl || '').replace(/\/$/, '');
+      const base = supabaseBaseUrl();
       const key = _cfg.supabaseAnonKey || '';
-      if (!url || !key || !entry) return false;
+      if (!base || !key || !entry) return false;
       try {
-        const res = await fetch(`${url}/rest/v1/season_results`, {
+        const res = await fetch(`${base}/rest/v1/season_results`, {
           method: 'POST',
-          headers: {
-            apikey: key,
-            Authorization: `Bearer ${key}`,
+          headers: supabaseHeaders({
             'Content-Type': 'application/json',
             Prefer: 'return=minimal',
-          },
+          }),
           body: JSON.stringify({
             nickname: entry.nickname,
             era_id: entry.era_id,
@@ -4107,8 +4122,12 @@
             user_agent: (navigator.userAgent || '').slice(0, 180),
           }),
         });
+        if (!res.ok) {
+          console.warn('Leaderboard insert failed', res.status, await res.text().catch(() => ''));
+        }
         return res.ok;
-      } catch (_) {
+      } catch (e) {
+        console.warn('Leaderboard insert error', e);
         return false;
       }
     }

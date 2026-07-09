@@ -24,8 +24,9 @@ window.SITE_CONFIG = {
   ga4Id: '',
 
   // Supabase (optional — not required for v1 play)
-  supabaseUrl: '',
-  supabaseAnonKey: '',
+  // Project URL only — no /rest/v1 (the app adds that)
+  supabaseUrl: 'https://oxtokirbzrbtkcsxbplb.supabase.co',
+  supabaseAnonKey: 'sb_publishable_ytbzWmrCYggDtiF8yAE5ZQ_GdVubMLE',
 
   // Google AdSense
   adsense: {
