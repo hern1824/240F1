@@ -1,13 +1,16 @@
 /**
  * 24-0 F1 — site & ads config (safe to edit without touching game logic)
  *
- * After AdSense approval:
- *  1. Set ADSENSE_CLIENT to ca-pub-xxxxxxxx
- *  2. Set ADS.demo = false
- *  3. Fill slot IDs below
+ * AdSense:
+ *  1. client + slots.banner from AdSense → Ads → By ad unit
+ *  2. ads.demo = false when units are live
  *
- * Supabase (optional leaderboards later):
- *  Set SUPABASE_URL + SUPABASE_ANON_KEY from project Settings → API
+ * GDPR consent (Google certified CMP — no extra vendor):
+ *  AdSense → Privacy & messaging → GDPR → create/publish message for 240-f1.vercel.app
+ *  Site already loads adsbygoogle.js + Consent Mode defaults in index.html
+ *  Recommended buttons: Consent | Do not consent | Manage options (3-choice)
+ *
+ * Supabase (optional): URL + anon key from project Settings → API
  */
 window.SITE_CONFIG = {
   siteName: '24-0 F1',
