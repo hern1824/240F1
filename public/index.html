@@ -548,7 +548,7 @@
         <canvas id="share-canvas" width="1080" height="1080" aria-label="Shareable season result card"></canvas>
         <p id="share-status" class="text-[11px] text-zinc-400 min-h-[1.25rem]"></p>
         <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="downloadShareCard()" class="py-2.5 bg-f1-red text-white text-[10px] tracking-widest uppercase font-display">Download PNG</button>
+          <button type="button" onclick="downloadShareCard()" class="py-2.5 bg-f1-red text-white text-[10px] tracking-widest uppercase font-display">Save PNG</button>
           <button type="button" onclick="nativeShareCard()" class="py-2.5 border border-zinc-500 text-zinc-100 text-[10px] tracking-widest uppercase font-display">Share…</button>
           <button type="button" onclick="copyShareImage()" class="py-2.5 border border-zinc-600 text-zinc-300 text-[10px] tracking-widest uppercase font-display">Copy image</button>
           <button type="button" onclick="copyShareCaption()" class="py-2.5 border border-zinc-600 text-zinc-300 text-[10px] tracking-widest uppercase font-display">Copy caption</button>
@@ -3992,22 +3992,100 @@
       });
     }
 
+    function shareFileName() {
+      const slug = `${state.era?.team || 'team'}-${state.wins}-${state.losses}`.replace(/\s+/g, '-').toLowerCase();
+      return `24-0-f1-${slug}.png`;
+    }
+
+    /** iOS / Android: prefer share sheet so user can Save Image / Photos. */
+    function prefersMobileShareSheet() {
+      const ua = navigator.userAgent || '';
+      const touch = (navigator.maxTouchPoints || 0) > 0;
+      if (/iPhone|iPad|iPod|Android/i.test(ua)) return true;
+      // iPadOS desktop UA
+      if (navigator.platform === 'MacIntel' && touch) return true;
+      return false;
+    }
+
+    function triggerFileDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2500);
+    }
+
+    /**
+     * Open OS share sheet with the PNG when supported (Save to Photos / Files / apps).
+     * Returns 'shared' | 'cancelled' | 'unavailable'
+     */
+    async function sharePngViaSheet(blob, filename, { withCaption = false } = {}) {
+      if (!navigator.share) return 'unavailable';
+      const file = new File([blob], filename, { type: 'image/png' });
+      const payload = withCaption
+        ? { files: [file], title: '24-0 F1', text: shareCaption() }
+        : { files: [file], title: '24-0 F1' };
+
+      // Prefer canShare when available; some mobile browsers are picky
+      let canFiles = false;
+      try {
+        canFiles = !navigator.canShare || navigator.canShare({ files: [file] });
+      } catch (_) {
+        canFiles = prefersMobileShareSheet();
+      }
+      if (!canFiles) return 'unavailable';
+
+      try {
+        await navigator.share(payload);
+        return 'shared';
+      } catch (e) {
+        if (e?.name === 'AbortError') return 'cancelled';
+        // Retry with caption only on file share failure is less useful for Save PNG
+        throw e;
+      }
+    }
+
     async function downloadShareCard() {
       try {
         paintShareCard(document.getElementById('share-canvas'));
         const blob = await shareCanvasBlob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        const slug = `${state.era.team}-${state.wins}-${state.losses}`.replace(/\s+/g, '-').toLowerCase();
-        a.href = url;
-        a.download = `24-0-f1-${slug}.png`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        setShareStatus('PNG downloaded.');
+        const filename = shareFileName();
+
+        // Mobile: system share sheet → Save Image / Add to Photos / Files
+        if (prefersMobileShareSheet() || (navigator.share && navigator.canShare)) {
+          const result = await sharePngViaSheet(blob, filename, { withCaption: false });
+          if (result === 'shared') {
+            setShareStatus('Share sheet opened — choose Save Image / Photos / Files.');
+            return;
+          }
+          if (result === 'cancelled') {
+            setShareStatus('Share cancelled.');
+            return;
+          }
+        }
+
+        // Desktop / no file-share: classic download
+        triggerFileDownload(blob, filename);
+        setShareStatus(prefersMobileShareSheet()
+          ? 'Download started. If no share sheet appeared, use Share… or long-press the card.'
+          : 'PNG downloaded.');
       } catch (e) {
-        setShareStatus(e.message || 'Download failed.', false);
+        if (e?.name === 'AbortError') {
+          setShareStatus('Share cancelled.');
+          return;
+        }
+        try {
+          paintShareCard(document.getElementById('share-canvas'));
+          const blob = await shareCanvasBlob();
+          triggerFileDownload(blob, shareFileName());
+          setShareStatus('PNG downloaded (fallback).');
+        } catch (e2) {
+          setShareStatus(e2.message || e.message || 'Save failed.', false);
+        }
       }
     }
 
@@ -4016,13 +4094,13 @@
         paintShareCard(document.getElementById('share-canvas'));
         const blob = await shareCanvasBlob();
         if (!navigator.clipboard || !window.ClipboardItem) {
-          setShareStatus('Copy image not supported here — use Download PNG.', false);
+          setShareStatus('Copy image not supported here — use Save PNG.', false);
           return;
         }
         await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
         setShareStatus('Image copied — paste into X, Discord, Slack, etc.');
       } catch (e) {
-        setShareStatus('Could not copy image. Try Download PNG.', false);
+        setShareStatus('Could not copy image. Try Save PNG.', false);
       }
     }
 
@@ -4048,26 +4126,27 @@
       try {
         paintShareCard(document.getElementById('share-canvas'));
         const blob = await shareCanvasBlob();
-        const file = new File([blob], `24-0-f1-${state.wins}-${state.losses}.png`, { type: 'image/png' });
-        const data = {
-          title: '24-0 F1',
-          text: shareCaption(),
-          files: [file],
-        };
-        if (navigator.share && navigator.canShare?.(data)) {
-          await navigator.share(data);
+        const filename = shareFileName();
+        const result = await sharePngViaSheet(blob, filename, { withCaption: true });
+        if (result === 'shared') {
           setShareStatus('Shared.');
           return;
         }
-        if (navigator.share) {
-          await navigator.share({ title: '24-0 F1', text: shareCaption() });
-          setShareStatus('Caption shared (image: use Download).');
+        if (result === 'cancelled') {
+          setShareStatus('Share cancelled.');
           return;
         }
-        setShareStatus('Native share unavailable — use Download or Copy.', false);
+        // No file share: text-only sheet, then offer download
+        if (navigator.share) {
+          await navigator.share({ title: '24-0 F1', text: shareCaption() });
+          setShareStatus('Caption shared. Use Save PNG for the image.');
+          return;
+        }
+        triggerFileDownload(blob, filename);
+        setShareStatus('PNG downloaded (share unavailable).');
       } catch (e) {
         if (e?.name === 'AbortError') setShareStatus('Share cancelled.');
-        else setShareStatus('Share failed — try Download PNG.', false);
+        else setShareStatus('Share failed — try Save PNG.', false);
       }
     }
 
