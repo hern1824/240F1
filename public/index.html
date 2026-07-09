@@ -3139,7 +3139,7 @@
             <li><strong class="text-white">McLaren 1988</strong>: Won almost everything; the advantage was still larger on power tracks (Honda peak).</li>
             <li><strong class="text-white">Ferrari turbo era</strong>: Excelled at Monza-type power venues; twisty technical circuits exposed the softer aero/chassis axis.</li>
           </ul>
-          <p class="text-xs text-zinc-400 mt-2">Open Season Draw ? for how race location and calendar order drive those edges in this game.</p>
+          <p class="text-xs text-zinc-400 mt-2">See Season Draw ?.</p>
         `,
       },
       folklore: {
@@ -3163,7 +3163,7 @@
             <li><strong class="text-white">Perfect Execution</strong>: Thin margins. Wrong stop, Attack on a soft PU, or a bad pit window often means a loss. God tiers can misclick; underdogs usually cannot.</li>
             <li><strong class="text-white">Survival</strong>: DNFs and exclusions end folklore runs. Title, Passive, and Conserve are tools, not free wins. Redos (${SEASON_REDOS}/season, one per race) are scarce and taxed — not a 24–0 cheat code.</li>
           </ol>
-          <p class="text-xs text-zinc-400 mt-2">Rarity is multiplicative gates, not charity. If a rule would not apply the same way to Ferrari 2004, it is not in the rules. Full difficulty math lives under Best Outcomes ?</p>
+          <p class="text-xs text-zinc-400 mt-2">Rarity is multiplicative gates, not charity. If a rule would not apply the same way to Ferrari 2004, it is not in the rules. See Best Outcomes ?.</p>
         `,
       },
       era: {
@@ -3179,7 +3179,7 @@
           </ul>
           <p><strong class="text-white">Real F1 shape</strong>: elite cars still have a bigger margin on their strong track type (e.g. 1988 McLaren on power tracks; turbo Ferrari at Monza). Balanced gods still win technical races — they just work harder for them.</p>
           <p><strong class="text-white">Underdogs are spiky by design</strong>: one elite axis, one fatal hole. Flat 25s fails. Read the path line on the card.</p>
-          <p class="text-xs text-zinc-400">Open Stakes ? for folklore contract · Season Draw ? for how the calendar hits your spike/hole.</p>
+          <p class="text-xs text-zinc-400">See Stakes ?. See Season Draw ?.</p>
         `,
       },
       lineup: {
@@ -3242,14 +3242,14 @@
       schedule: {
         title: 'Season Draw',
         body: `
-          <p><strong class="text-white">One spin. No re-spin.</strong> The season hand is the pressure you build against.</p>
+          <p><strong class="text-white">One spin locks in the race schedule of the season.</strong> The season hand is the pressure you build against.</p>
           <p><strong class="text-white">Arc</strong> (Opening / Mid / Close): Balanced, Power, Technical, or Weather stress per block.</p>
           <p><strong class="text-white">Wear climate</strong>: High-wear, Mixed, or Low-wear bias across the year.</p>
           <p><strong class="text-white">SC climate</strong>: Calm, Standard, or Street-heavy safety-car pressure.</p>
           <p><strong class="text-white">Weather climate</strong>: Dry bias, Standard, or Unstable rain variance.</p>
           <p><strong class="text-white">Travel</strong>: Compact vs Flyaway heavy (Regional activation).</p>
           <p><strong class="text-white">Regs</strong>: Quiet, Standard, or Reg heat (scales lobbying risk).</p>
-          <p class="text-white font-display text-xs tracking-wide mt-2">KEY INSIGHTS FROM REAL F1 DATA</p>
+          <p class="font-display text-xs tracking-wide mt-2" style="color:#D4AF37">KEY INSIGHTS FROM REAL F1 DATA</p>
           <p>Race location and order have a massive impact on season outcomes:</p>
           <ul class="list-disc pl-4 space-y-1.5">
             <li><strong class="text-white">Track characteristics</strong> — Power tracks (Monza, Spa, Jeddah, Baku) favor engines. Technical tracks (Monaco, Singapore, Hungary, Zandvoort) favor chassis/aero and driver skill.</li>
@@ -3258,14 +3258,14 @@
             <li><strong class="text-white">Back-to-back races</strong> — Fatigue, logistics, and limited setup time favor well-resourced ops (reliability + strategy axes).</li>
             <li><strong class="text-white">Calendar clustering</strong> — European blocks vs flyaways affect development windows and part risk — modeled here as Arc + Travel + Dev cut-off interaction.</li>
           </ul>
-          <p class="text-white font-display text-xs tracking-wide mt-2">HOW THIS MAPS IN 24-0 F1</p>
+          <p class="font-display text-xs tracking-wide mt-2" style="color:#D4AF37">HOW THIS MAPS IN 24-0 F1</p>
           <ul class="list-disc pl-4 space-y-1.5">
             <li>Power / Technical / Weather <strong class="text-white">arc chips</strong> tilt whole calendar blocks toward those stresses.</li>
             <li>Fixed venues still carry tire wear, SC, and base rain (card facts).</li>
             <li>Travel climate + Regional sponsors interact with flyaway-heavy hands.</li>
             <li>Wear climate amplifies Push vs Manage tire philosophies.</li>
           </ul>
-          <p class="text-xs text-zinc-400 mt-2">Era can be re-spun. The season hand stays locked for the campaign once drawn. Historical dominance examples: Best Outcomes ?</p>
+          <p class="text-xs text-zinc-400 mt-2">Era can be re-spun. The season hand stays locked for the campaign once drawn. For historical dominance examples, see Best Outcomes ?.</p>
         `,
       },
       ads: {
@@ -3529,8 +3529,7 @@
               class="w-full mt-2 py-3.5 bg-f1-red text-white font-display text-xs tracking-widest uppercase hover:bg-red-700 transition disabled:opacity-50">
               ${(() => {
                 if (!era) return 'Spin Era';
-                const left = freeEraSpinsLeft();
-                if (left > 0) return `Re-spin Era · ${left} free`;
+                if (freeEraSpinsLeft() > 0) return 'Re-spin Era';
                 if (ADS.enabled && ADS.rewardedEraRespin) return 'Watch ad · Re-spin Era';
                 return 'Re-spin Era';
               })()}
@@ -3649,7 +3648,7 @@
           <section class="bg-zinc-800 p-5">
             ${sectionTitle('Season Draw', 'schedule', state.seasonDraw?.locked ? '<div class="text-[10px] text-emerald-400 uppercase tracking-wider">Locked</div>' : '')}
             ${!state.seasonDraw?.locked || state.seasonSpinning ? `
-              <p class="text-[11px] text-zinc-300 mb-3 leading-relaxed">One spin. No re-spin.</p>
+              <p class="text-[11px] text-zinc-300 mb-3 leading-relaxed">One spin locks in the race schedule of the season.</p>
               <button type="button" onclick="spinSeason()" ${state.seasonSpinning || !state.era ? 'disabled' : ''}
                 class="w-full py-3.5 font-display text-xs tracking-widest uppercase transition ${
                   state.seasonSpinning || !state.era
