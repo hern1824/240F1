@@ -233,11 +233,11 @@
       text-transform: none;
     }
     .seg-btn.is-on {
-      border-color: #E10600;
-      color: #fafafa;
-      background: #1a0a0a;
+      border-color: #fafafa;
+      color: #09090b;
+      background: #fafafa;
     }
-    .seg-btn.is-on small { color: #a1a1aa; }
+    .seg-btn.is-on small { color: #3f3f46; }
     /* Compact race decision matrix */
     .race-opts {
       display: grid;
@@ -4229,22 +4229,10 @@
         });
       });
 
-      // ── URL INSIDE the card (content zone, not footer chrome) ──
+      // ── Footer: CTA left · logo right · URL plain bottom-center (no box) ──
       const siteUrl = String(_cfg.siteUrl || 'https://240-f1.vercel.app').replace(/\/+$/, '');
       const urlDisplay = siteUrl.replace(/^https?:\/\//, '');
-      const urlY = 900;
-      ctx.fillStyle = 'rgba(24,24,27,0.95)';
-      ctx.fillRect(pad, urlY - 28, rowW, 48);
-      ctx.strokeStyle = 'rgba(250,250,250,0.22)';
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(pad + 0.5, urlY - 27.5, rowW - 1, 47);
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#FAFAFA';
-      ctx.font = `700 28px ${display}`;
-      ctx.fillText(urlDisplay, W / 2, urlY + 6);
-
-      // ── Footer strip: CTA left · logo right (URL already in body above) ──
-      const footH = 88;
+      const footH = 100;
       ctx.fillStyle = '#18181b';
       ctx.fillRect(0, H - footH, W, footH);
       ctx.fillStyle = brand;
@@ -4253,11 +4241,11 @@
       ctx.textAlign = 'left';
       ctx.fillStyle = '#FAFAFA';
       ctx.font = `600 26px ${display}`;
-      ctx.fillText('Can you go 24–0?', pad, H - 42);
+      ctx.fillText('Can you go 24–0?', pad, H - 58);
 
       ctx.fillStyle = '#A1A1AA';
       ctx.font = `500 22px ${body}`;
-      ctx.fillText('Spin an era · Draft the line-up · Hunt the perfect season', pad, H - 14);
+      ctx.fillText('Spin an era · Draft the line-up · Hunt the perfect season', pad, H - 32);
 
       ctx.textAlign = 'right';
       ctx.font = `700 30px ${display}`;
@@ -4265,9 +4253,15 @@
       const footF1 = ' F1';
       const footF1W = ctx.measureText(footF1).width;
       ctx.fillStyle = f1Red;
-      ctx.fillText(footF1, right, H - 36);
+      ctx.fillText(footF1, right, H - 50);
       ctx.fillStyle = '#FAFAFA';
-      ctx.fillText(footMark, right - footF1W, H - 36);
+      ctx.fillText(footMark, right - footF1W, H - 50);
+
+      // URL bottom-aligned, no box — plain text inside card footer
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FAFAFA';
+      ctx.font = `600 24px ${display}`;
+      ctx.fillText(urlDisplay, W / 2, H - 14);
       ctx.textAlign = 'left';
     }
 
