@@ -231,10 +231,27 @@
       line-height: 1.15;
     }
     .race-opts .opt-row button.is-on {
-      border-color: #E10600;
-      color: #fca5a5;
-      background: #1a0a0a;
+      border-color: #71717a;
+      color: #fafafa;
+      background: #27272a;
     }
+    .race-fact {
+      font-size: 10px;
+      line-height: 1.4;
+      color: #52525b;
+      margin-bottom: 0.75rem;
+    }
+    .lb-chip {
+      cursor: pointer;
+      transition: border-color 0.12s, color 0.12s, background 0.12s;
+    }
+    .lb-chip:hover {
+      border-color: #e4e4e7 !important;
+      color: #fafafa !important;
+      background: #18181b;
+    }
+    #lb-modal.hidden { display: none; }
+    #lb-modal { display: flex; }
     .fade-in { animation: fadeIn 0.2s ease-out; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(3px); }
@@ -473,6 +490,25 @@
       </div>
       <div class="px-5 py-3 border-t border-zinc-800 shrink-0">
         <button type="button" onclick="closeShare()" class="w-full py-2.5 bg-zinc-800 text-zinc-200 text-xs tracking-widest uppercase font-display border border-zinc-700">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div id="lb-modal" class="hidden fixed inset-0 z-50 items-end sm:items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+    <div class="absolute inset-0 bg-black/80" onclick="closeLeaderboard()"></div>
+    <div class="relative w-full max-w-md max-h-[85vh] flex flex-col bg-zinc-900 border border-zinc-700 shadow-2xl">
+      <div class="flex items-start justify-between gap-3 px-5 py-4 border-b border-zinc-800 shrink-0">
+        <div>
+          <div class="text-[10px] tracking-widest uppercase text-f1-red font-display mb-1">Records</div>
+          <h2 id="lb-title" class="font-display text-lg text-white leading-tight">Leaderboard</h2>
+          <p class="text-[11px] text-zinc-500 mt-1">Top seasons · this device + cloud if configured</p>
+        </div>
+        <button type="button" onclick="closeLeaderboard()" class="text-zinc-400 hover:text-white text-sm px-2 py-1 border border-zinc-700" aria-label="Close">✕</button>
+      </div>
+      <div id="lb-body" class="px-5 py-4 overflow-y-auto text-sm text-zinc-300 space-y-2"></div>
+      <div class="px-5 py-3 border-t border-zinc-800 shrink-0">
+        <button type="button" onclick="closeLeaderboard()" class="w-full py-2.5 bg-zinc-800 text-zinc-200 text-xs tracking-widest uppercase font-display border border-zinc-700">Close</button>
       </div>
     </div>
   </div>
@@ -1153,30 +1189,30 @@
     }
 
     const RACES = [
-      { n: 1,  name: 'Bahrain Grand Prix',       loc: 'Sakhir, Bahrain',            flag: 'BH', tire: 'Medium', sc: 12, baseRain: 5,  fact: 'Desert opener. Sand on track early; tyre temperature windows critical.' },
-      { n: 2,  name: 'Saudi Arabian Grand Prix',  loc: 'Jeddah, Saudi Arabia',       flag: 'SA', tire: 'Low',    sc: 28, baseRain: 2,  fact: 'High-speed street circuit. Safety car interventions historically frequent.' },
-      { n: 3,  name: 'Australian Grand Prix',     loc: 'Melbourne, Australia',       flag: 'AU', tire: 'Medium', sc: 22, baseRain: 25, fact: 'Albert Park evolution years. Variable weather and early-season setup risk.' },
-      { n: 4,  name: 'Japanese Grand Prix',       loc: 'Suzuka, Japan',              flag: 'JP', tire: 'High',   sc: 15, baseRain: 35, fact: 'Technical figure-eight. Rain at Suzuka has rewritten championships.' },
-      { n: 5,  name: 'Chinese Grand Prix',        loc: 'Shanghai, China',            flag: 'CN', tire: 'High',   sc: 14, baseRain: 30, fact: 'Long back straight rewards power. Deg high on soft compounds.' },
-      { n: 6,  name: 'Miami Grand Prix',          loc: 'Miami, USA',                 flag: 'US', tire: 'Medium', sc: 18, baseRain: 40, fact: 'Heat and humidity. Thunderstorms can flip predicted dry races.' },
-      { n: 7,  name: 'Emilia Romagna Grand Prix', loc: 'Imola, Italy',               flag: 'IT', tire: 'Medium', sc: 16, baseRain: 28, fact: 'Old-school layout. Overtaking limited; quali and strategy decide.' },
-      { n: 8,  name: 'Monaco Grand Prix',         loc: 'Monte Carlo, Monaco',        flag: 'MC', tire: 'Low',    sc: 35, baseRain: 15, fact: 'Qualifying is the race. One error ends the weekend.' },
-      { n: 9,  name: 'Spanish Grand Prix',        loc: 'Barcelona, Spain',           flag: 'ES', tire: 'High',   sc: 10, baseRain: 12, fact: 'Classic aero benchmark. Long runs expose true race pace hierarchy.' },
-      { n: 10, name: 'Canadian Grand Prix',       loc: 'Montreal, Canada',           flag: 'CA', tire: 'Medium', sc: 30, baseRain: 35, fact: 'Wall of Champions. Braking zones and SC periods create lottery moments.' },
-      { n: 11, name: 'Austrian Grand Prix',       loc: 'Spielberg, Austria',         flag: 'AT', tire: 'Medium', sc: 20, baseRain: 30, fact: 'Short lap, high DRS exposure. Weather fronts move quickly.' },
-      { n: 12, name: 'British Grand Prix',        loc: 'Silverstone, UK',            flag: 'GB', tire: 'High',   sc: 18, baseRain: 45, fact: 'High-speed corners. British weather is the permanent wildcard.' },
-      { n: 13, name: 'Hungarian Grand Prix',      loc: 'Budapest, Hungary',          flag: 'HU', tire: 'High',   sc: 12, baseRain: 25, fact: 'Twisty, low overtake. Undercut power is absolute on a clear track.' },
-      { n: 14, name: 'Belgian Grand Prix',        loc: 'Spa-Francorchamps, Belgium', flag: 'BE', tire: 'Medium', sc: 25, baseRain: 55, fact: 'Spa weather microclimates. Half wet, half dry is not rare.' },
-      { n: 15, name: 'Dutch Grand Prix',          loc: 'Zandvoort, Netherlands',     flag: 'NL', tire: 'High',   sc: 14, baseRain: 35, fact: 'Banked corners and sand. Tyre management under lateral load.' },
-      { n: 16, name: 'Italian Grand Prix',        loc: 'Monza, Italy',               flag: 'IT', tire: 'Low',    sc: 16, baseRain: 20, fact: 'Temple of Speed. Power unit stress peaks; slipstream races possible.' },
-      { n: 17, name: 'Azerbaijan Grand Prix',     loc: 'Baku, Azerbaijan',           flag: 'AZ', tire: 'Low',    sc: 40, baseRain: 8,  fact: 'Longest straight + tight castle section. SC probability among highest.' },
-      { n: 18, name: 'Singapore Grand Prix',      loc: 'Marina Bay, Singapore',      flag: 'SG', tire: 'High',   sc: 32, baseRain: 40, fact: 'Night street race. Heat, humidity, and safety cars punish fatigue.' },
-      { n: 19, name: 'United States Grand Prix',  loc: 'Austin, USA',                flag: 'US', tire: 'High',   sc: 15, baseRain: 20, fact: 'COTA elevation changes. Sector 1 rewards aero balance.' },
-      { n: 20, name: 'Mexico City Grand Prix',    loc: 'Mexico City, Mexico',        flag: 'MX', tire: 'Medium', sc: 14, baseRain: 15, fact: 'High altitude starves engines of air. Cooling and PU maps critical.' },
-      { n: 21, name: 'São Paulo Grand Prix',      loc: 'Interlagos, Brazil',         flag: 'BR', tire: 'High',   sc: 22, baseRain: 50, fact: 'Interlagos weather and slipstream. Championship deciders live here.' },
-      { n: 22, name: 'Las Vegas Grand Prix',      loc: 'Las Vegas, USA',             flag: 'US', tire: 'Low',    sc: 20, baseRain: 5,  fact: 'Cold night track. Tyre warm-up is the hidden performance metric.' },
-      { n: 23, name: 'Qatar Grand Prix',          loc: 'Lusail, Qatar',              flag: 'QA', tire: 'High',   sc: 12, baseRain: 3,  fact: 'Abrasive surface. Tyre life can collapse if compound choice is wrong.' },
-      { n: 24, name: 'Abu Dhabi Grand Prix',      loc: 'Yas Marina, UAE',            flag: 'AE', tire: 'Medium', sc: 14, baseRain: 2,  fact: 'Season finale. Track evolution after sunset; strategy windows narrow late.' },
+      { n: 1,  name: 'Bahrain Grand Prix',       loc: 'Sakhir, Bahrain',            flag: 'BH', tire: 'Medium', sc: 12, baseRain: 5,  fact: 'Desert opener · sand on track early · tyre temp windows · Push only if warm-up is free · low rain, clean baseline weekend' },
+      { n: 2,  name: 'Saudi Arabian Grand Prix',  loc: 'Jeddah, Saudi Arabia',       flag: 'SA', tire: 'Low',    sc: 28, baseRain: 2,  fact: 'High-speed street · SC lottery · walls punish errors · prefer 2-stop flexibility · Overcut when yellows stack' },
+      { n: 3,  name: 'Australian Grand Prix',     loc: 'Melbourne, Australia',       flag: 'AU', tire: 'Medium', sc: 22, baseRain: 25, fact: 'Albert Park evolution · setup risk early · showers flip compounds · keep a Neutral plan · SC if barriers bite' },
+      { n: 4,  name: 'Japanese Grand Prix',       loc: 'Suzuka, Japan',              flag: 'JP', tire: 'High',   sc: 15, baseRain: 35, fact: 'Technical figure-eight · rain rewrites titles · Manage on high wear · wet skill matters · power + aero both pay' },
+      { n: 5,  name: 'Chinese Grand Prix',        loc: 'Shanghai, China',            flag: 'CN', tire: 'High',   sc: 14, baseRain: 30, fact: 'Long back straight · power unit stress · high deg on softs · Manage default · undercut if clear air' },
+      { n: 6,  name: 'Miami Grand Prix',          loc: 'Miami, USA',                 flag: 'US', tire: 'Medium', sc: 18, baseRain: 40, fact: 'Heat + humidity · storm risk · tyre cliffs in traffic · watch rain % · flexible stops beat hero calls' },
+      { n: 7,  name: 'Emilia Romagna Grand Prix', loc: 'Imola, Italy',               flag: 'IT', tire: 'Medium', sc: 16, baseRain: 28, fact: 'Old-school layout · hard to pass · quali + strategy · clean Neutral defaults · avoid free Attack risk' },
+      { n: 8,  name: 'Monaco Grand Prix',         loc: 'Monte Carlo, Monaco',        flag: 'MC', tire: 'Low',    sc: 35, baseRain: 15, fact: 'Quali is the race · one error ends it · SC dense · 2-stop chaos tools · Conserve protects glass packages' },
+      { n: 9,  name: 'Spanish Grand Prix',        loc: 'Barcelona, Spain',           flag: 'ES', tire: 'High',   sc: 10, baseRain: 12, fact: 'Aero benchmark · long-run truth · high wear · Manage preferred · undercut if pace delta is real' },
+      { n: 10, name: 'Canadian Grand Prix',       loc: 'Montreal, Canada',           flag: 'CA', tire: 'Medium', sc: 30, baseRain: 35, fact: 'Wall of Champions · braking zones · SC lottery · wet slices possible · keep strategy flexible' },
+      { n: 11, name: 'Austrian Grand Prix',       loc: 'Spielberg, Austria',         flag: 'AT', tire: 'Medium', sc: 20, baseRain: 30, fact: 'Short lap · DRS trains · weather fronts · standard calls fine · Attack only with Reli cover' },
+      { n: 12, name: 'British Grand Prix',        loc: 'Silverstone, UK',            flag: 'GB', tire: 'High',   sc: 18, baseRain: 45, fact: 'High-speed corners · weather wildcard · high wear · Manage + wet readiness · never lock a dry-only plan' },
+      { n: 13, name: 'Hungarian Grand Prix',      loc: 'Budapest, Hungary',          flag: 'HU', tire: 'High',   sc: 12, baseRain: 25, fact: 'Twisty · low overtake · undercut king · Manage deg · track position over hero pace' },
+      { n: 14, name: 'Belgian Grand Prix',        loc: 'Spa-Francorchamps, Belgium', flag: 'BE', tire: 'Medium', sc: 25, baseRain: 55, fact: 'Microclimates · half wet / half dry · power sector + rain · wet rating critical · flexible stops' },
+      { n: 15, name: 'Dutch Grand Prix',          loc: 'Zandvoort, Netherlands',     flag: 'NL', tire: 'High',   sc: 14, baseRain: 35, fact: 'Banking + sand · lateral load · high wear · Manage compounds · aero balance over pure power' },
+      { n: 16, name: 'Italian Grand Prix',        loc: 'Monza, Italy',               flag: 'IT', tire: 'Low',    sc: 16, baseRain: 20, fact: 'Temple of Speed · PU stress · slipstream · low wear can Push · Attack only if Reli is funded' },
+      { n: 17, name: 'Azerbaijan Grand Prix',     loc: 'Baku, Azerbaijan',           flag: 'AZ', tire: 'Low',    sc: 40, baseRain: 8,  fact: 'Longest straight + castle · SC among highest · 2-stop default · Overcut yellows · walls end runs' },
+      { n: 18, name: 'Singapore Grand Prix',      loc: 'Marina Bay, Singapore',      flag: 'SG', tire: 'High',   sc: 32, baseRain: 40, fact: 'Night street · heat + humidity · SC dense · Manage + 2-stop · fatigue punishes free risk' },
+      { n: 19, name: 'United States Grand Prix',  loc: 'Austin, USA',                flag: 'US', tire: 'High',   sc: 15, baseRain: 20, fact: 'COTA elevation · S1 aero · high wear · Manage long runs · balance > pure engine mode' },
+      { n: 20, name: 'Mexico City Grand Prix',    loc: 'Mexico City, Mexico',        flag: 'MX', tire: 'Medium', sc: 14, baseRain: 15, fact: 'Altitude starves PU · cooling critical · medium wear · Conserve if Reli is soft · power maps matter' },
+      { n: 21, name: 'São Paulo Grand Prix',      loc: 'Interlagos, Brazil',         flag: 'BR', tire: 'High',   sc: 22, baseRain: 50, fact: 'Weather + slipstream · title theatre · high wear · wet ready · flexible strategy wins late' },
+      { n: 22, name: 'Las Vegas Grand Prix',      loc: 'Las Vegas, USA',             flag: 'US', tire: 'Low',    sc: 20, baseRain: 5,  fact: 'Cold night track · tyre warm-up key · low wear · avoid ice-cold Push · temp windows decide' },
+      { n: 23, name: 'Qatar Grand Prix',          loc: 'Lusail, Qatar',              flag: 'QA', tire: 'High',   sc: 12, baseRain: 3,  fact: 'Abrasive surface · tyre cliffs · high wear · Manage default · wrong compound ends the race' },
+      { n: 24, name: 'Abu Dhabi Grand Prix',      loc: 'Yas Marina, UAE',            flag: 'AE', tire: 'Medium', sc: 14, baseRain: 2,  fact: 'Finale · sunset evolution · strategy windows narrow · clean defaults · no free late Attack' },
     ];
 
     // Season tire bias = light car/org lean. Weekend compound plan does most tire work.
@@ -1309,6 +1345,7 @@
       debrief: [],
       seasonComplete: false,
       redoFeedback: null, // { n, name, outcome, margin, notes, remaining }
+      lbSubmitted: false,
       // Ads session flags
       eraSpinsUsed: 0,
       ads: {
@@ -2543,6 +2580,7 @@
       state.seasonComplete = false;
       state.debrief = [];
       state.redoFeedback = null;
+      state.lbSubmitted = false;
       state.ads.seasonInterstitialShown = false;
       render();
       window.scrollTo(0, 0);
@@ -2713,6 +2751,7 @@
         debrief: [],
         seasonComplete: false,
         redoFeedback: null,
+        lbSubmitted: false,
         eraSpinsUsed: 0,
         ads: {
           seasonInterstitialShown: false,
@@ -2904,7 +2943,7 @@
       raceDecisions: {
         title: 'Race Decisions',
         body: `
-          <p>Each race loads <strong class="text-white">smart defaults</strong> from wear, SC risk, and rain. You can simulate without touching a card.</p>
+          <p>Each race loads <strong class="text-white">smart defaults</strong> from wear, SC risk, and rain. These are the default assumptions for how the weekend runs. Your expert adjustments can push win rate higher when they fit the track — and lower it when they fight the weekend.</p>
           <p><strong class="text-white">Compound plan</strong> (weekend): Push / Standard / Manage. High wear and wet lean Manage; low wear dry leans Push; else Standard. Hot / high-deg venues punish Push.</p>
           <p><strong class="text-white">Strategy</strong>: 1-stop on low wear + low SC; 2-stop on high wear or high SC (street/chaos weekends).</p>
           <p><strong class="text-white">Engine</strong>: Balanced by default. Attack only with strong Reli — power tracks tempt Attack, glass packages die there. Conserve on fragile iron.</p>
@@ -2918,6 +2957,13 @@
             <li>Good calls are ~+10–15% where they fit; wrong calls are how 70% packages become 18–6 seasons.</li>
           </ul>
           <p class="text-xs text-zinc-400">Redos: one attempt per race, season pool of ${SEASON_REDOS}, always taxed. Save them for micro-losses and DNFs — not structural beatdowns.</p>
+        `,
+      },
+      leaderboard: {
+        title: 'Leaderboard',
+        body: `
+          <p>Season records saved on this device, and to the cloud when Supabase is configured in <code class="text-zinc-300">config.js</code>.</p>
+          <p>Submit from the debrief after a full 24-race season. Sorted by wins, then fewest redos used.</p>
         `,
       },
     };
@@ -2968,6 +3014,7 @@
       if (e.key === 'Escape') {
         // Don't force-close mid-ad; user must Skip/Continue
         if (!_adBusy) {
+          closeLeaderboard();
           closeShare();
           closeHelp();
         }
@@ -3016,10 +3063,13 @@
               ${ADS.enabled ? `<div class="mt-1">${helpBtn('ads')}</div>` : ''}
             </div>
           </div>
-          <div class="mt-3 flex flex-wrap gap-1.5 text-[9px] uppercase tracking-wider font-display">
+          <div class="mt-3 flex flex-wrap gap-1.5 text-[9px] uppercase tracking-wider font-display items-center">
             <span class="px-1.5 py-0.5 border" style="color:#D4AF37;border-color:#D4AF37">God Tier ×${tc.god}</span>
             <span class="px-1.5 py-0.5 border border-zinc-400 text-zinc-300">Strong ×${tc.strong}</span>
             <span class="px-1.5 py-0.5 border" style="color:#CD7F32;border-color:#CD7F32">Underdog ×${tc.underdog} · Folklore</span>
+            <button type="button" onclick="openLeaderboard()" class="lb-chip px-1.5 py-0.5 border border-zinc-500 text-zinc-300"
+              title="Season leaderboard">Leaderboard</button>
+            ${helpBtn('leaderboard')}
           </div>
           <div class="mt-3">
             <div class="flex items-center gap-2 mb-2">
@@ -3073,7 +3123,6 @@
             <div class="flex items-center gap-2">
               <div class="text-xs text-white uppercase tracking-wider">Constructor Era</div>
               ${helpBtn('era')}
-              ${helpBtn('folklore')}
             </div>
             <div class="text-xs text-zinc-200 font-display tracking-wide">${years}</div>
           </div>
@@ -3350,7 +3399,7 @@
           ${trackOutlineImg(race.n)}
           <div class="race-card-head flex justify-between items-start gap-3 mb-3">
             <div class="min-w-0">
-              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="text-zinc-500 font-normal text-[11px]">· ${phaseLab}</span>` : ''}</div>
+              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="text-zinc-400 font-normal text-[11px]">· ${phaseLab}</span>` : ''}</div>
               <div class="font-display text-lg text-white leading-tight mt-0.5 flex items-center gap-0">
                 ${flagImg(race.flag)}<span>${race.name}</span>
               </div>
@@ -3371,7 +3420,7 @@
             <span class="${wear.cls}">Wear ${wear.text}</span>
             <span class="text-amber-500/90">SC ${race.sc}%</span>
           </div>
-          <p class="text-[11px] text-zinc-500 leading-snug mb-3 line-clamp-2">${race.fact}</p>
+          <p class="race-fact">${race.fact}</p>
 
           ${showDecisions ? `
             <div class="race-opts">
@@ -3442,8 +3491,8 @@
         </div>
 
         ${!anyResult ? `
-          <div class="flex items-center gap-2 mb-4">
-            <p class="text-xs text-zinc-300">Weekend calls are pre-filled. Change a card only if you want a different call.</p>
+          <div class="flex items-start gap-2 mb-4">
+            <p class="text-xs text-zinc-400 leading-relaxed">Each race loads smart defaults from wear, SC risk, and rain — the baseline for how the weekend runs. Expert adjustments can raise win rate when they fit; fighting the weekend lowers it.</p>
             ${helpBtn('raceDecisions')}
           </div>
         ` : `
@@ -3526,6 +3575,14 @@
             <span>Share result card</span>
           </button>
           <p class="text-[11px] text-zinc-500 text-center -mt-3">Era-branded badge with race map + debrief</p>
+          ${!state.lbSubmitted ? `
+            <button type="button" onclick="submitToLeaderboard()"
+              class="w-full py-2.5 border border-zinc-500 text-zinc-200 text-[10px] tracking-widest uppercase font-display">
+              Submit to leaderboard
+            </button>
+          ` : `
+            <p class="text-[10px] text-emerald-500/80 text-center">Leaderboard entry saved</p>
+          `}
           ${ADS.enabled && ADS.rewardedShareClean && !state.ads.shareClean ? `
             <button type="button" onclick="unlockShareClean()"
               class="w-full py-2 border border-zinc-600 text-[10px] tracking-widest uppercase text-zinc-400 font-display">
@@ -3939,6 +3996,198 @@
       if (ok) render();
     }
 
+    // ─────────────────────────────────────────────
+    // LEADERBOARD (localStorage always · Supabase when configured)
+    // ─────────────────────────────────────────────
+    const LB_KEY = 'f1_240_leaderboard_v1';
+
+    function lbLocalLoad() {
+      try {
+        const raw = localStorage.getItem(LB_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function lbLocalSave(rows) {
+      try {
+        localStorage.setItem(LB_KEY, JSON.stringify(rows.slice(0, 50)));
+      } catch (_) { /* quota */ }
+    }
+
+    function lbSort(rows) {
+      return rows.slice().sort((a, b) => {
+        if (b.wins !== a.wins) return b.wins - a.wins;
+        if (a.redos_used !== b.redos_used) return a.redos_used - b.redos_used;
+        return (b.created_at || 0) - (a.created_at || 0);
+      });
+    }
+
+    function currentSeasonEntry(nickname) {
+      if (!state.era || !state.primary) return null;
+      if (state.wins + state.losses !== 24) return null;
+      return {
+        id: `local-${Date.now()}`,
+        created_at: Date.now(),
+        nickname: (nickname || 'Driver').slice(0, 24),
+        era_id: state.era.id,
+        team: state.era.team,
+        era_label: state.era.era,
+        tier: state.era.tier,
+        wins: state.wins,
+        losses: state.losses,
+        redos_used: SEASON_REDOS - state.redosLeft,
+        primary_driver: state.primary.name,
+        is_perfect: state.wins === 24,
+      };
+    }
+
+    async function lbFetchRemote() {
+      const url = (_cfg.supabaseUrl || '').replace(/\/$/, '');
+      const key = _cfg.supabaseAnonKey || '';
+      if (!url || !key) return [];
+      try {
+        const res = await fetch(
+          `${url}/rest/v1/season_results?select=*&order=wins.desc,redos_used.asc,created_at.desc&limit=30`,
+          {
+            headers: {
+              apikey: key,
+              Authorization: `Bearer ${key}`,
+              Accept: 'application/json',
+            },
+          }
+        );
+        if (!res.ok) return [];
+        const data = await res.json();
+        return (data || []).map(r => ({
+          id: r.id,
+          created_at: r.created_at ? new Date(r.created_at).getTime() : 0,
+          nickname: r.nickname || 'Driver',
+          era_id: r.era_id,
+          team: r.team,
+          era_label: r.era_label,
+          tier: r.tier,
+          wins: r.wins,
+          losses: r.losses,
+          redos_used: r.redos_used ?? 0,
+          primary_driver: r.primary_driver || '',
+          is_perfect: !!r.is_perfect || r.wins === 24,
+          source: 'cloud',
+        }));
+      } catch (_) {
+        return [];
+      }
+    }
+
+    async function lbPushRemote(entry) {
+      const url = (_cfg.supabaseUrl || '').replace(/\/$/, '');
+      const key = _cfg.supabaseAnonKey || '';
+      if (!url || !key || !entry) return false;
+      try {
+        const res = await fetch(`${url}/rest/v1/season_results`, {
+          method: 'POST',
+          headers: {
+            apikey: key,
+            Authorization: `Bearer ${key}`,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+          },
+          body: JSON.stringify({
+            nickname: entry.nickname,
+            era_id: entry.era_id,
+            team: entry.team,
+            era_label: entry.era_label,
+            tier: entry.tier,
+            wins: entry.wins,
+            losses: entry.losses,
+            redos_used: entry.redos_used,
+            primary_driver: entry.primary_driver,
+            user_agent: (navigator.userAgent || '').slice(0, 180),
+          }),
+        });
+        return res.ok;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    async function submitToLeaderboard() {
+      const nick = (prompt('Nickname for leaderboard (max 24 chars):', 'Driver') || '').trim().slice(0, 24);
+      if (!nick) return;
+      const entry = currentSeasonEntry(nick);
+      if (!entry) {
+        alert('Finish all 24 races before submitting.');
+        return;
+      }
+      const local = lbLocalLoad();
+      local.unshift(entry);
+      lbLocalSave(lbSort(local));
+      const cloud = await lbPushRemote(entry);
+      state.lbSubmitted = true;
+      render();
+      alert(cloud
+        ? 'Saved locally and to the cloud leaderboard.'
+        : 'Saved on this device. Cloud submit skipped (Supabase not configured or offline).');
+    }
+
+    async function openLeaderboard() {
+      const body = document.getElementById('lb-body');
+      const modal = document.getElementById('lb-modal');
+      if (!body || !modal) return;
+      body.innerHTML = '<p class="text-zinc-500 text-xs">Loading…</p>';
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      const local = lbLocalLoad().map(r => ({ ...r, source: r.source || 'local' }));
+      const remote = await lbFetchRemote();
+      // Merge by id; prefer higher wins
+      const map = new Map();
+      [...remote, ...local].forEach(r => {
+        const k = r.id || `${r.team}-${r.wins}-${r.created_at}`;
+        if (!map.has(k)) map.set(k, r);
+      });
+      const rows = lbSort([...map.values()]).slice(0, 25);
+
+      if (!rows.length) {
+        body.innerHTML = `
+          <p class="text-zinc-400 text-sm leading-relaxed">No seasons logged yet. Finish a campaign and submit from the debrief.</p>
+          <p class="text-[11px] text-zinc-600 mt-2">Cloud board activates when Supabase URL + anon key are set in config.js and schema.sql is run.</p>`;
+        return;
+      }
+
+      body.innerHTML = rows.map((r, i) => {
+        const tierColor = r.tier === 'god' ? '#D4AF37' : r.tier === 'underdog' ? '#CD7F32' : '#C0C0C0';
+        const rec = `${r.wins}–${r.losses}`;
+        const badge = r.is_perfect || r.wins === 24 ? 'PERFECT' : r.wins >= 20 ? 'DOMINANT' : '';
+        const src = r.source === 'cloud' ? 'cloud' : 'device';
+        return `
+          <div class="bg-zinc-950 border border-zinc-800 px-3 py-2.5 flex gap-3 items-start">
+            <div class="font-display text-zinc-500 text-sm tabular-nums w-6 shrink-0">${i + 1}</div>
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-display text-white text-base tabular-nums">${rec}</span>
+                ${badge ? `<span class="text-[9px] tracking-wider uppercase" style="color:${tierColor}">${badge}</span>` : ''}
+                <span class="text-[9px] text-zinc-600 uppercase">${src}</span>
+              </div>
+              <div class="text-xs text-zinc-300 truncate mt-0.5">${r.nickname || 'Driver'} · ${r.primary_driver || '—'}</div>
+              <div class="text-[11px] text-zinc-500 truncate">${r.team || ''} ${r.era_label || ''} · redos ${r.redos_used ?? 0}</div>
+            </div>
+            <div class="text-[9px] uppercase tracking-wider shrink-0 px-1.5 py-0.5 border" style="color:${tierColor};border-color:${tierColor}">${(r.tier || 'strong').slice(0, 3)}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function closeLeaderboard() {
+      document.getElementById('lb-modal')?.classList.add('hidden');
+      if (document.getElementById('help-modal')?.classList.contains('hidden') &&
+          document.getElementById('share-modal')?.classList.contains('hidden') &&
+          document.getElementById('ad-modal')?.classList.contains('hidden')) {
+        document.body.style.overflow = '';
+      }
+    }
+
     function render() {
       const root = document.getElementById('app');
       if (state.phase === 'setup') root.innerHTML = renderSetup();
@@ -3955,6 +4204,7 @@
       openHelp, closeHelp, goDebrief,
       openShare, closeShare, downloadShareCard, copyShareImage, copyShareCaption, nativeShareCard,
       unlockShareClean, requestEraSpin, ADS,
+      openLeaderboard, closeLeaderboard, submitToLeaderboard,
       state, render, buildDebrief,
     });
 
