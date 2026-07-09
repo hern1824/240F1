@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -6,19 +7,8 @@
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "interest-cohort=()" }
-      ]
-    },
-    {
-      "source": "/config.js",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=60" }
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/play", "destination": "/index.html" },
-    { "source": "/game", "destination": "/index.html" }
   ]
 }
