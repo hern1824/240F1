@@ -537,10 +537,10 @@
       border: 1px solid #3f3f46;
       padding: 2px 6px;
     }
-    /* Sticky CTAs clear the fixed ad banner */
+    /* Sticky CTAs sit tight against the fixed ad banner (no extra lift) */
     .sticky-cta {
       position: sticky;
-      bottom: calc(var(--ad-banner-h) + 0.75rem);
+      bottom: var(--ad-banner-h, 0px);
       z-index: 10;
     }
   </style>
@@ -2209,67 +2209,93 @@
       return race;
     }
 
+    function debriefText(item) {
+      if (!item) return '';
+      return typeof item === 'string' ? item : (item.text || '');
+    }
+
+    function debriefTone(item) {
+      if (!item || typeof item === 'string') return 'neutral';
+      return item.tone || 'neutral';
+    }
+
     function buildDebrief() {
       const s = teamStrength();
       const observations = [];
+      const push = (text, tone = 'neutral') => observations.push({ text, tone });
       const tier = tierInfo(state.era);
+      // Gold: only rare top-end outcomes. Red: structural / season-killing fails.
       if (state.wins === 24) {
         if (state.era.tier === 'underdog') {
-          observations.push('Underdog 24–0. Perfect Fit, Perfect Execution, Survival. Same rules. Screenshot then delete app territory.');
+          push('Underdog 24–0. Perfect Fit, Perfect Execution, Survival. Same rules. Screenshot then delete app territory.', 'gold');
         } else {
-          observations.push(`Perfect season achieved (${tier.label}). Operational and sporting execution aligned across all 24 events.`);
+          push(`Perfect season achieved (${tier.label}). Operational and sporting execution aligned across all 24 events.`, 'gold');
         }
-      } else if (state.wins >= 20) observations.push('Championship-dominant campaign. The losses were isolated, not structural.');
-      else if (state.wins >= 14) observations.push('Race-winning package, but consistency gaps prevented a clean sweep.');
-      else if (state.wins >= 8) observations.push('Competitive in windows. Package lacked multi-condition coverage for 24-0.');
-      else observations.push('Performance baseline sat below the field average on too many weekends.');
+      } else if (state.wins >= 22) {
+        push('Elite near-sweep. A perfect season was one or two weekends away — exceptional package control.', 'gold');
+      } else if (state.wins >= 20) {
+        push('Championship-dominant campaign. The losses were isolated, not structural.', 'neutral');
+      } else if (state.wins >= 14) {
+        push('Race-winning package, but consistency gaps prevented a clean sweep.', 'neutral');
+      } else if (state.wins >= 8) {
+        push('Competitive in windows. Package lacked multi-condition coverage for 24-0.', 'neutral');
+      } else {
+        push('Performance baseline sat below the field average on too many weekends.', 'red');
+      }
 
       if (state.era.tier === 'underdog' && state.wins < 24) {
         const { spike, hole } = eraSpikeHole(state.era);
-        observations.push(`Underdog path check: spike ${spike.label}, hole ${hole.label}. Folklore 24–0 needs fit on both, then zero free risk.`);
+        push(`Underdog path check: spike ${spike.label}, hole ${hole.label}. Folklore 24–0 needs fit on both, then zero free risk.`, state.wins < 8 ? 'red' : 'neutral');
       }
 
-      if (s.power < 50) observations.push('Power unit allocation looked light on power-sensitive venues.');
-      if (s.aero < 50) observations.push('Aero/chassis budget limited performance at high-downforce circuits.');
-      if (s.reliability < 50) observations.push('Reliability spend left residual DNF and mode risk.');
-      if (s.strategy < 50) observations.push('Strategy department under-resourced relative to SC-heavy races.');
+      if (s.power < 50) push('Power unit allocation looked light on power-sensitive venues.', s.power < 40 ? 'red' : 'neutral');
+      if (s.aero < 50) push('Aero/chassis budget limited performance at high-downforce circuits.', s.aero < 40 ? 'red' : 'neutral');
+      if (s.reliability < 50) push('Reliability spend left residual DNF and mode risk.', 'red');
+      if (s.strategy < 50) push('Strategy department under-resourced relative to SC-heavy races.', s.strategy < 40 ? 'red' : 'neutral');
 
       const highWearLosses = state.races.filter(r => r.tire === 'High' && r.result === 'loss').length;
       const lowWearLosses = state.races.filter(r => r.tire === 'Low' && r.result === 'loss').length;
       if (state.tirePhil === 'aggressive' && highWearLosses >= 3) {
-        observations.push('Aggressive tyre philosophy struggled on high-wear circuits: conservative or balanced may have held more.');
+        push('Aggressive tyre philosophy struggled on high-wear circuits: conservative or balanced may have held more.', 'red');
       }
       if (state.tirePhil === 'conservative' && lowWearLosses >= 3) {
-        observations.push('Conservative tyres left pace on low-wear weekends where aggression usually pays.');
+        push('Conservative tyres left pace on low-wear weekends where aggression usually pays.', 'neutral');
       }
       if (state.devCutoff === 'late') {
         const openLoss = state.races.filter(r => r.n <= 8 && r.result === 'loss').length;
         const closeWin = state.races.filter(r => r.n >= 17 && r.result === 'win').length;
-        if (openLoss >= 3) observations.push('Late development push cost Opening weekends; Early Freeze or Mid may fit mixed schedules better.');
-        if (closeWin >= 6) observations.push('Late push showed in the Close: upgrades landed when it mattered.');
+        if (openLoss >= 3) push('Late development push cost Opening weekends; Early Freeze or Mid may fit mixed schedules better.', 'red');
+        if (closeWin >= 6 && state.wins >= 20) push('Late push showed in the Close: upgrades landed when it mattered.', 'gold');
+        else if (closeWin >= 6) push('Late push showed in the Close: upgrades landed when it mattered.', 'neutral');
       }
       if (state.devCutoff === 'early') {
         const closeLoss = state.races.filter(r => r.n >= 17 && r.result === 'loss').length;
-        if (closeLoss >= 3) observations.push('Early freeze left the package soft in the Close as the field developed past you.');
+        if (closeLoss >= 3) push('Early freeze left the package soft in the Close as the field developed past you.', 'red');
       }
       const exclusions = state.races.filter(r => r.notes?.some(n => n.includes('excluded') || n.includes('protest'))).length;
       if (state.lobbying === 'aggressive' && exclusions > 0) {
-        observations.push('Aggressive lobbying bought pace but paid scrutiny costs: Passive is the 24–0 insurance play.');
+        push('Aggressive lobbying bought pace but paid scrutiny costs: Passive is the 24–0 insurance play.', 'red');
       }
       if (state.sponsor === 'title') {
-        const dnfs = state.races.filter(r => r.margin === -99).length;
-        if (dnfs === 0) observations.push('Title sponsorship reliability cover held: no mechanical wipeouts on record.');
+        const titleDnfs = state.races.filter(r => r.margin === -99).length;
+        if (titleDnfs === 0 && state.wins >= 22) {
+          push('Title sponsorship reliability cover held: no mechanical wipeouts on record.', 'gold');
+        } else if (titleDnfs === 0) {
+          push('Title sponsorship reliability cover held: no mechanical wipeouts on record.', 'neutral');
+        }
       }
       if (state.primary.wet < 85 && state.races.filter(r => r.actualRain >= 25 && r.result === 'loss').length >= 2) {
-        observations.push('Wet-weather weekends exposed a gap in primary driver wet performance.');
+        push('Wet-weather weekends exposed a gap in primary driver wet performance.', 'red');
       }
       const closeLosses = state.races.filter(r => r.result === 'loss' && r.margin > -4 && r.margin !== -99).length;
-      if (closeLosses >= 3) observations.push(`${closeLosses} defeats were decided inside a narrow performance band: redo targets.`);
+      if (closeLosses >= 3) push(`${closeLosses} defeats were decided inside a narrow performance band: redo targets.`, 'neutral');
       const dnfs = state.races.filter(r => r.margin === -99).length;
-      if (dnfs > 0) observations.push(`${dnfs} retirement(s) on record. Mechanical risk remains a perfect-season killer.`);
-      if (state.redosLeft === 0 && state.wins < 24) observations.push('All redos exhausted. Final classification is locked.');
-      observations.push(`Schedule profile: ${scheduleSummary()}.`);
-      observations.push(`Team reference: ${state.era.team} ${state.era.era} · ${state.primary.name} / ${state.teammate.name} · ${state.principal.name}.`);
+      if (dnfs > 0) push(`${dnfs} retirement(s) on record. Mechanical risk remains a perfect-season killer.`, 'red');
+      if (state.redosLeft === 0 && state.wins < 24) {
+        push('All redos exhausted. Final classification is locked.', state.wins < 14 ? 'red' : 'neutral');
+      }
+      push(`Schedule profile: ${scheduleSummary()}.`, 'neutral');
+      push(`Team reference: ${state.era.team} ${state.era.era} · ${state.primary.name} / ${state.teammate.name} · ${state.principal.name}.`, 'neutral');
       state.debrief = observations;
     }
 
@@ -3936,16 +3962,18 @@
           ` : ''}
 
           <div>
-            <div class="font-display tracking-widest uppercase text-white mb-2" style="font-size:10px">Debrief</div>
+            <div class="font-display tracking-widest uppercase text-f1-red mb-2" style="font-size:10px">Debrief</div>
             <div class="space-y-2">
-              ${state.debrief.map(o => `
-                <div class="bg-zinc-800 p-4 text-sm text-zinc-300 leading-relaxed">${o}</div>
-              `).join('')}
+              ${state.debrief.map(o => {
+                const tone = debriefTone(o);
+                const color = tone === 'gold' ? '#D4AF37' : tone === 'red' ? '#E10600' : '#d4d4d8';
+                return `<div class="bg-zinc-800 p-4 text-sm leading-relaxed" style="color:${color}">${debriefText(o)}</div>`;
+              }).join('')}
             </div>
           </div>
 
           <div>
-            <div class="font-display tracking-widest uppercase text-white mb-2" style="font-size:10px">Race Map</div>
+            <div class="font-display tracking-widest uppercase text-f1-red mb-2" style="font-size:10px">Race Map</div>
             <div class="grid grid-cols-8 gap-1.5">
               ${state.races.map(r => `
                 <div class="aspect-square flex items-center justify-center text-[10px] font-display ${
@@ -3996,7 +4024,7 @@
         `${state.primary.name} / ${state.teammate.name} · ${state.principal.name}`,
         `Redos ${redosUsed}/${SEASON_REDOS} · ${scheduleSummary()}`,
       ];
-      if (state.debrief?.[0]) lines.push(state.debrief[0]);
+      if (state.debrief?.[0]) lines.push(debriefText(state.debrief[0]));
       lines.push('');
       lines.push('Can you go 24–0? Play 24-0 F1 — spin an era, draft the line-up, hunt the perfect season.');
       if (!state.ads.shareClean) lines.push('Supported by ads · free to play');
@@ -4205,23 +4233,25 @@
       ctx.font = `600 22px ${display}`;
       ctx.fillText('DEBRIEF', pad, 650);
 
-      const items = (state.debrief && state.debrief.length)
+      const rawItems = (state.debrief && state.debrief.length)
         ? state.debrief.slice(0, 3)
-        : ['Season classification locked.'];
-      while (items.length < 3) items.push('');
+        : [{ text: 'Season classification locked.', tone: 'neutral' }];
+      while (rawItems.length < 3) rawItems.push({ text: '', tone: 'neutral' });
 
       const rowH = 60;
       const rowTop = 666;
       const rowW = W - pad * 2;
-      items.forEach((text, i) => {
+      rawItems.forEach((item, i) => {
+        const text = debriefText(item);
         if (!text) return;
+        const tone = debriefTone(item);
         const y = rowTop + i * (rowH + 5);
         ctx.fillStyle = 'rgba(24,24,27,0.92)';
         ctx.fillRect(pad, y, rowW, rowH);
         ctx.fillStyle = brand;
         ctx.fillRect(pad, y, 4, rowH);
 
-        ctx.fillStyle = '#D4D4D8';
+        ctx.fillStyle = tone === 'gold' ? '#D4AF37' : tone === 'red' ? '#E10600' : '#D4D4D8';
         ctx.font = `400 22px ${body}`;
         const lines = wrapCanvasText(ctx, text, rowW - 32).slice(0, 2);
         lines.forEach((ln, li) => {
@@ -4774,12 +4804,4 @@
       startSeason, simulateSeason, redoRace, applyRedoSim, dismissRedoFeedback, resetAll,
       openHelp, closeHelp, goDebrief,
       openShare, closeShare, downloadShareCard, copyShareImage, copyShareCaption, nativeShareCard,
-      unlockShareClean, requestEraSpin, ADS,
-      openLeaderboard, closeLeaderboard, submitToLeaderboard, setLeaderboardTab,
-      state, render, buildDebrief,
-    });
-
-    render();
-  </script>
-</body>
-</html>
+      unlockSh
