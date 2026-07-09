@@ -236,9 +236,9 @@
       background: #27272a;
     }
     .race-fact {
-      font-size: 10px;
-      line-height: 1.4;
-      color: #52525b;
+      font-size: 11px;
+      line-height: 1.45;
+      color: #fafafa;
       margin-bottom: 0.75rem;
     }
     .lb-chip {
@@ -1268,30 +1268,30 @@
     }
 
     const RACES = [
-      { n: 1,  name: 'Bahrain Grand Prix',       loc: 'Sakhir, Bahrain',            flag: 'BH', tire: 'Medium', sc: 12, baseRain: 5,  fact: 'Desert opener · sand on track early · tyre temp windows · Push only if warm-up is free · low rain, clean baseline weekend' },
-      { n: 2,  name: 'Saudi Arabian Grand Prix',  loc: 'Jeddah, Saudi Arabia',       flag: 'SA', tire: 'Low',    sc: 28, baseRain: 2,  fact: 'High-speed street · SC lottery · walls punish errors · prefer 2-stop flexibility · Overcut when yellows stack' },
-      { n: 3,  name: 'Australian Grand Prix',     loc: 'Melbourne, Australia',       flag: 'AU', tire: 'Medium', sc: 22, baseRain: 25, fact: 'Albert Park evolution · setup risk early · showers flip compounds · keep a Neutral plan · SC if barriers bite' },
-      { n: 4,  name: 'Japanese Grand Prix',       loc: 'Suzuka, Japan',              flag: 'JP', tire: 'High',   sc: 15, baseRain: 35, fact: 'Technical figure-eight · rain rewrites titles · Manage on high wear · wet skill matters · power + aero both pay' },
-      { n: 5,  name: 'Chinese Grand Prix',        loc: 'Shanghai, China',            flag: 'CN', tire: 'High',   sc: 14, baseRain: 30, fact: 'Long back straight · power unit stress · high deg on softs · Manage default · undercut if clear air' },
-      { n: 6,  name: 'Miami Grand Prix',          loc: 'Miami, USA',                 flag: 'US', tire: 'Medium', sc: 18, baseRain: 40, fact: 'Heat + humidity · storm risk · tyre cliffs in traffic · watch rain % · flexible stops beat hero calls' },
-      { n: 7,  name: 'Emilia Romagna Grand Prix', loc: 'Imola, Italy',               flag: 'IT', tire: 'Medium', sc: 16, baseRain: 28, fact: 'Old-school layout · hard to pass · quali + strategy · clean Neutral defaults · avoid free Attack risk' },
-      { n: 8,  name: 'Monaco Grand Prix',         loc: 'Monte Carlo, Monaco',        flag: 'MC', tire: 'Low',    sc: 35, baseRain: 15, fact: 'Quali is the race · one error ends it · SC dense · 2-stop chaos tools · Conserve protects glass packages' },
-      { n: 9,  name: 'Spanish Grand Prix',        loc: 'Barcelona, Spain',           flag: 'ES', tire: 'High',   sc: 10, baseRain: 12, fact: 'Aero benchmark · long-run truth · high wear · Manage preferred · undercut if pace delta is real' },
-      { n: 10, name: 'Canadian Grand Prix',       loc: 'Montreal, Canada',           flag: 'CA', tire: 'Medium', sc: 30, baseRain: 35, fact: 'Wall of Champions · braking zones · SC lottery · wet slices possible · keep strategy flexible' },
-      { n: 11, name: 'Austrian Grand Prix',       loc: 'Spielberg, Austria',         flag: 'AT', tire: 'Medium', sc: 20, baseRain: 30, fact: 'Short lap · DRS trains · weather fronts · standard calls fine · Attack only with Reli cover' },
-      { n: 12, name: 'British Grand Prix',        loc: 'Silverstone, UK',            flag: 'GB', tire: 'High',   sc: 18, baseRain: 45, fact: 'High-speed corners · weather wildcard · high wear · Manage + wet readiness · never lock a dry-only plan' },
-      { n: 13, name: 'Hungarian Grand Prix',      loc: 'Budapest, Hungary',          flag: 'HU', tire: 'High',   sc: 12, baseRain: 25, fact: 'Twisty · low overtake · undercut king · Manage deg · track position over hero pace' },
-      { n: 14, name: 'Belgian Grand Prix',        loc: 'Spa-Francorchamps, Belgium', flag: 'BE', tire: 'Medium', sc: 25, baseRain: 55, fact: 'Microclimates · half wet / half dry · power sector + rain · wet rating critical · flexible stops' },
-      { n: 15, name: 'Dutch Grand Prix',          loc: 'Zandvoort, Netherlands',     flag: 'NL', tire: 'High',   sc: 14, baseRain: 35, fact: 'Banking + sand · lateral load · high wear · Manage compounds · aero balance over pure power' },
-      { n: 16, name: 'Italian Grand Prix',        loc: 'Monza, Italy',               flag: 'IT', tire: 'Low',    sc: 16, baseRain: 20, fact: 'Temple of Speed · PU stress · slipstream · low wear can Push · Attack only if Reli is funded' },
-      { n: 17, name: 'Azerbaijan Grand Prix',     loc: 'Baku, Azerbaijan',           flag: 'AZ', tire: 'Low',    sc: 40, baseRain: 8,  fact: 'Longest straight + castle · SC among highest · 2-stop default · Overcut yellows · walls end runs' },
-      { n: 18, name: 'Singapore Grand Prix',      loc: 'Marina Bay, Singapore',      flag: 'SG', tire: 'High',   sc: 32, baseRain: 40, fact: 'Night street · heat + humidity · SC dense · Manage + 2-stop · fatigue punishes free risk' },
-      { n: 19, name: 'United States Grand Prix',  loc: 'Austin, USA',                flag: 'US', tire: 'High',   sc: 15, baseRain: 20, fact: 'COTA elevation · S1 aero · high wear · Manage long runs · balance > pure engine mode' },
-      { n: 20, name: 'Mexico City Grand Prix',    loc: 'Mexico City, Mexico',        flag: 'MX', tire: 'Medium', sc: 14, baseRain: 15, fact: 'Altitude starves PU · cooling critical · medium wear · Conserve if Reli is soft · power maps matter' },
-      { n: 21, name: 'São Paulo Grand Prix',      loc: 'Interlagos, Brazil',         flag: 'BR', tire: 'High',   sc: 22, baseRain: 50, fact: 'Weather + slipstream · title theatre · high wear · wet ready · flexible strategy wins late' },
-      { n: 22, name: 'Las Vegas Grand Prix',      loc: 'Las Vegas, USA',             flag: 'US', tire: 'Low',    sc: 20, baseRain: 5,  fact: 'Cold night track · tyre warm-up key · low wear · avoid ice-cold Push · temp windows decide' },
-      { n: 23, name: 'Qatar Grand Prix',          loc: 'Lusail, Qatar',              flag: 'QA', tire: 'High',   sc: 12, baseRain: 3,  fact: 'Abrasive surface · tyre cliffs · high wear · Manage default · wrong compound ends the race' },
-      { n: 24, name: 'Abu Dhabi Grand Prix',      loc: 'Yas Marina, UAE',            flag: 'AE', tire: 'Medium', sc: 14, baseRain: 2,  fact: 'Finale · sunset evolution · strategy windows narrow · clean defaults · no free late Attack' },
+      { n: 1,  name: 'Bahrain Grand Prix',       loc: 'Sakhir, Bahrain',            flag: 'BH', tire: 'Medium', sc: 12, baseRain: 5,  fact: 'Sakhir desert island · Gulf winter heat · sand blows on overnight · classic season opener since 2004 · tyre temp windows decide · low rain, clean baseline' },
+      { n: 2,  name: 'Saudi Arabian Grand Prix',  loc: 'Jeddah, Saudi Arabia',       flag: 'SA', tire: 'Low',    sc: 28, baseRain: 2,  fact: 'Jeddah Corniche · fastest street circuit · night lights · walls + SC lottery · debuted 2021 · 2-stop flexibility · Overcut when yellows stack' },
+      { n: 3,  name: 'Australian Grand Prix',     loc: 'Melbourne, Australia',       flag: 'AU', tire: 'Medium', sc: 22, baseRain: 25, fact: 'Albert Park lake parkland · flyaway opener heritage · surface evolves all weekend · spring showers · Neutral plan · SC if barriers bite' },
+      { n: 4,  name: 'Japanese Grand Prix',       loc: 'Suzuka, Japan',              flag: 'JP', tire: 'High',   sc: 15, baseRain: 35, fact: 'Suzuka figure-eight · Honda heartland · rain rewrote titles (Senna/Prost era lore) · high wear · wet skill · power + aero both pay' },
+      { n: 5,  name: 'Chinese Grand Prix',        loc: 'Shanghai, China',            flag: 'CN', tire: 'High',   sc: 14, baseRain: 30, fact: 'Shanghai snail design · long T1–2 arc · power-hungry back straight · softs cliff hard · Manage deg · undercut if clear air' },
+      { n: 6,  name: 'Miami Grand Prix',          loc: 'Miami, USA',                 flag: 'US', tire: 'Medium', sc: 18, baseRain: 40, fact: 'Hard Rock stadium complex · Florida heat + humidity · afternoon storms · tyre cliffs in traffic · watch rain % · flexible stops' },
+      { n: 7,  name: 'Emilia Romagna Grand Prix', loc: 'Imola, Italy',               flag: 'IT', tire: 'Medium', sc: 22, baseRain: 28, fact: 'Autodromo Enzo e Dino Ferrari · old-school Enzo land · Rivazza + Tamburello history · hard to pass · quali + strategy · avoid free Attack' },
+      { n: 8,  name: 'Monaco Grand Prix',         loc: 'Monte Carlo, Monaco',        flag: 'MC', tire: 'Low',    sc: 35, baseRain: 15, fact: 'Monte Carlo harbour · since 1929 · slowest average but zero margin · quali is the race · SC dense · 2-stop chaos · Conserve glass packages' },
+      { n: 9,  name: 'Spanish Grand Prix',        loc: 'Barcelona, Spain',           flag: 'ES', tire: 'High',   sc: 10, baseRain: 12, fact: 'Circuit de Catalunya · winter test benchmark · aero truth serum · long-run hierarchy · high wear · Manage · undercut if pace delta is real' },
+      { n: 10, name: 'Canadian Grand Prix',       loc: 'Montreal, Canada',           flag: 'CA', tire: 'Medium', sc: 30, baseRain: 35, fact: 'Île Notre-Dame · Wall of Champions · chicane history · braking-zone SC lottery · wet slices · keep strategy flexible' },
+      { n: 11, name: 'Austrian Grand Prix',       loc: 'Spielberg, Austria',         flag: 'AT', tire: 'Medium', sc: 20, baseRain: 30, fact: 'Red Bull Ring Alps foothills · short lap · DRS trains · mountain weather fronts · Attack only with Reli cover' },
+      { n: 12, name: 'British Grand Prix',        loc: 'Silverstone, UK',            flag: 'GB', tire: 'High',   sc: 18, baseRain: 45, fact: 'Northamptonshire airfield heritage · Maggots–Becketts · British weather wildcard · high wear · Manage + wet ready' },
+      { n: 13, name: 'Hungarian Grand Prix',      loc: 'Budapest, Hungary',          flag: 'HU', tire: 'High',   sc: 12, baseRain: 25, fact: 'Hungaroring · “Monaco without walls” · twisty · low overtake · undercut king · track position over hero pace' },
+      { n: 14, name: 'Belgian Grand Prix',        loc: 'Spa-Francorchamps, Belgium', flag: 'BE', tire: 'Medium', sc: 25, baseRain: 55, fact: 'Ardennes forest · Eau Rouge / Raidillon · microclimates · half wet half dry · wet rating critical · flexible stops' },
+      { n: 15, name: 'Dutch Grand Prix',          loc: 'Zandvoort, Netherlands',     flag: 'NL', tire: 'High',   sc: 14, baseRain: 35, fact: 'North Sea dunes · banked T3/T14 · sand on track · high lateral load · Manage compounds · aero over pure power' },
+      { n: 16, name: 'Italian Grand Prix',        loc: 'Monza, Italy',               flag: 'IT', tire: 'Low',    sc: 16, baseRain: 20, fact: 'Temple of Speed · royal park Monza · since 1922 · PU stress · slipstream · Push on low wear · Attack only if Reli funded' },
+      { n: 17, name: 'Azerbaijan Grand Prix',     loc: 'Baku, Azerbaijan',           flag: 'AZ', tire: 'Low',    sc: 40, baseRain: 8,  fact: 'Baku old city + Caspian waterfront · longest straight · castle walls · SC among highest · 2-stop · Overcut yellows' },
+      { n: 18, name: 'Singapore Grand Prix',      loc: 'Marina Bay, Singapore',      flag: 'SG', tire: 'High',   sc: 32, baseRain: 40, fact: 'Marina Bay night street · first F1 night race (2008) · heat humidity · SC dense · Manage + 2-stop · fatigue kills free risk' },
+      { n: 19, name: 'United States Grand Prix',  loc: 'Austin, USA',                flag: 'US', tire: 'High',   sc: 15, baseRain: 20, fact: 'COTA Texas hill country · Tilke + Hermann Tilke S1 · elevation · aero balance · Manage long runs' },
+      { n: 20, name: 'Mexico City Grand Prix',    loc: 'Mexico City, Mexico',        flag: 'MX', tire: 'Medium', sc: 14, baseRain: 15, fact: 'Autódromo Hermanos Rodríguez · 2,200m altitude · thin air starves PU · stadium Foro Sol · Conserve if Reli soft' },
+      { n: 21, name: 'São Paulo Grand Prix',      loc: 'Interlagos, Brazil',         flag: 'BR', tire: 'High',   sc: 22, baseRain: 50, fact: 'Interlagos · Senna’s home soil · anti-clockwise · weather + slipstream · title theatre · wet ready · flexible strategy' },
+      { n: 22, name: 'Las Vegas Grand Prix',      loc: 'Las Vegas, USA',             flag: 'US', tire: 'Low',    sc: 20, baseRain: 5,  fact: 'Strip night race · cold desert air · Sphere + casino backdrop · tyre warm-up is everything · avoid ice-cold Push' },
+      { n: 23, name: 'Qatar Grand Prix',          loc: 'Lusail, Qatar',              flag: 'QA', tire: 'High',   sc: 12, baseRain: 3,  fact: 'Lusail near Doha · abrasive desert asphalt · tyre cliffs · high wear · Manage default · wrong compound ends the race' },
+      { n: 24, name: 'Abu Dhabi Grand Prix',      loc: 'Yas Marina, UAE',            flag: 'AE', tire: 'Medium', sc: 14, baseRain: 2,  fact: 'Yas Island finale · sunset to floodlights · 2010+ title theatre · track evolution after dark · clean defaults · no free late Attack' },
     ];
 
     // Season tire bias = light car/org lean. Weekend compound plan does most tire work.
@@ -1321,11 +1321,12 @@
       { id: 'regional', label: 'Regional Mix', tip: 'Wet races + flyaway weekends.' },
     ];
     // Season draw axes (one spin, locked). Opening/Mid/Close + climates.
+    // Four stress types (not three): Balanced · Power · Technical · Weather
     const PHASE_TYPES = [
-      { id: 'balanced', label: 'Balanced', powerMod: 0, aeroMod: 0, weatherMod: 0 },
-      { id: 'power', label: 'Power', powerMod: 5, aeroMod: -2, weatherMod: 0 },
-      { id: 'technical', label: 'Technical', powerMod: -2, aeroMod: 5, weatherMod: 0 },
-      { id: 'weather', label: 'Weather', powerMod: 0, aeroMod: 0, weatherMod: 16 },
+      { id: 'balanced', label: 'Balanced', color: '#3B82F6', powerMod: 0, aeroMod: 0, weatherMod: 0 },
+      { id: 'power', label: 'Power', color: '#E10600', powerMod: 5, aeroMod: -2, weatherMod: 0 },
+      { id: 'technical', label: 'Technical', color: '#EAB308', powerMod: -2, aeroMod: 5, weatherMod: 0 },
+      { id: 'weather', label: 'Weather', color: '#38BDF8', powerMod: 0, aeroMod: 0, weatherMod: 16 },
     ];
     const WEAR_CLIMATES = [
       { id: 'high', label: 'High-wear bias', tip: 'More cliff risk. Conservative tires interact cleanly.' },
@@ -1463,20 +1464,35 @@
       return PHASE_TYPES.find(p => p.id === key) || PHASE_TYPES[0];
     }
 
+    function phaseMeta(id) {
+      return PHASE_TYPES.find(p => p.id === id) || PHASE_TYPES[0];
+    }
+
+    function phaseLabelHtml(id) {
+      const p = phaseMeta(id);
+      return `<span style="color:${p.color}">${p.label}</span>`;
+    }
+
     function scheduleSummary() {
       const draw = getSeasonDraw();
       if (!draw) return 'Not drawn';
-      const o = PHASE_TYPES.find(p => p.id === draw.opening).label;
-      const m = PHASE_TYPES.find(p => p.id === draw.mid).label;
-      const c = PHASE_TYPES.find(p => p.id === draw.close).label;
+      const o = phaseMeta(draw.opening).label;
+      const m = phaseMeta(draw.mid).label;
+      const c = phaseMeta(draw.close).label;
       return `${o} / ${m} / ${c}`;
+    }
+
+    function scheduleSummaryHtml() {
+      const draw = getSeasonDraw();
+      if (!draw) return 'Not drawn';
+      return `${phaseLabelHtml(draw.opening)} / ${phaseLabelHtml(draw.mid)} / ${phaseLabelHtml(draw.close)}`;
     }
 
     function seasonDrawSummaryLines(draw) {
       if (!draw) return [];
-      const phase = `${PHASE_TYPES.find(p => p.id === draw.opening).label} / ${PHASE_TYPES.find(p => p.id === draw.mid).label} / ${PHASE_TYPES.find(p => p.id === draw.close).label}`;
+      const phase = `${phaseLabelHtml(draw.opening)} / ${phaseLabelHtml(draw.mid)} / ${phaseLabelHtml(draw.close)}`;
       return [
-        { k: 'Arc', v: phase },
+        { k: 'Arc', v: phase, html: true },
         { k: 'Wear', v: WEAR_CLIMATES.find(x => x.id === draw.wear).label },
         { k: 'SC', v: SC_CLIMATES.find(x => x.id === draw.sc).label },
         { k: 'Weather', v: WEATHER_CLIMATES.find(x => x.id === draw.weather).label },
@@ -3393,7 +3409,7 @@
                 ${seasonDrawSummaryLines(state.seasonDraw).map(row => `
                   <div class="bg-zinc-950 px-2.5 py-2">
                     <div class="text-[10px] text-zinc-400 uppercase tracking-wider">${row.k}</div>
-                    <div class="text-xs text-white font-medium mt-0.5 leading-snug">${row.v}</div>
+                    <div class="text-xs ${row.html ? '' : 'text-white'} font-medium mt-0.5 leading-snug">${row.v}</div>
                   </div>
                 `).join('')}
               </div>
