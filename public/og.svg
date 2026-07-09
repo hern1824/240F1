@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#09090b"/>
+  <rect x="0" y="0" width="1200" height="12" fill="#E10600"/>
+  <rect x="0" y="0" width="16" height="630" fill="#E10600"/>
+  <text x="80" y="160" fill="#E10600" font-family="system-ui,sans-serif" font-size="28" font-weight="700" letter-spacing="6">F1 ROSTER PROTOCOL</text>
+  <text x="80" y="280" fill="#fafafa" font-family="system-ui,sans-serif" font-size="120" font-weight="800">24-0</text>
+  <text x="480" y="280" fill="#E10600" font-family="system-ui,sans-serif" font-size="120" font-weight="800"> F1</text>
+  <text x="80" y="360" fill="#a1a1aa" font-family="system-ui,sans-serif" font-size="36">Perfect Season Builder</text>
+  <text x="80" y="480" fill="#d4d4d8" font-family="system-ui,sans-serif" font-size="28">Spin an era · Draft the line-up · Hunt 24–0</text>
+  <text x="80" y="560" fill="#71717a" font-family="system-ui,sans-serif" font-size="22">Unofficial fan game · Not affiliated with F1 / FIA</text>
+</svg>
