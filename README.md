@@ -44,15 +44,18 @@ vercel --prod
 
 ## Config
 
-Edit **`config.js`** only when possible:
+Edit **`config.js`** (or `public/config.js` for deploy) only when possible:
 
 ```js
-siteUrl: 'https://your-deployment.vercel.app',
-ga4Id: 'G-XXXXXXXX',           // optional
-adsense: { client: 'ca-pub-…', slots: { banner: '…' } },
-ads: { demo: false },          // after AdSense is live
-supabaseUrl: '',               // optional
-supabaseAnonKey: '',
+siteUrl: 'https://240-f1.vercel.app',
+ga4Id: 'G-XXXXXXXX',           // Analytics → Admin → Data streams
+adsense: {
+  client: 'ca-pub-…',
+  slots: { banner: '…', interstitial: '…', rewarded: '…' },
+},
+ads: { demo: false },          // after AdSense is live + banner slot set
+supabaseUrl: 'https://….supabase.co',
+supabaseAnonKey: '…',
 ```
 
 ## Ads checklist
@@ -60,16 +63,27 @@ supabaseAnonKey: '',
 1. Deploy live HTTPS site.
 2. Apply [Google AdSense](https://www.google.com/adsense/) with that domain.
 3. Add privacy + terms links (already linked from the game footer).
-4. Create a **Display** ad unit → paste client + slot into `config.js`.
+4. Create **Display** ad units (banner + optional modal) → paste slot IDs into `config.js`.
 5. Set `ads.demo = false`.
-6. Keep placements soft: banner + post-season break; never sell win rate.
+6. Soft placements: sticky banner, season-complete interstitial modal, optional rewarded modal for era re-spin / clean share — never sell win rate.
+7. Publish **Privacy & messaging** CMP for the domain (Consent Mode v2 already in page head).
 
-## Supabase (optional, later)
+## Analytics (GA4)
 
-1. Create a project at [supabase.com](https://supabase.com).
+1. Create a GA4 property → Web data stream → copy Measurement ID (`G-…`).
+2. Set `ga4Id` in `config.js`.
+3. Events: `era_spin`, `season_start`, `season_complete`, `share_open`, `leaderboard_submit`, `ad_rewarded_*`, `ad_interstitial_*`.
+
+## Social preview (OG)
+
+`public/og.png` (1200×630) is used for `og:image` / Twitter card. Absolute URL is built from `siteUrl`.
+
+## Supabase leaderboard
+
+1. Project at [supabase.com](https://supabase.com).
 2. SQL Editor → run `supabase/schema.sql`.
-3. Settings → API → copy URL + anon key into `config.js`.
-4. Wire submit on debrief when you want a public board.
+3. Settings → API → URL + publishable/anon key into `config.js`.
+4. Submit from debrief after a full season (Public + Device tabs).
 
 ## Project layout
 

@@ -20,7 +20,9 @@ window.SITE_CONFIG = {
   siteUrl: 'https://240-f1.vercel.app',
   tagline: 'Spin an era. Draft the line-up. Hunt 24–0.',
 
-  // Google Analytics 4 (optional) — Measurement ID G-XXXXXXXX
+  // Google Analytics 4 — paste Measurement ID from analytics.google.com (G-XXXXXXXX)
+  // Events fire automatically: era_spin, season_start, season_complete, share_open,
+  // leaderboard_submit, ad_rewarded_*, ad_interstitial_*
   ga4Id: '',
 
   // Supabase (optional — not required for v1 play)
@@ -34,7 +36,8 @@ window.SITE_CONFIG = {
     // Slot IDs from AdSense → Ads → By ad unit (fill after approval)
     slots: {
       banner: '',       // sticky bottom display — required before demo: false
-      interstitial: '', // optional season-complete unit
+      interstitial: '', // season-complete modal (falls back to banner)
+      rewarded: '',     // era re-spin / clean caption modal (falls back to interstitial → banner)
     },
   },
 

@@ -28,11 +28,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="24-0 F1 — Perfect Season Builder" />
   <meta property="og:description" content="Spin an era. Draft the line-up. Hunt 24–0." />
-  <meta property="og:image" content="/og.svg" />
+  <meta property="og:image" content="https://240-f1.vercel.app/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://240-f1.vercel.app/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="24-0 F1 — Perfect Season Builder" />
   <meta name="twitter:description" content="Spin an era. Draft the line-up. Hunt 24–0." />
-  <meta name="twitter:image" content="/og.svg" />
+  <meta name="twitter:image" content="https://240-f1.vercel.app/og.png" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23E10600' width='100' height='100'/><text y='.9em' font-size='70' x='8' fill='white' font-family='sans-serif' font-weight='700'>24</text></svg>" />
   <script src="config.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -650,6 +653,8 @@
         <div class="w-full h-1.5 bg-zinc-800 overflow-hidden">
           <div id="ad-progress" class="h-full bg-f1-red transition-all duration-100" style="width:0%"></div>
         </div>
+        <!-- Live AdSense unit mounts here when ads.demo = false + slot IDs set -->
+        <div id="ad-modal-unit" class="w-full min-h-[100px] flex items-center justify-center bg-zinc-950 border border-zinc-800 hidden"></div>
         <p id="ad-modal-copy" class="text-sm text-zinc-300 leading-relaxed">Loading ad…</p>
         <p id="ad-modal-reward" class="text-[11px] text-zinc-500 hidden"></p>
       </div>
@@ -1428,18 +1433,43 @@
       adsenseSlots: (_cfg.adsense && _cfg.adsense.slots) || {},
     };
 
-    // Optional GA4
+    // Optional GA4 — set SITE_CONFIG.ga4Id = 'G-XXXXXXXX' in config.js
     if (_cfg.ga4Id && /^G-/.test(_cfg.ga4Id)) {
       const s = document.createElement('script');
       s.async = true;
-      s.src = `https://www.googletagmanager.com/gtag/js?id=${_cfg.ga4Id}`;
+      s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(_cfg.ga4Id)}`;
       document.head.appendChild(s);
       window.dataLayer = window.dataLayer || [];
-      function gtag(){ dataLayer.push(arguments); }
-      window.gtag = gtag;
-      gtag('js', new Date());
-      gtag('config', _cfg.ga4Id);
+      // Preserve consent-mode gtag if already defined in <head>
+      const _gtag = window.gtag || function gtag(){ dataLayer.push(arguments); };
+      window.gtag = _gtag;
+      _gtag('js', new Date());
+      _gtag('config', _cfg.ga4Id, { anonymize_ip: true, send_page_view: true });
     }
+
+    function trackEvent(name, params = {}) {
+      try {
+        if (typeof window.gtag === 'function' && _cfg.ga4Id && /^G-/.test(_cfg.ga4Id)) {
+          window.gtag('event', name, params);
+        }
+      } catch (_) { /* ignore */ }
+    }
+
+    // Absolute social preview URL from siteUrl
+    (function wireOgAbsolute() {
+      try {
+        const base = String(_cfg.siteUrl || 'https://240-f1.vercel.app').replace(/\/+$/, '');
+        const img = `${base}/og.png`;
+        const page = `${base}/`;
+        const set = (sel, attr, val) => {
+          const el = document.querySelector(sel);
+          if (el) el.setAttribute(attr, val);
+        };
+        set('meta[property="og:image"]', 'content', img);
+        set('meta[name="twitter:image"]', 'content', img);
+        set('meta[property="og:url"]', 'content', page);
+      } catch (_) { /* ignore */ }
+    })();
 
     // ─────────────────────────────────────────────
     // STATE
@@ -2368,6 +2398,7 @@
       if (_adTimer) { clearTimeout(_adTimer); _adTimer = null; }
       if (_adProgressTimer) { clearInterval(_adProgressTimer); _adProgressTimer = null; }
       _adBusy = false;
+      clearModalAdUnit();
       document.getElementById('ad-modal')?.classList.add('hidden');
       if (document.getElementById('help-modal')?.classList.contains('hidden') &&
           document.getElementById('share-modal')?.classList.contains('hidden')) {
@@ -2375,9 +2406,55 @@
       }
     }
 
+    function pickAdSlot(kind) {
+      const slots = ADS.adsenseSlots || {};
+      if (kind === 'rewarded') {
+        return slots.rewarded || slots.interstitial || slots.banner || '';
+      }
+      return slots.interstitial || slots.banner || slots.rewarded || '';
+    }
+
+    function mountModalAdUnit(kind) {
+      const host = document.getElementById('ad-modal-unit');
+      if (!host) return false;
+      host.innerHTML = '';
+      host.classList.add('hidden');
+
+      if (ADS.demo || !ADS.adsenseClient) return false;
+      const slot = pickAdSlot(kind);
+      if (!slot) return false;
+
+      ensureAdsenseScript();
+      host.classList.remove('hidden');
+      const ins = document.createElement('ins');
+      ins.className = 'adsbygoogle';
+      ins.style.display = 'block';
+      ins.style.width = '100%';
+      ins.style.minHeight = '100px';
+      ins.setAttribute('data-ad-client', ADS.adsenseClient);
+      ins.setAttribute('data-ad-slot', slot);
+      ins.setAttribute('data-ad-format', 'auto');
+      ins.setAttribute('data-full-width-responsive', 'true');
+      host.appendChild(ins);
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.warn('adsbygoogle push', e);
+      }
+      return true;
+    }
+
+    function clearModalAdUnit() {
+      const host = document.getElementById('ad-modal-unit');
+      if (host) {
+        host.innerHTML = '';
+        host.classList.add('hidden');
+      }
+    }
+
     /**
-     * Demo interstitial / rewarded player.
-     * Replace body with real SDK load (AdMob, AdSense, etc.) when ADS.demo = false.
+     * Interstitial / rewarded player.
+     * demo: timed placeholder. Live: mounts AdSense display unit in modal for min view time, then grants reward.
      * @param {'interstitial'|'rewarded'} kind
      * @param {{ placement: string, title?: string, rewardText?: string }} opts
      * @returns {Promise<'completed'|'skipped'|'failed'>}
@@ -2389,7 +2466,10 @@
         closeAdModal();
       }
 
-      const duration = kind === 'rewarded' ? ADS.rewardedMs : ADS.interstitialMs;
+      const live = !ADS.demo && !!ADS.adsenseClient && !!pickAdSlot(kind);
+      const duration = live
+        ? (kind === 'rewarded' ? 5500 : 4000)
+        : (kind === 'rewarded' ? ADS.rewardedMs : ADS.interstitialMs);
       const modal = document.getElementById('ad-modal');
       const kindEl = document.getElementById('ad-modal-kind');
       const titleEl = document.getElementById('ad-modal-title');
@@ -2401,13 +2481,23 @@
       if (!modal || !btnGo || !btnSkip) return Promise.resolve('failed');
 
       _adBusy = true;
+      trackEvent(kind === 'rewarded' ? 'ad_rewarded_open' : 'ad_interstitial_open', {
+        placement: opts.placement || kind,
+        live: live ? 1 : 0,
+      });
 
       return new Promise((resolve) => {
         let settled = false;
         const finish = (result) => {
           if (settled) return;
           settled = true;
+          clearModalAdUnit();
           closeAdModal();
+          trackEvent(kind === 'rewarded' ? 'ad_rewarded_result' : 'ad_interstitial_result', {
+            placement: opts.placement || kind,
+            result,
+            live: live ? 1 : 0,
+          });
           // Next tick so click handlers / busy flag fully clear before callers run spin
           setTimeout(() => resolve(result), 0);
         };
@@ -2415,11 +2505,6 @@
         try {
           kindEl.textContent = kind === 'rewarded' ? 'Rewarded ad' : 'Interstitial';
           titleEl.textContent = opts.title || (kind === 'rewarded' ? 'Watch for reward' : 'Short break');
-          copyEl.textContent = ADS.demo
-            ? (kind === 'rewarded'
-              ? 'Demo rewarded unit. Finish to unlock re-spin — no effect on race win rate.'
-              : 'Demo interstitial. Soft break after the season — never mid-race.')
-            : 'Loading advertisement…';
           if (opts.rewardText) {
             rewardEl.textContent = opts.rewardText;
             rewardEl.classList.remove('hidden');
@@ -2451,8 +2536,17 @@
           modal.classList.remove('hidden');
           document.body.style.overflow = 'hidden';
 
-          if (!ADS.demo) {
-            copyEl.textContent = `Placement: ${opts.placement || 'default'} · wire SDK here`;
+          const mounted = live && mountModalAdUnit(kind);
+          if (ADS.demo) {
+            copyEl.textContent = kind === 'rewarded'
+              ? 'Demo rewarded unit. Finish to unlock re-spin — no effect on race win rate.'
+              : 'Demo interstitial. Soft break after the season — never mid-race.';
+          } else if (mounted) {
+            copyEl.textContent = kind === 'rewarded'
+              ? 'Watch the ad to unlock your reward. Does not change race odds.'
+              : 'Short sponsored break — then back to your season.';
+          } else {
+            copyEl.textContent = 'Ad unit not configured yet — continuing shortly.';
           }
 
           const t0 = Date.now();
@@ -2467,14 +2561,14 @@
             btnGo.disabled = false;
             btnSkip.disabled = false;
             if (kind === 'rewarded') {
-              copyEl.textContent = ADS.demo ? 'Reward unlocked — spinning era…' : 'Ad complete.';
-              btnGo.textContent = 'Spin era';
+              copyEl.textContent = ADS.demo ? 'Reward unlocked — spinning era…' : 'Reward ready.';
+              btnGo.textContent = 'Claim';
               // Auto-claim so re-spin always fires after a completed watch
-              _adTimer = setTimeout(() => finish('completed'), 450);
+              _adTimer = setTimeout(() => finish('completed'), live ? 700 : 450);
             } else {
-              copyEl.textContent = ADS.demo ? 'Ad complete.' : 'Ad complete.';
+              copyEl.textContent = 'Ad complete.';
               btnGo.textContent = 'Continue';
-              _adTimer = setTimeout(() => finish('completed'), 600);
+              _adTimer = setTimeout(() => finish('completed'), live ? 800 : 600);
             }
           }, duration);
         } catch (err) {
@@ -2577,6 +2671,12 @@
           state.principal = null;
           state.lineupOpen = 'primary';
           state.spinning = false;
+          trackEvent('era_spin', {
+            era_id: state.era?.id || '',
+            team: state.era?.team || '',
+            tier: state.era?.tier || '',
+            spin_n: state.eraSpinsUsed,
+          });
           render();
         }
       }, 70);
@@ -2938,6 +3038,11 @@
       state.redoFeedback = null;
       state.lbSubmitted = false;
       state.ads.seasonInterstitialShown = false;
+      trackEvent('season_start', {
+        era_id: state.era?.id || '',
+        team: state.era?.team || '',
+        tier: state.era?.tier || '',
+      });
       render();
       window.scrollTo(0, 0);
     }
@@ -2966,6 +3071,13 @@
       state.simulating = false;
       state.seasonComplete = true;
       buildDebrief();
+      trackEvent('season_complete', {
+        wins: state.wins,
+        losses: state.losses,
+        redos_used: SEASON_REDOS - state.redosLeft,
+        era_id: state.era?.id || '',
+        perfect: state.wins === 24 ? 1 : 0,
+      });
       await showSeasonCompleteInterstitial();
       state.phase = 'result';
       render();
@@ -4305,6 +4417,11 @@
     async function openShare() {
       if (!state.era || !state.races.length) return;
       if (!state.debrief?.length) buildDebrief();
+      trackEvent('share_open', {
+        wins: state.wins,
+        losses: state.losses,
+        era_id: state.era?.id || '',
+      });
       const modal = document.getElementById('share-modal');
       const canvas = document.getElementById('share-canvas');
       setShareStatus('Building card…');
@@ -4491,7 +4608,10 @@
 
     async function unlockShareClean() {
       const ok = await requestShareClean();
-      if (ok) render();
+      if (ok) {
+        trackEvent('share_clean_unlock', { ok: 1 });
+        render();
+      }
     }
 
     // ─────────────────────────────────────────────
@@ -4763,6 +4883,12 @@
       lbLocalSave(lbSort(local));
       const cloud = await lbPushRemote(entry);
       state.lbSubmitted = true;
+      trackEvent('leaderboard_submit', {
+        wins: entry.wins,
+        redos_used: entry.redos_used,
+        cloud: cloud ? 1 : 0,
+        era_id: entry.era_id || '',
+      });
       render();
       alert(cloud
         ? 'Saved locally and to the cloud leaderboard.'
