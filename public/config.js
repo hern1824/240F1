@@ -29,17 +29,17 @@ window.SITE_CONFIG = {
 
   // Google AdSense
   adsense: {
-    client: '', // ca-pub-xxxxxxxxxxxxxxxx
-    // Slot IDs from AdSense → Ads → By ad unit
+    client: 'ca-pub-7522159512030116',
+    // Slot IDs from AdSense → Ads → By ad unit (fill after approval)
     slots: {
-      banner: '',       // sticky bottom display
-      interstitial: '', // season-complete overlay unit (display)
+      banner: '',       // sticky bottom display — required before demo: false
+      interstitial: '', // optional season-complete unit
     },
   },
 
   ads: {
     enabled: true,
-    demo: true, // flip to false when AdSense units are live
+    demo: true, // set false only when slots.banner is filled and AdSense is approved
     freeEraSpins: 3,
     bannerOnSetup: true,
     bannerOnSeason: true,
