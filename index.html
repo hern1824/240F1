@@ -259,6 +259,23 @@
       font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 600;
       line-height: 1.1;
+      /* label is a tap target for its explainer */
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      padding: 2px 0;
+      margin: 0;
+      text-align: left;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .race-opts .opt-lab:hover { color: #F5D76E; }
+    .race-opts .opt-lab .opt-lab-caret {
+      font-size: 8px;
+      color: #71717a;
+      line-height: 1;
     }
     .race-opts .opt-row {
       display: flex;
@@ -1535,7 +1552,7 @@
       extraRedoUsed: false,    // one rewarded emergency redo per season
       recorded: false,         // season written to history
       flashReason: null,       // why the auto-run paused
-      raceHints: false,        // per-race decision explainers on/off (default off)
+      hints: {},               // which race-card decision labels have their explainer tapped open (per key)
       shareTheme: 'classic',
       // Ads session flags
       eraSpinsUsed: 0,
@@ -3223,7 +3240,7 @@
       }
     }
 
-    function toggleRaceHints() { state.raceHints = !state.raceHints; render(); }
+    function toggleHint(key) { state.hints = state.hints || {}; state.hints[key] = !state.hints[key]; render(); }
     function raceNext() { void runRaces({ count: 1 }); }
     function raceToFlashpoint() { void runRaces({ stopAtFlashpoints: true }); }
     async function simulateSeason() { await runRaces({}); }
@@ -3703,31 +3720,36 @@
       operations: {
         title: 'Operations',
         body: `
-          <p class="text-white font-display text-xs tracking-wide">TIRE BIAS</p>
-          <ul class="list-disc pl-4 space-y-1 mb-2">
+          <p><strong class="text-white">Tire bias</strong>: light car/org lean for the year (Push / Neutral / Manage). Weekend compound plans still do most of the tire work. Hot / high-wear climates (Bahrain, Qatar, high-deg tracks) punish pure Push.</p>
+          <p><strong class="text-white">Dev cut-off</strong>: Early Freeze / Mid / Late Push shift strength across Opening vs Close. Real calendars cluster Europe vs flyaways. Late Push can leave you soft early; Early Freeze can get overhauled late.</p>
+          <p><strong class="text-white">Lobbying</strong>: Passive (safe), Active (small edge + rare protest), Aggressive (bigger edge + exclusion risk). Passive is the clean 24–0 default.</p>
+          <p><strong class="text-white">Sponsors</strong>: Title (DNF cover), Tech (dry pace on power/aero venues), Regional (wet + flyaways). Title is the survival default for undefeated runs.</p>
+          <p class="text-xs text-zinc-400">Ops cannot invent free pace. They tilt margins; variance still deletes perfect seasons.</p>
+          <p class="text-white font-display text-xs tracking-wide mt-2">QUICK REFERENCE</p>
+          <p class="text-white font-display text-[11px] tracking-wide mt-1">Tire bias</p>
+          <ul class="list-disc pl-4 space-y-1">
             <li><strong class="text-white">Push</strong>: maximum pace, higher risk of DNF and tire wear.</li>
             <li><strong class="text-white">Neutral</strong>: balanced pace and risk.</li>
             <li><strong class="text-white">Manage</strong>: protect the car and tires, lower pace but safer.</li>
           </ul>
-          <p class="text-white font-display text-xs tracking-wide">DEVELOPMENT</p>
-          <ul class="list-disc pl-4 space-y-1 mb-2">
+          <p class="text-white font-display text-[11px] tracking-wide mt-1">Development</p>
+          <ul class="list-disc pl-4 space-y-1">
             <li><strong class="text-white">Early Freeze</strong>: strong Opening (R1-8), soft Close (R17-24).</li>
             <li><strong class="text-white">Mid-Season</strong>: even curve, no strong or soft window.</li>
             <li><strong class="text-white">Late Push</strong>: soft Opening, strong Close.</li>
           </ul>
-          <p class="text-white font-display text-xs tracking-wide">LOBBYING</p>
-          <ul class="list-disc pl-4 space-y-1 mb-2">
-            <li><strong class="text-white">Passive</strong>: zero edge, zero exclusion risk. The clean 24–0 default.</li>
+          <p class="text-white font-display text-[11px] tracking-wide mt-1">Lobbying</p>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><strong class="text-white">Passive</strong>: zero edge, zero exclusion risk.</li>
             <li><strong class="text-white">Active</strong>: small edge, rare protest drag.</li>
             <li><strong class="text-white">Aggressive</strong>: bigger edge, real exclusion risk.</li>
           </ul>
-          <p class="text-white font-display text-xs tracking-wide">SPONSOR</p>
-          <ul class="list-disc pl-4 space-y-1 mb-2">
-            <li><strong class="text-white">Title Focus</strong>: lower DNF risk, slightly less peak pace. Survival default.</li>
+          <p class="text-white font-display text-[11px] tracking-wide mt-1">Sponsor</p>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><strong class="text-white">Title Focus</strong>: lower DNF risk, slightly less peak pace.</li>
             <li><strong class="text-white">Tech Partners</strong>: peak dry pace on power/aero venues.</li>
             <li><strong class="text-white">Regional Mix</strong>: helps wet races and flyaway weekends.</li>
           </ul>
-          <p class="text-xs text-zinc-400">Ops cannot invent free pace. They tilt margins; variance still deletes perfect seasons.</p>
         `,
       },
       outlook: {
@@ -4268,7 +4290,10 @@
               onclick="state.races[${i}].${key}='${id}';render()">${lab}</button>
           `).join('')}
         </div>`;
-      const optHint = (txt) => state.raceHints ? `<div style="grid-column:1/-1;font-size:11px;color:#71717a;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
+      const hintOpen = (key) => !!(state.hints && state.hints[key]);
+      // Each label is a tap target that shows/hides its own explainer.
+      const optLab = (key, label) => `<button type="button" class="opt-lab" onclick="toggleHint('${key}')" title="Tap for explainer">${label}<span class="opt-lab-caret">${hintOpen(key) ? '▾' : '▸'}</span></button>`;
+      const optHint = (key, txt) => hintOpen(key) ? `<div style="grid-column:1/-1;font-size:11px;color:#71717a;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
       const anyCall = race.tirePlan || race.strategy || race.engineMode || race.pitWindow || race.quali || race.wetCall || race.lead;
 
       return `
@@ -4305,32 +4330,33 @@
           <p class="race-fact line-clamp-2" style="cursor:pointer" title="Tap to expand" onclick="this.classList.toggle('line-clamp-2')">${race.fact}</p>
 
           ${showDecisions ? `
-            ${!anyCall ? '<div class="mb-2 text-[11px] uppercase tracking-wider font-display" style="color:#F5D76E">Make the weekend calls · nothing pre-picked</div>' : ''}
+            ${!anyCall ? '<div class="mb-1 text-[11px] uppercase tracking-wider font-display" style="color:#F5D76E">Make the weekend calls · nothing pre-picked</div>' : ''}
+            <div class="mb-2 text-[10px] text-zinc-600">Tap a label for its explainer.</div>
             <div class="race-opts">
-              <div class="opt-lab">Tires</div>
+              ${optLab('tirePlan', 'Tires')}
               ${optRow('tirePlan', RACE_TIRE_PLANS.map(p => [p.id, p.label]), race.tirePlan)}
-              ${optHint(`Wear ${wear.text}. Push: pace now, wears fast · Manage: saves tires, slower`)}
-              <div class="opt-lab">Stops</div>
+              ${optHint('tirePlan', `Wear ${wear.text}. Push: pace now, wears fast · Manage: saves tires, slower`)}
+              ${optLab('strategy', 'Stops')}
               ${optRow('strategy', [['1-stop', '1-stop'], ['2-stop', '2-stop']], race.strategy)}
-              ${optHint('1-stop: track position, tire risk late · 2-stop: fresh rubber, lose track position')}
-              <div class="opt-lab">Engine</div>
+              ${optHint('strategy', '1-stop: track position, tire risk late · 2-stop: fresh rubber, lose track position')}
+              ${optLab('engineMode', 'Engine')}
               ${optRow('engineMode', [['conserve', 'Conserve'], ['balanced', 'Balanced'], ['attack', 'Attack']], race.engineMode)}
-              ${optHint('Attack: more pace, higher DNF risk · Conserve: protects the car, less pace')}
-              <div class="opt-lab">Pit window</div>
+              ${optHint('engineMode', 'Attack: more pace, higher DNF risk · Conserve: protects the car, less pace')}
+              ${optLab('pitWindow', 'Pit window')}
               ${optRow('pitWindow', [['undercut', 'Undercut'], ['standard', 'Standard'], ['overcut', 'Overcut']], race.pitWindow)}
-              ${optHint(`SC ${race.sc}%. Undercut: pit early for clear air · Overcut: run long, gain under yellows`)}
-              <div class="opt-lab">Qualifying</div>
+              ${optHint('pitWindow', `SC ${race.sc}%. Undercut: pit early for clear air · Overcut: run long, gain under yellows`)}
+              ${optLab('quali', 'Qualifying')}
               ${optRow('quali', [['safe', 'Safe'], ['pole', 'Pole push']], race.quali)}
-              ${optHint('Pole push: better grid, crash risk · Safe: bank the grid slot')}
+              ${optHint('quali', 'Pole push: better grid, crash risk · Safe: bank the grid slot')}
               ${race.predRain >= 10 ? `
-                <div class="opt-lab">Wet call</div>
+                ${optLab('wetCall', 'Wet call')}
                 ${optRow('wetCall', [['auto', 'Auto'], ['slicks', 'Slicks'], ['inters', 'Inters']], race.wetCall)}
-                ${optHint(`Rain ${race.predRain}%. Slicks: quick if it stays dry · Inters: ready if it rains`)}
+                ${optHint('wetCall', `Rain ${race.predRain}%. Slicks: quick if it stays dry · Inters: ready if it rains`)}
               ` : ''}
               ${race.predRain >= 30 && state.teammate && state.teammate.wet > state.primary.wet ? `
-                <div class="opt-lab">Lead</div>
+                ${optLab('lead', 'Lead')}
                 ${optRow('lead', [['primary', state.primary.name.split(' ').slice(-1)[0]], ['teammate', state.teammate.name.split(' ').slice(-1)[0]]], race.lead)}
-                ${optHint(`Rain ${race.predRain}%. Lead the stronger wet driver (WET ${state.teammate.name.split(' ').slice(-1)[0]} ${state.teammate.wet} vs ${state.primary.wet})`)}
+                ${optHint('lead', `Rain ${race.predRain}%. Lead the stronger wet driver (WET ${state.teammate.name.split(' ').slice(-1)[0]} ${state.teammate.wet} vs ${state.primary.wet})`)}
               ` : ''}
             </div>
             ${race.redoOpen ? `
@@ -4420,14 +4446,6 @@
           </div>
         `}
 
-        ${!state.races.every(r => r.result) ? `
-          <div class="flex justify-end mb-2">
-            <button type="button" onclick="toggleRaceHints()"
-              class="text-[11px] px-2.5 py-1 border font-display tracking-wider uppercase ${state.raceHints ? 'border-[#F5D76E] text-[#F5D76E]' : 'border-zinc-600 text-zinc-400'}">
-              Explainers ${state.raceHints ? 'On' : 'Off'}
-            </button>
-          </div>
-        ` : ''}
         <div class="space-y-3">
           ${state.races.map(r => renderRaceCard(r)).join('')}
         </div>
@@ -5590,7 +5608,7 @@
 
     Object.assign(window, {
       spinEra, spinSeason, selectDriver, selectPrincipal, setLineupOpen, onDriverChange, onPrincipalChange, setBudget, setMod, setPhase,
-      startSeason, simulateSeason, raceNext, raceToFlashpoint, toggleRaceHints, redoRace, applyRedoSim, dismissRedoFeedback, resetAll,
+      startSeason, simulateSeason, raceNext, raceToFlashpoint, toggleHint, redoRace, applyRedoSim, dismissRedoFeedback, resetAll,
       startDaily, exitDaily, spendToken, requestExtraRedo,
       openGarage, closeGarage, setGarageTab,
       setShareTheme, openSupport, redeemSupporter,
