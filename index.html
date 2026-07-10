@@ -3240,7 +3240,7 @@
       }
     }
 
-    function toggleHint(key) { state.hints = state.hints || {}; state.hints[key] = !state.hints[key]; render(); }
+    function toggleHint(n, key) { state.hints = state.hints || {}; const k = n + ':' + key; state.hints[k] = !state.hints[k]; render(); }
     function raceNext() { void runRaces({ count: 1 }); }
     function raceToFlashpoint() { void runRaces({ stopAtFlashpoints: true }); }
     async function simulateSeason() { await runRaces({}); }
@@ -4290,9 +4290,9 @@
               onclick="state.races[${i}].${key}='${id}';render()">${lab}</button>
           `).join('')}
         </div>`;
-      const hintOpen = (key) => !!(state.hints && state.hints[key]);
-      // Each label is a tap target that shows/hides its own explainer.
-      const optLab = (key, label) => `<button type="button" class="opt-lab" onclick="toggleHint('${key}')" title="Tap for explainer">${label}<span class="opt-lab-caret">${hintOpen(key) ? '▾' : '▸'}</span></button>`;
+      // Each label toggles its OWN explainer on THIS card only (keyed by race number + option).
+      const hintOpen = (key) => !!(state.hints && state.hints[race.n + ':' + key]);
+      const optLab = (key, label) => `<button type="button" class="opt-lab" onclick="toggleHint(${race.n}, '${key}')" title="Tap for explainer">${label}<span class="opt-lab-caret">${hintOpen(key) ? '▾' : '▸'}</span></button>`;
       const optHint = (key, txt) => hintOpen(key) ? `<div style="grid-column:1/-1;font-size:11px;color:#71717a;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
       const anyCall = race.tirePlan || race.strategy || race.engineMode || race.pitWindow || race.quali || race.wetCall || race.lead;
 
