@@ -247,17 +247,18 @@
     /* Compact race decision matrix */
     .race-opts {
       display: grid;
-      grid-template-columns: 52px 1fr;
+      grid-template-columns: 74px 1fr;
       gap: 6px 8px;
       align-items: center;
     }
     .race-opts .opt-lab {
-      font-size: 9px;
-      letter-spacing: 0.12em;
+      font-size: 10px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #fafafa;
       font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 600;
+      line-height: 1.1;
     }
     .race-opts .opt-row {
       display: flex;
@@ -266,10 +267,10 @@
     .race-opts .opt-row button {
       flex: 1;
       padding: 6px 2px;
-      font-size: 10px;
+      font-size: 11px;
       font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 600;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       border: 1px solid #3f3f46;
       background: #09090b;
       color: #71717a;
@@ -282,7 +283,7 @@
       background: #27272a;
     }
     .race-fact {
-      font-size: 11px;
+      font-size: 12px;
       line-height: 1.45;
       color: #fafafa;
       margin-bottom: 0.75rem;
@@ -1534,6 +1535,7 @@
       extraRedoUsed: false,    // one rewarded emergency redo per season
       recorded: false,         // season written to history
       flashReason: null,       // why the auto-run paused
+      raceHints: false,        // per-race decision explainers on/off (default off)
       shareTheme: 'classic',
       // Ads session flags
       eraSpinsUsed: 0,
@@ -3017,6 +3019,7 @@
     const ICON_PLAY = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
     const ICON_FFWD = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>';
     const ICON_SKIP = '<svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>';
+    const ICON_GARAGE = '<svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><path d="M12 3 2 10v11h6v-6h8v6h6V10L12 3z"/></svg>';
 
     function weatherIconSvg(kind) {
       // kind: sun | cloud | rain — 12×12, currentColor
@@ -3220,6 +3223,7 @@
       }
     }
 
+    function toggleRaceHints() { state.raceHints = !state.raceHints; render(); }
     function raceNext() { void runRaces({ count: 1 }); }
     function raceToFlashpoint() { void runRaces({ stopAtFlashpoints: true }); }
     async function simulateSeason() { await runRaces({}); }
@@ -3699,10 +3703,30 @@
       operations: {
         title: 'Operations',
         body: `
-          <p><strong class="text-white">Tire bias</strong>: light car/org lean for the year (Push / Neutral / Manage). Weekend compound plans still do most of the tire work. Hot / high-wear climates (Bahrain, Qatar, high-deg tracks) punish pure Push.</p>
-          <p><strong class="text-white">Dev cut-off</strong>: Early Freeze / Mid / Late Push shift strength across Opening vs Close. Real calendars cluster Europe vs flyaways. Late Push can leave you soft early; Early Freeze can get overhauled late.</p>
-          <p><strong class="text-white">Lobbying</strong>: Passive (safe), Active (small edge + rare protest), Aggressive (bigger edge + exclusion risk). Passive is the clean 24–0 default.</p>
-          <p><strong class="text-white">Sponsors</strong>: Title (DNF cover), Tech (dry pace on power/aero venues), Regional (wet + flyaways). Title is the survival default for undefeated runs.</p>
+          <p class="text-white font-display text-xs tracking-wide">TIRE BIAS</p>
+          <ul class="list-disc pl-4 space-y-1 mb-2">
+            <li><strong class="text-white">Push</strong>: maximum pace, higher risk of DNF and tire wear.</li>
+            <li><strong class="text-white">Neutral</strong>: balanced pace and risk.</li>
+            <li><strong class="text-white">Manage</strong>: protect the car and tires, lower pace but safer.</li>
+          </ul>
+          <p class="text-white font-display text-xs tracking-wide">DEVELOPMENT</p>
+          <ul class="list-disc pl-4 space-y-1 mb-2">
+            <li><strong class="text-white">Early Freeze</strong>: strong Opening (R1-8), soft Close (R17-24).</li>
+            <li><strong class="text-white">Mid-Season</strong>: even curve, no strong or soft window.</li>
+            <li><strong class="text-white">Late Push</strong>: soft Opening, strong Close.</li>
+          </ul>
+          <p class="text-white font-display text-xs tracking-wide">LOBBYING</p>
+          <ul class="list-disc pl-4 space-y-1 mb-2">
+            <li><strong class="text-white">Passive</strong>: zero edge, zero exclusion risk. The clean 24–0 default.</li>
+            <li><strong class="text-white">Active</strong>: small edge, rare protest drag.</li>
+            <li><strong class="text-white">Aggressive</strong>: bigger edge, real exclusion risk.</li>
+          </ul>
+          <p class="text-white font-display text-xs tracking-wide">SPONSOR</p>
+          <ul class="list-disc pl-4 space-y-1 mb-2">
+            <li><strong class="text-white">Title Focus</strong>: lower DNF risk, slightly less peak pace. Survival default.</li>
+            <li><strong class="text-white">Tech Partners</strong>: peak dry pace on power/aero venues.</li>
+            <li><strong class="text-white">Regional Mix</strong>: helps wet races and flyaway weekends.</li>
+          </ul>
           <p class="text-xs text-zinc-400">Ops cannot invent free pace. They tilt margins; variance still deletes perfect seasons.</p>
         `,
       },
@@ -3902,8 +3926,8 @@
             <span class="ml-auto flex flex-col items-end gap-1">
               <button type="button" onclick="openLeaderboard()" class="lb-chip px-0 py-0.5 text-[#3B82F6] hover:text-[#60A5FA]"
                 title="Season leaderboard">★ Leaderboard ★</button>
-              <button type="button" onclick="openGarage()" class="lb-chip px-0 py-0.5" style="color:#D4AF37"
-                title="Eras · history · trophies">Garage ⌂</button>
+              <button type="button" onclick="openGarage()" class="lb-chip px-0 py-0.5 inline-flex items-center gap-1" style="color:#D4AF37"
+                title="Eras · history · trophies">${ICON_GARAGE}<span>Garage</span>${ICON_GARAGE}</button>
             </span>
           </div>
           <div class="mt-3">
@@ -4187,11 +4211,6 @@
                       onclick="setMod('tirePhil', '${o.id}')">${o.label}<small>${o.sub}</small></button>
                   `).join('')}
                 </div>
-                <div class="mt-2 space-y-0.5 text-[10px] leading-snug text-zinc-500">
-                  <div><span class="text-zinc-300">Push:</span> maximum pace, higher risk of DNF and tire wear.</div>
-                  <div><span class="text-zinc-300">Neutral:</span> balanced pace and risk.</div>
-                  <div><span class="text-zinc-300">Manage:</span> protect the car and tires, lower pace but safer.</div>
-                </div>
               </div>
               <div>
                 <div class="label-gold mb-2">Development</div>
@@ -4249,7 +4268,7 @@
               onclick="state.races[${i}].${key}='${id}';render()">${lab}</button>
           `).join('')}
         </div>`;
-      const optHint = (txt) => `<div style="grid-column:1/-1;font-size:10px;color:#71717a;line-height:1.3;margin:-3px 0 4px">${txt}</div>`;
+      const optHint = (txt) => state.raceHints ? `<div style="grid-column:1/-1;font-size:11px;color:#71717a;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
       const anyCall = race.tirePlan || race.strategy || race.engineMode || race.pitWindow || race.quali || race.wetCall || race.lead;
 
       return `
@@ -4257,22 +4276,22 @@
           ${trackOutlineImg(race.n)}
           <div class="race-card-head flex justify-between items-start gap-3 mb-3">
             <div class="min-w-0">
-              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="font-normal text-[12px]" style="color:${phaseColor}">· ${phaseLab}</span>` : ''}${race.isSprint ? ' <span class="font-normal text-[11px] text-amber-400">· SPRINT</span>' : ''}</div>
+              <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="font-normal text-[12px]" style="color:${phaseColor}">· ${phaseLab}</span>` : ''}${race.isSprint ? ' <span class="font-normal text-[12px] text-amber-400">· SPRINT</span>' : ''}</div>
               <div class="font-display text-lg text-white leading-tight mt-0.5 flex items-center gap-0">
                 ${flagImg(race.flag)}<span>${race.name}</span>
               </div>
-              <div class="text-[11px] text-zinc-400">${race.loc}</div>
+              <div class="text-[12px] text-zinc-400">${race.loc}</div>
             </div>
             <div class="text-right shrink-0 relative z-[1]">
-              ${!race.result && state.phase === 'season' ? `<div class="font-display text-xs tracking-widest ${estimateWin(race) >= 0.85 ? 'text-emerald-400' : estimateWin(race) >= 0.72 ? 'text-amber-400' : 'text-f1-red'}">${Math.round(estimateWin(race) * 100)}%</div><div class="text-[9px] text-zinc-600 uppercase tracking-wider">Win est</div>` : ''}
+              ${!race.result && state.phase === 'season' ? `<div class="font-display text-xs tracking-widest ${estimateWin(race) >= 0.85 ? 'text-emerald-400' : estimateWin(race) >= 0.72 ? 'text-amber-400' : 'text-f1-red'}">${Math.round(estimateWin(race) * 100)}%</div><div class="text-[10px] text-zinc-600 uppercase tracking-wider">Win est</div>` : ''}
               ${race.result === 'win' ? '<div class="font-display text-emerald-400 text-xs tracking-widest">WIN</div>' : ''}
-              ${race.result === 'loss' ? `<div class="font-display text-f1-red text-xs tracking-widest">LOSS${race.wonBy === 'rival' && state.rival ? `</div><div class="text-[9px] uppercase tracking-wider" style="color:${state.rival.color}">${state.rival.driver.split(' ').slice(-1)[0]} won` : ''}</div>` : ''}
-              ${race.result && race.margin !== -99 ? `<div class="text-[10px] text-zinc-500">Δ ${race.margin > 0 ? '+' : ''}${race.margin}</div>` : ''}
-              ${race.margin === -99 ? '<div class="text-[10px] text-zinc-500">DNF</div>' : ''}
+              ${race.result === 'loss' ? `<div class="font-display text-f1-red text-xs tracking-widest">LOSS${race.wonBy === 'rival' && state.rival ? `</div><div class="text-[10px] uppercase tracking-wider" style="color:${state.rival.color}">${state.rival.driver.split(' ').slice(-1)[0]} won` : ''}</div>` : ''}
+              ${race.result && race.margin !== -99 ? `<div class="text-[11px] text-zinc-500">Δ ${race.margin > 0 ? '+' : ''}${race.margin}</div>` : ''}
+              ${race.margin === -99 ? '<div class="text-[11px] text-zinc-500">DNF</div>' : ''}
             </div>
           </div>
 
-          <div class="flex flex-wrap gap-x-4 gap-y-1 text-[11px] mb-2 items-center">
+          <div class="flex flex-wrap gap-x-4 gap-y-1 text-[12px] mb-2 items-center">
             <span class="inline-flex items-center text-sky-400">
               ${weatherIconSvg(weatherKindForRace(race))}${race.airTemp}°C · Track ${race.trackTemp}°C · Rain ${race.predRain}%${race.actualRain != null ? ` → ${race.actualRain}%` : ''}
             </span>
@@ -4280,13 +4299,13 @@
             <span class="text-amber-500/90">SC ${race.sc}%</span>
           </div>
           ${state.flashReason && state.flashReason.n === race.n ? `
-            <div class="mb-2 px-2.5 py-2 border border-amber-500/50 bg-amber-500/10 text-[11px] text-amber-300 fade-in">
-              <span class="font-display uppercase tracking-wider text-[9px]">Flashpoint</span> · ${state.flashReason.reason}
+            <div class="mb-2 px-2.5 py-2 border border-amber-500/50 bg-amber-500/10 text-[12px] text-amber-300 fade-in">
+              <span class="font-display uppercase tracking-wider text-[10px]">Flashpoint</span> · ${state.flashReason.reason}
             </div>` : ''}
           <p class="race-fact line-clamp-2" style="cursor:pointer" title="Tap to expand" onclick="this.classList.toggle('line-clamp-2')">${race.fact}</p>
 
           ${showDecisions ? `
-            ${!anyCall ? '<div class="mb-2 text-[10px] uppercase tracking-wider font-display" style="color:#F5D76E">Make the weekend calls · nothing pre-picked</div>' : ''}
+            ${!anyCall ? '<div class="mb-2 text-[11px] uppercase tracking-wider font-display" style="color:#F5D76E">Make the weekend calls · nothing pre-picked</div>' : ''}
             <div class="race-opts">
               <div class="opt-lab">Tires</div>
               ${optRow('tirePlan', RACE_TIRE_PLANS.map(p => [p.id, p.label]), race.tirePlan)}
@@ -4295,12 +4314,12 @@
               ${optRow('strategy', [['1-stop', '1-stop'], ['2-stop', '2-stop']], race.strategy)}
               ${optHint('1-stop: track position, tire risk late · 2-stop: fresh rubber, lose track position')}
               <div class="opt-lab">Engine</div>
-              ${optRow('engineMode', [['conserve', 'Cons'], ['balanced', 'Bal'], ['attack', 'Atk']], race.engineMode)}
+              ${optRow('engineMode', [['conserve', 'Conserve'], ['balanced', 'Balanced'], ['attack', 'Attack']], race.engineMode)}
               ${optHint('Attack: more pace, higher DNF risk · Conserve: protects the car, less pace')}
-              <div class="opt-lab">Pit</div>
-              ${optRow('pitWindow', [['undercut', 'Under'], ['standard', 'Std'], ['overcut', 'Over']], race.pitWindow)}
+              <div class="opt-lab">Pit window</div>
+              ${optRow('pitWindow', [['undercut', 'Undercut'], ['standard', 'Standard'], ['overcut', 'Overcut']], race.pitWindow)}
               ${optHint(`SC ${race.sc}%. Undercut: pit early for clear air · Overcut: run long, gain under yellows`)}
-              <div class="opt-lab">Quali</div>
+              <div class="opt-lab">Qualifying</div>
               ${optRow('quali', [['safe', 'Safe'], ['pole', 'Pole push']], race.quali)}
               ${optHint('Pole push: better grid, crash risk · Safe: bank the grid slot')}
               ${race.predRain >= 10 ? `
@@ -4316,26 +4335,26 @@
             </div>
             ${race.redoOpen ? `
               <button onclick="applyRedoSim(${race.n})"
-                class="w-full mt-3 py-2.5 bg-zinc-100 text-zinc-900 text-[10px] tracking-widest uppercase font-display">
+                class="w-full mt-3 py-2.5 bg-zinc-100 text-zinc-900 text-[11px] tracking-widest uppercase font-display">
                 Run redo
               </button>
             ` : ''}
           ` : `
-            <div class="text-[11px] text-zinc-500 mb-1">${race.tirePlan || 'standard'} · ${race.strategy} · ${race.engineMode} · ${race.pitWindow}${race.redoAttempted ? ' · redone' : ''}</div>
+            <div class="text-[12px] text-zinc-500 mb-1">${race.tirePlan || 'standard'} · ${race.strategy} · ${race.engineMode} · ${race.pitWindow}${race.redoAttempted ? ' · redone' : ''}</div>
             <div class="space-y-0.5">
-              ${race.notes.slice(0, 4).map(n => `<div class="text-[11px] text-zinc-400">· ${n}</div>`).join('')}
+              ${race.notes.slice(0, 4).map(n => `<div class="text-[12px] text-zinc-400">· ${n}</div>`).join('')}
             </div>
             ${race.result === 'loss' && state.redosLeft > 0 && !race.redoAttempted && state.phase === 'season' ? `
               <button onclick="redoRace(${race.n})"
-                class="mt-3 w-full py-2 border border-zinc-600 text-[10px] tracking-widest uppercase text-zinc-300">
+                class="mt-3 w-full py-2 border border-zinc-600 text-[11px] tracking-widest uppercase text-zinc-300">
                 Use season redo · ${state.redosLeft} left
               </button>
             ` : ''}
             ${race.result === 'loss' && race.redoAttempted && state.phase === 'season' ? `
-              <div class="mt-2 text-[10px] text-zinc-600 uppercase tracking-wider">Redo already used on this race</div>
+              <div class="mt-2 text-[11px] text-zinc-600 uppercase tracking-wider">Redo already used on this race</div>
             ` : ''}
             ${race.result === 'loss' && state.redosLeft <= 0 && !race.redoAttempted && state.phase === 'season' ? `
-              <div class="mt-2 text-[10px] text-zinc-600 uppercase tracking-wider">No season redos left</div>
+              <div class="mt-2 text-[11px] text-zinc-600 uppercase tracking-wider">No season redos left</div>
             ` : ''}
           `}
         </article>
@@ -4401,6 +4420,14 @@
           </div>
         `}
 
+        ${!state.races.every(r => r.result) ? `
+          <div class="flex justify-end mb-2">
+            <button type="button" onclick="toggleRaceHints()"
+              class="text-[11px] px-2.5 py-1 border font-display tracking-wider uppercase ${state.raceHints ? 'border-[#F5D76E] text-[#F5D76E]' : 'border-zinc-600 text-zinc-400'}">
+              Explainers ${state.raceHints ? 'On' : 'Off'}
+            </button>
+          </div>
+        ` : ''}
         <div class="space-y-3">
           ${state.races.map(r => renderRaceCard(r)).join('')}
         </div>
@@ -5520,10 +5547,11 @@
           </div>
           <p class="text-[11px] text-zinc-500 mb-3">${earnedN}/${trophies.length} trophies.</p>
           <div class="grid grid-cols-2 gap-1.5">
-            ${trophies.map(t => {
+            ${trophies.map((t, ti) => {
               const col = rarityColor[t.rarity] || '#a1a1aa';
-              // Mythic (rarity 5) trophies get a full colored border ring so the elite set stands out.
-              const frame = t.rarity === 5
+              // The last 4 trophies (the elite / mythic set) get a full colored border ring so they stand out.
+              const isElite = ti >= trophies.length - 4;
+              const frame = isElite
                 ? (t.earned ? `border:1px solid ${col};box-shadow:0 0 0 1px ${col} inset` : 'border:1px solid #52525b')
                 : (t.earned ? `border-left:2px solid ${col}` : 'border-left:2px solid #3f3f46');
               return `
@@ -5531,7 +5559,7 @@
                 <span class="shrink-0 leading-none" style="font-size:${iconSize[t.rarity] || '18px'};${t.earned ? '' : 'filter:grayscale(1);opacity:0.4'}">${t.icon || '🏁'}</span>
                 <div class="min-w-0">
                   <div class="text-[11px] font-display tracking-wide leading-tight" style="color:${t.earned ? col : '#71717a'}">${t.label}</div>
-                  <div class="text-[10px] leading-tight mt-0.5 ${t.earned ? 'text-zinc-600' : 'text-zinc-700'}">${t.desc}</div>
+                  <div class="text-[11px] leading-snug mt-0.5 ${t.earned ? 'text-zinc-400' : 'text-zinc-500'}">${t.desc}</div>
                 </div>
               </div>`;
             }).join('')}
@@ -5562,7 +5590,7 @@
 
     Object.assign(window, {
       spinEra, spinSeason, selectDriver, selectPrincipal, setLineupOpen, onDriverChange, onPrincipalChange, setBudget, setMod, setPhase,
-      startSeason, simulateSeason, raceNext, raceToFlashpoint, redoRace, applyRedoSim, dismissRedoFeedback, resetAll,
+      startSeason, simulateSeason, raceNext, raceToFlashpoint, toggleRaceHints, redoRace, applyRedoSim, dismissRedoFeedback, resetAll,
       startDaily, exitDaily, spendToken, requestExtraRedo,
       openGarage, closeGarage, setGarageTab,
       setShareTheme, openSupport, redeemSupporter,
