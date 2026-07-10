@@ -259,23 +259,28 @@
       font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 600;
       line-height: 1.1;
-      /* label is a tap target for its explainer */
+    }
+    .race-info-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
       background: none;
       border: none;
-      padding: 2px 0;
+      padding: 2px 4px;
       margin: 0;
-      text-align: left;
       cursor: pointer;
+      color: #a1a1aa;
+      font-size: 12px;
+      line-height: 1;
       -webkit-tap-highlight-color: transparent;
     }
-    .race-opts .opt-lab:hover { color: #F5D76E; }
-    .race-opts .opt-lab .opt-lab-caret {
-      font-size: 8px;
-      color: #71717a;
-      line-height: 1;
+    .race-info-toggle:hover { color: #F5D76E; }
+    .race-info-toggle .ri-label {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
     .race-opts .opt-row {
       display: flex;
@@ -4290,9 +4295,9 @@
               onclick="state.races[${i}].${key}='${id}';render()">${lab}</button>
           `).join('')}
         </div>`;
-      // Tapping ANY label toggles ALL explainers on THIS card (per card, independent of other cards).
+      // The caret on the header row toggles ALL explainers on THIS card (per card, independent of other cards).
       const cardHintsOpen = !!(state.hints && state.hints[race.n]);
-      const optLab = (label) => `<button type="button" class="opt-lab" onclick="toggleHint(${race.n})" title="Tap to show/hide explainers">${label}<span class="opt-lab-caret">${cardHintsOpen ? '▾' : '▸'}</span></button>`;
+      const optLab = (label) => `<div class="opt-lab">${label}</div>`;
       const optHint = (txt) => cardHintsOpen ? `<div style="grid-column:1/-1;font-size:11px;color:#c4c4cc;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
       const anyCall = race.tirePlan || race.strategy || race.engineMode || race.pitWindow || race.quali || race.wetCall || race.lead;
 
@@ -4330,8 +4335,14 @@
           <p class="race-fact line-clamp-2" style="cursor:pointer" title="Tap to expand" onclick="this.classList.toggle('line-clamp-2')">${race.fact}</p>
 
           ${showDecisions ? `
-            ${!anyCall ? '<div class="mb-1 text-[11px] uppercase tracking-wider font-display" style="color:#F5D76E">Make the weekend calls · nothing pre-picked</div>' : ''}
-            <div class="mb-2 text-[10px] text-zinc-600">Tap any label to show/hide the explainers.</div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              ${!anyCall
+                ? '<span class="text-[11px] uppercase tracking-wider font-display" style="color:#F5D76E">Make the weekend calls · nothing pre-picked</span>'
+                : '<span></span>'}
+              <button type="button" class="race-info-toggle" onclick="toggleHint(${race.n})" aria-label="Show or hide explainers" title="Show/hide explainers">
+                <span class="ri-label">${cardHintsOpen ? 'Hide' : 'Info'}</span><span>${cardHintsOpen ? '▾' : '▸'}</span>
+              </button>
+            </div>
             <div class="race-opts">
               ${optLab('Tires')}
               ${optRow('tirePlan', RACE_TIRE_PLANS.map(p => [p.id, p.label]), race.tirePlan)}
