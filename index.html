@@ -512,18 +512,18 @@
     }
     .track-outline {
       position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 72px;
-      height: 52px;
+      top: 14px;
+      right: 12px;
+      width: 52px;
+      height: 38px;
       object-fit: contain;
       object-position: right top;
-      opacity: 0.4;
+      opacity: 0.35;
       pointer-events: none;
       z-index: 0;
     }
     .race-card-head {
-      padding-right: 96px;
+      padding-right: 44px;
       position: relative;
       z-index: 1;
     }
@@ -1557,6 +1557,7 @@
       extraRedoUsed: false,    // one rewarded emergency redo per season
       recorded: false,         // season written to history
       flashReason: null,       // why the auto-run paused
+      flashAck: null,          // race number the player has acknowledged at a flashpoint (re-click runs it)
       hints: {},               // which race-card decision labels have their explainer tapped open (per key)
       shareTheme: 'classic',
       // Ads session flags
@@ -3171,16 +3172,16 @@
       }
     }
 
-    /** Should the auto-runner pause before this race for a human call? */
+    /** Should the auto-runner pause before this race for a human call?
+     *  Deliberately rare — only genuine decision points, so "To flashpoint" stays useful. */
     function flashpointReason(race) {
       if (!race) return null;
-      const p = Math.round(estimateWin(race) * 100);
-      if (p < 78) return `Win estimate ${p}%: tough weekend, check the calls`;
-      if (race.predRain >= 35) return `Rain ${race.predRain}%: crossover + lead-car call live`;
-      if (race.sc >= 28) return `SC ${race.sc}%: pit window decides this one`;
-      if (race.isSprint) return 'Sprint weekend: double jeopardy';
-      if (race.n === 9 || race.n === 17) return `${phaseMeta(phaseForRace(race.n)).label} phase begins`;
       if (race.n === 24) return 'Season finale';
+      if (race.isSprint) return 'Sprint weekend: double jeopardy';
+      const p = Math.round(estimateWin(race) * 100);
+      if (p < 70) return `Win estimate ${p}%: tough weekend, check the calls`;
+      if (race.predRain >= 45) return `Rain ${race.predRain}%: wet-weather call live`;
+      if (race.sc >= 38) return `SC ${race.sc}%: pit window decides this one`;
       return null;
     }
 
@@ -3213,15 +3214,20 @@
       while (done < count) {
         const race = nextUnresolved();
         if (!race) break;
-        // Flashpoint mode: auto-run routine races, but PAUSE before any genuine decision
-        // point (including the very next one) and hand the player the controls. The race
-        // is left unresolved with its decision UI active — the player makes the weekend
-        // calls, then runs it with "Race R##". If they don't intervene it's not a flashpoint.
+        // Flashpoint mode: fast-forward routine races and pause ONCE at each genuine
+        // decision point (decision UI live). Re-clicking "To flashpoint" runs the race
+        // you're paused on (you've had your chance to set the calls) and continues to the
+        // next one — so it always makes progress instead of stopping on the same race.
         if (stopAtFlashpoints) {
           const reason = flashpointReason(race);
-          if (reason) { state.flashReason = { n: race.n, reason }; break; }
+          if (reason && state.flashAck !== race.n) {
+            state.flashReason = { n: race.n, reason };
+            state.flashAck = race.n;
+            break;
+          }
         }
         resolveRace(race);
+        if (state.flashAck === race.n) state.flashAck = null;
         done++;
         saveGame();
         render();
@@ -3611,6 +3617,8 @@
         extraRedoUsed: false,
         recorded: false,
         flashReason: null,
+        flashAck: null,
+        hints: {},
         ads: {
           seasonInterstitialShown: false,
           shareClean: false,
