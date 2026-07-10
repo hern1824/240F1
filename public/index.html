@@ -4293,7 +4293,7 @@
       // Each label toggles its OWN explainer on THIS card only (keyed by race number + option).
       const hintOpen = (key) => !!(state.hints && state.hints[race.n + ':' + key]);
       const optLab = (key, label) => `<button type="button" class="opt-lab" onclick="toggleHint(${race.n}, '${key}')" title="Tap for explainer">${label}<span class="opt-lab-caret">${hintOpen(key) ? '▾' : '▸'}</span></button>`;
-      const optHint = (key, txt) => hintOpen(key) ? `<div style="grid-column:1/-1;font-size:11px;color:#71717a;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
+      const optHint = (key, txt) => hintOpen(key) ? `<div style="grid-column:1/-1;font-size:11px;color:#c4c4cc;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
       const anyCall = race.tirePlan || race.strategy || race.engineMode || race.pitWindow || race.quali || race.wetCall || race.lead;
 
       return `
