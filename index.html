@@ -3240,7 +3240,7 @@
       }
     }
 
-    function toggleHint(n, key) { state.hints = state.hints || {}; const k = n + ':' + key; state.hints[k] = !state.hints[k]; render(); }
+    function toggleHint(n) { state.hints = state.hints || {}; state.hints[n] = !state.hints[n]; render(); }
     function raceNext() { void runRaces({ count: 1 }); }
     function raceToFlashpoint() { void runRaces({ stopAtFlashpoints: true }); }
     async function simulateSeason() { await runRaces({}); }
@@ -4290,10 +4290,10 @@
               onclick="state.races[${i}].${key}='${id}';render()">${lab}</button>
           `).join('')}
         </div>`;
-      // Each label toggles its OWN explainer on THIS card only (keyed by race number + option).
-      const hintOpen = (key) => !!(state.hints && state.hints[race.n + ':' + key]);
-      const optLab = (key, label) => `<button type="button" class="opt-lab" onclick="toggleHint(${race.n}, '${key}')" title="Tap for explainer">${label}<span class="opt-lab-caret">${hintOpen(key) ? '▾' : '▸'}</span></button>`;
-      const optHint = (key, txt) => hintOpen(key) ? `<div style="grid-column:1/-1;font-size:11px;color:#c4c4cc;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
+      // Tapping ANY label toggles ALL explainers on THIS card (per card, independent of other cards).
+      const cardHintsOpen = !!(state.hints && state.hints[race.n]);
+      const optLab = (label) => `<button type="button" class="opt-lab" onclick="toggleHint(${race.n})" title="Tap to show/hide explainers">${label}<span class="opt-lab-caret">${cardHintsOpen ? '▾' : '▸'}</span></button>`;
+      const optHint = (txt) => cardHintsOpen ? `<div style="grid-column:1/-1;font-size:11px;color:#c4c4cc;line-height:1.35;margin:-2px 0 5px">${txt}</div>` : '';
       const anyCall = race.tirePlan || race.strategy || race.engineMode || race.pitWindow || race.quali || race.wetCall || race.lead;
 
       return `
@@ -4331,32 +4331,32 @@
 
           ${showDecisions ? `
             ${!anyCall ? '<div class="mb-1 text-[11px] uppercase tracking-wider font-display" style="color:#F5D76E">Make the weekend calls · nothing pre-picked</div>' : ''}
-            <div class="mb-2 text-[10px] text-zinc-600">Tap a label for its explainer.</div>
+            <div class="mb-2 text-[10px] text-zinc-600">Tap any label to show/hide the explainers.</div>
             <div class="race-opts">
-              ${optLab('tirePlan', 'Tires')}
+              ${optLab('Tires')}
               ${optRow('tirePlan', RACE_TIRE_PLANS.map(p => [p.id, p.label]), race.tirePlan)}
-              ${optHint('tirePlan', `Wear ${wear.text}. Push: pace now, wears fast · Manage: saves tires, slower`)}
-              ${optLab('strategy', 'Stops')}
+              ${optHint(`Wear ${wear.text}. Push: pace now, wears fast · Manage: saves tires, slower`)}
+              ${optLab('Stops')}
               ${optRow('strategy', [['1-stop', '1-stop'], ['2-stop', '2-stop']], race.strategy)}
-              ${optHint('strategy', '1-stop: track position, tire risk late · 2-stop: fresh rubber, lose track position')}
-              ${optLab('engineMode', 'Engine')}
+              ${optHint('1-stop: track position, tire risk late · 2-stop: fresh rubber, lose track position')}
+              ${optLab('Engine')}
               ${optRow('engineMode', [['conserve', 'Conserve'], ['balanced', 'Balanced'], ['attack', 'Attack']], race.engineMode)}
-              ${optHint('engineMode', 'Attack: more pace, higher DNF risk · Conserve: protects the car, less pace')}
-              ${optLab('pitWindow', 'Pit window')}
+              ${optHint('Attack: more pace, higher DNF risk · Conserve: protects the car, less pace')}
+              ${optLab('Pit window')}
               ${optRow('pitWindow', [['undercut', 'Undercut'], ['standard', 'Standard'], ['overcut', 'Overcut']], race.pitWindow)}
-              ${optHint('pitWindow', `SC ${race.sc}%. Undercut: pit early for clear air · Overcut: run long, gain under yellows`)}
-              ${optLab('quali', 'Qualifying')}
+              ${optHint(`SC ${race.sc}%. Undercut: pit early for clear air · Overcut: run long, gain under yellows`)}
+              ${optLab('Qualifying')}
               ${optRow('quali', [['safe', 'Safe'], ['pole', 'Pole push']], race.quali)}
-              ${optHint('quali', 'Pole push: better grid, crash risk · Safe: bank the grid slot')}
+              ${optHint('Pole push: better grid, crash risk · Safe: bank the grid slot')}
               ${race.predRain >= 10 ? `
-                ${optLab('wetCall', 'Wet call')}
+                ${optLab('Wet call')}
                 ${optRow('wetCall', [['auto', 'Auto'], ['slicks', 'Slicks'], ['inters', 'Inters']], race.wetCall)}
-                ${optHint('wetCall', `Rain ${race.predRain}%. Slicks: quick if it stays dry · Inters: ready if it rains`)}
+                ${optHint(`Rain ${race.predRain}%. Slicks: quick if it stays dry · Inters: ready if it rains`)}
               ` : ''}
               ${race.predRain >= 30 && state.teammate && state.teammate.wet > state.primary.wet ? `
-                ${optLab('lead', 'Lead')}
+                ${optLab('Lead')}
                 ${optRow('lead', [['primary', state.primary.name.split(' ').slice(-1)[0]], ['teammate', state.teammate.name.split(' ').slice(-1)[0]]], race.lead)}
-                ${optHint('lead', `Rain ${race.predRain}%. Lead the stronger wet driver (WET ${state.teammate.name.split(' ').slice(-1)[0]} ${state.teammate.wet} vs ${state.primary.wet})`)}
+                ${optHint(`Rain ${race.predRain}%. Lead the stronger wet driver (WET ${state.teammate.name.split(' ').slice(-1)[0]} ${state.teammate.wet} vs ${state.primary.wet})`)}
               ` : ''}
             </div>
             ${race.redoOpen ? `
