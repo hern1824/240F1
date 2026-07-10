@@ -3500,20 +3500,21 @@
       return best;
     }
     const TROPHIES = [
-      { id: 'first', label: 'Lights Out', desc: 'Complete your first season.', test: hs => hs.length >= 1 },
-      { id: 'winning', label: 'Race Winner', desc: 'A 14+ win season.', test: hs => hs.some(h => h.wins >= 14) },
-      { id: 'dominant', label: 'Championship Iron', desc: 'A 20+ win season.', test: hs => hs.some(h => h.wins >= 20) },
-      { id: 'elite', label: 'Elite Sweep', desc: 'A 22+ win season.', test: hs => hs.some(h => h.wins >= 22) },
-      { id: 'perfect', label: 'Perfect Season', desc: '24–0. The whole point.', test: hs => hs.some(h => h.wins === 24) },
-      { id: 'folklore', label: 'Folklore', desc: '24–0 with an Underdog era.', test: hs => hs.some(h => h.wins === 24 && h.tier === 'underdog') },
-      { id: 'noredo', label: 'No Safety Net', desc: '20+ wins without spending a redo.', test: hs => hs.some(h => h.wins >= 20 && h.redos === 0) },
-      { id: 'rainmaster', label: 'Rainmaster', desc: 'Win every wet race in a season (3+ wet).', test: hs => hs.some(h => h.wet_races >= 3 && h.wet_wins === h.wet_races) },
-      { id: 'ironclad', label: 'Ironclad', desc: 'A season with zero retirements.', test: hs => hs.some(h => h.dnfs === 0) },
-      { id: 'daily', label: 'Daily Driver', desc: 'Complete a Daily Challenge.', test: hs => hs.some(h => h.mode === 'daily') },
-      { id: 'collector5', label: 'Garage Keys', desc: 'Complete seasons with 5 different eras.', test: hs => new Set(hs.map(h => h.era_id)).size >= 5 },
-      { id: 'collector12', label: 'Era Collector', desc: 'Complete seasons with 12 different eras.', test: hs => new Set(hs.map(h => h.era_id)).size >= 12 },
-      { id: 'tourist', label: 'World Tour', desc: 'Complete 10 seasons.', test: hs => hs.length >= 10 },
-      { id: 'giantkiller', label: 'Giant Killer', desc: '20+ wins with an Underdog era.', test: hs => hs.some(h => h.wins >= 20 && h.tier === 'underdog') },
+      // rarity 1 (common) .. 5 (mythic): drives icon + size in the trophy grid
+      { id: 'first', label: 'Lights Out', desc: 'Complete your first season.', rarity: 1, icon: '🎬', test: hs => hs.length >= 1 },
+      { id: 'daily', label: 'Daily Driver', desc: 'Complete a Daily Challenge.', rarity: 1, icon: '📅', test: hs => hs.some(h => h.mode === 'daily') },
+      { id: 'winning', label: 'Race Winner', desc: 'A 14+ win season.', rarity: 2, icon: '🥉', test: hs => hs.some(h => h.wins >= 14) },
+      { id: 'collector5', label: 'Garage Keys', desc: 'Complete seasons with 5 different eras.', rarity: 2, icon: '🗝️', test: hs => new Set(hs.map(h => h.era_id)).size >= 5 },
+      { id: 'dominant', label: 'Championship Iron', desc: 'A 20+ win season.', rarity: 3, icon: '🥈', test: hs => hs.some(h => h.wins >= 20) },
+      { id: 'ironclad', label: 'Ironclad', desc: 'A season with zero retirements.', rarity: 3, icon: '🛡️', test: hs => hs.some(h => h.dnfs === 0) },
+      { id: 'tourist', label: 'World Tour', desc: 'Complete 10 seasons.', rarity: 3, icon: '🌍', test: hs => hs.length >= 10 },
+      { id: 'rainmaster', label: 'Rainmaster', desc: 'Win every wet race in a season (3+ wet).', rarity: 3, icon: '🌧️', test: hs => hs.some(h => h.wet_races >= 3 && h.wet_wins === h.wet_races) },
+      { id: 'collector12', label: 'Era Collector', desc: 'Complete seasons with 12 different eras.', rarity: 4, icon: '🥇', test: hs => new Set(hs.map(h => h.era_id)).size >= 12 },
+      { id: 'elite', label: 'Elite Sweep', desc: 'A 22+ win season.', rarity: 4, icon: '⭐', test: hs => hs.some(h => h.wins >= 22) },
+      { id: 'noredo', label: 'No Safety Net', desc: '20+ wins without spending a redo.', rarity: 4, icon: '💎', test: hs => hs.some(h => h.wins >= 20 && h.redos === 0) },
+      { id: 'perfect', label: 'Perfect Season', desc: '24–0. The whole point.', rarity: 5, icon: '👑', test: hs => hs.some(h => h.wins === 24) },
+      { id: 'giantkiller', label: 'Giant Killer', desc: '20+ wins with an Underdog era.', rarity: 5, icon: '🗡️', test: hs => hs.some(h => h.wins >= 20 && h.tier === 'underdog') },
+      { id: 'folklore', label: 'Folklore', desc: '24–0 with an Underdog era.', rarity: 5, icon: '🏆', test: hs => hs.some(h => h.wins === 24 && h.tier === 'underdog') },
     ];
     function earnedTrophies() {
       const hs = historyLoad();
@@ -3872,10 +3873,12 @@
             <span class="px-1.5 py-0.5 border" style="color:#D4AF37;border-color:#D4AF37">God Tier ×${tc.god}</span>
             <span class="px-1.5 py-0.5 border border-zinc-400 text-zinc-300">Strong ×${tc.strong}</span>
             <span class="px-1.5 py-0.5 border" style="color:#CD7F32;border-color:#CD7F32">Underdog ×${tc.underdog} · Folklore</span>
-            <button type="button" onclick="openGarage()" class="lb-chip ml-auto px-0 py-0.5" style="color:#D4AF37"
-              title="Eras · history · trophies">⌂ Garage</button>
-            <button type="button" onclick="openLeaderboard()" class="lb-chip px-0 py-0.5 text-[#3B82F6] hover:text-[#60A5FA]"
-              title="Season leaderboard">★ Leaderboard ★</button>
+            <span class="ml-auto flex flex-col items-end gap-1">
+              <button type="button" onclick="openLeaderboard()" class="lb-chip px-0 py-0.5 text-[#3B82F6] hover:text-[#60A5FA]"
+                title="Season leaderboard">★ Leaderboard ★</button>
+              <button type="button" onclick="openGarage()" class="lb-chip px-0 py-0.5" style="color:#D4AF37"
+                title="Eras · history · trophies">Garage ⌂</button>
+            </span>
           </div>
           <div class="mt-3">
             <div class="flex items-center gap-2 mb-2">
@@ -3986,7 +3989,7 @@
             <div class="min-w-0">
               <div class="font-display text-[10px] tracking-widest uppercase text-sky-400">Daily Challenge</div>
               <div class="text-[11px] text-zinc-300 mt-0.5">${state.mode === 'daily'
-                ? `Locked hand · seed #${dailySeed()} · one attempt · same for everyone`
+                ? `Locked hand · seed #${dailySeed()} · one attempt<br>same for all`
                 : dailyUsed() ? 'Today\'s attempt used · new seed at midnight UTC' : 'Same era + season for everyone · one attempt · daily board'}</div>
             </div>
             ${state.mode === 'daily'
@@ -4446,10 +4449,10 @@
               <span class="text-white">–</span>
               <span class="text-f1-red">${state.losses}</span>
             </div>
-            <div class="mt-3 font-display tracking-widest uppercase" style="color: ${badge.color};font-size:1.15rem">
+            <div class="mt-3 font-display tracking-widest uppercase" style="color: ${perfect || elite ? badge.color : '#ffffff'};font-size:1.15rem">
               ${badge.label}
             </div>
-            <div class="mt-2 font-display tracking-wide" style="color:${badge.color};font-size:19px;opacity:0.95">${badge.sub}</div>
+            <div class="mt-2 font-display tracking-wide" style="color:${perfect || elite ? badge.color : '#ffffff'};font-size:19px;opacity:0.95">${badge.sub}</div>
             <div class="mt-2.5 font-display tracking-wide" style="font-size:17px;${zeroRedos ? 'color:#D4AF37' : 'color:#a1a1aa'}">Redos ${redosUsed}/${SEASON_REDOS}${zeroRedos ? '!' : ''}</div>
             <div style="font-size:17px;color:#a1a1aa;margin-top:6px">${state.era.team} ${state.era.era} · <span style="color: ${tierInfo(state.era).color}">${tierInfo(state.era).label}</span></div>
             <div style="font-size:17px;color:#71717a;margin-top:4px">Schedule: ${scheduleSummary()}</div>
@@ -5171,7 +5174,7 @@
         };
       }
       if (w >= 14) {
-        return { key: 'solid', cardClass: '', badge: 'RACE-WINNING!', badgeColor: '#A1A1AA', blurb: '' };
+        return { key: 'solid', cardClass: '', badge: 'RACE-WINNING!', badgeColor: '#FFFFFF', blurb: '' };
       }
       return { key: 'run', cardClass: '', badge: '', badgeColor: '#71717a', blurb: '' };
     }
@@ -5431,20 +5434,18 @@
       if (tab === 'eras') {
         body = `
           <p class="text-[11px] text-zinc-500 mb-3">${played}/${ERAS.length} eras raced. Best record per era — collect them all.</p>
-          <div class="space-y-1.5">
+          <div class="grid grid-cols-3 gap-1.5">
             ${ERAS.map(e => {
               const b = best[e.id];
               const tc = tierInfo(e).color;
               return `
-                <div class="flex items-center gap-3 bg-zinc-800 px-3 py-2 ${b ? '' : 'opacity-50'}">
-                  <span class="w-1.5 h-8 shrink-0" style="background:${e.color}"></span>
-                  <div class="min-w-0 flex-1">
-                    <div class="text-xs text-zinc-100 font-medium truncate">${e.team} <span class="text-zinc-400">${e.era}</span></div>
-                    <div class="text-[10px] uppercase tracking-wider" style="color:${tc}">${tierInfo(e).label}</div>
-                  </div>
-                  <div class="text-right shrink-0">
-                    ${b ? `<div class="font-display text-sm ${b.wins === 24 ? 'text-[#F5D76E]' : b.wins >= 20 ? 'text-[#60A5FA]' : 'text-zinc-200'}">${b.wins}–${b.losses}</div><div class="text-[9px] text-zinc-500">Redos ${b.redos}</div>`
-                        : '<div class="text-[10px] text-zinc-600 uppercase tracking-wider">Unraced</div>'}
+                <div class="bg-zinc-800 px-2 py-2 border-l-2 ${b ? '' : 'opacity-50'}" style="border-color:${e.color}">
+                  <div class="text-[11px] text-zinc-100 font-medium leading-tight">${e.team}</div>
+                  <div class="text-[10px] text-zinc-400 leading-tight mt-0.5">${e.era}</div>
+                  <div class="flex items-center justify-between gap-1 mt-1">
+                    <span class="text-[9px] uppercase tracking-wider" style="color:${tc}">${tierInfo(e).label}</span>
+                    ${b ? `<span class="font-display text-[11px] ${b.wins === 24 ? 'text-[#F5D76E]' : b.wins >= 20 ? 'text-[#60A5FA]' : 'text-zinc-200'}">${b.wins}–${b.losses}</span>`
+                        : '<span class="text-[8px] text-zinc-600 uppercase tracking-wider">—</span>'}
                   </div>
                 </div>`;
             }).join('')}
@@ -5468,17 +5469,22 @@
                 ${h.rival ? `<div class="text-[10px] text-zinc-500 mt-1.5">Rival · ${h.rival}</div>` : ''}
               </div>`).join('')}</div>`;
       } else {
+        const rarityColor = { 1: '#a1a1aa', 2: '#CD7F32', 3: '#C0C0C0', 4: '#60A5FA', 5: '#F5D76E' };
+        const iconSize = { 1: '18px', 2: '22px', 3: '26px', 4: '30px', 5: '36px' };
         body = `
           <p class="text-[11px] text-zinc-500 mb-3">${earnedN}/${trophies.length} trophies.</p>
-          <div class="space-y-1.5">
-            ${trophies.map(t => `
-              <div class="flex items-center gap-3 bg-zinc-800 px-3 py-2.5 ${t.earned ? '' : 'opacity-45'}">
-                <span class="text-lg shrink-0">${t.earned ? '🏆' : '🔒'}</span>
+          <div class="grid grid-cols-2 gap-1.5">
+            ${trophies.map(t => {
+              const col = rarityColor[t.rarity] || '#a1a1aa';
+              return `
+              <div class="flex items-center gap-2.5 bg-zinc-800 px-2.5 py-2.5" style="${t.earned ? `border-left:2px solid ${col}` : 'border-left:2px solid #3f3f46'}">
+                <span class="shrink-0 leading-none" style="font-size:${iconSize[t.rarity] || '18px'};${t.earned ? '' : 'filter:grayscale(1);opacity:0.4'}">${t.icon || '🏁'}</span>
                 <div class="min-w-0">
-                  <div class="text-xs font-display tracking-wide ${t.earned ? 'text-[#F5D76E]' : 'text-zinc-300'}">${t.label}</div>
-                  <div class="text-[11px] text-zinc-400">${t.desc}</div>
+                  <div class="text-[11px] font-display tracking-wide leading-tight" style="color:${t.earned ? col : '#71717a'}">${t.label}</div>
+                  <div class="text-[10px] leading-tight mt-0.5 ${t.earned ? 'text-zinc-400' : 'text-zinc-600'}">${t.desc}</div>
                 </div>
-              </div>`).join('')}
+              </div>`;
+            }).join('')}
           </div>`;
       }
       return `
