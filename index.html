@@ -4305,7 +4305,7 @@
       return `
         <article id="race-${race.n}" class="race-card bg-zinc-800 p-4 ${resultCls} fade-in">
           ${trackOutlineImg(race.n)}
-          <div class="race-card-head flex justify-between items-start gap-3 mb-3">
+          <div class="race-card-head flex justify-between items-start gap-1.5 mb-3">
             <div class="min-w-0">
               <div class="font-display text-sm text-white tracking-wide tabular-nums">R${String(race.n).padStart(2, '0')} / 24${phaseLab ? ` <span class="font-normal text-[12px]" style="color:${phaseColor}">· ${phaseLab}</span>` : ''}${race.isSprint ? ' <span class="font-normal text-[12px] text-amber-400">· SPRINT</span>' : ''}</div>
               <div class="font-display text-lg text-white leading-tight mt-0.5 flex items-center gap-0">
@@ -4317,18 +4317,18 @@
               ${!race.result && state.phase === 'season' ? `<div class="font-display text-xs tracking-widest ${estimateWin(race) >= 0.85 ? 'text-emerald-400' : estimateWin(race) >= 0.72 ? 'text-amber-400' : 'text-f1-red'}">${Math.round(estimateWin(race) * 100)}%</div><div class="text-[10px] text-zinc-600 uppercase tracking-wider">Win est</div>` : ''}
               ${race.result === 'win' ? '<div class="font-display text-emerald-400 text-xs tracking-widest">WIN</div>' : ''}
               ${race.result === 'loss' ? `<div class="font-display text-f1-red text-xs tracking-widest">LOSS${race.wonBy === 'rival' && state.rival ? `</div><div class="text-[10px] uppercase tracking-wider" style="color:${state.rival.color}">${state.rival.driver.split(' ').slice(-1)[0]} won` : ''}</div>` : ''}
-              ${race.result && race.margin !== -99 ? `<div class="text-[11px] text-zinc-500">${race.result === 'win' ? 'Won by ' : 'Behind '}${Math.abs(race.margin).toFixed(1)}s</div>` : ''}
+              ${race.result && race.margin !== -99 ? `<div class="text-[11px] text-zinc-500 whitespace-nowrap">${race.margin > 0 ? '+' : '−'}${Math.abs(race.margin).toFixed(1)}s</div>` : ''}
               ${race.margin === -99 ? '<div class="text-[11px] text-zinc-500">DNF</div>' : ''}
             </div>
           </div>
 
-          <div class="flex flex-wrap gap-x-2.5 gap-y-1 text-[11px] mb-2 items-center">
+          <div class="flex flex-wrap gap-x-1.5 gap-y-1 text-[11px] mb-2 items-center">
             <span class="inline-flex items-center text-sky-400">
               ${weatherIconSvg(weatherKindForRace(race))}${race.airTemp}°C · Track ${race.trackTemp}°C · Rain ${race.predRain}%${race.actualRain != null ? ` → ${race.actualRain}%` : ''}
             </span>
             <span class="${wear.cls}">Wear ${wear.text}</span>
             <span class="text-amber-500/90">SC ${race.sc}%</span>
-            <span class="inline-flex items-center gap-0.5 text-zinc-400">${ICON_CLOCK}${race.start} local</span>
+            <span class="inline-flex items-center gap-0.5 text-zinc-400 whitespace-nowrap">${ICON_CLOCK}${race.start}</span>
           </div>
           ${state.flashReason && state.flashReason.n === race.n ? `
             <div class="mb-2 px-2.5 py-2 border border-amber-500/50 bg-amber-500/10 text-[12px] text-amber-300 fade-in">
