@@ -43,11 +43,14 @@ window.SITE_CONFIG = {
 
   ads: {
     enabled: true,
-    demo: true, // set false only when AdSense (incl. H5 Games Ads) is approved for the domain
+    demo: false, // live ads (H5 Games Ads); no demo placeholder boxes
     freeEraSpins: 3,
-    bannerOnSetup: true,
-    bannerOnSeason: true,
-    bannerOnResult: false, // keep the result/share screen clean
+    // Display banner OFF for now — a static banner on a thin SPA screen is what tripped
+    // the "ads on screens without content" policy. Rely on H5 Games Ads (game-native).
+    // Re-enable bannerOnSeason after passing review if desired (needs slots.banner set).
+    bannerOnSetup: false,
+    bannerOnSeason: false,
+    bannerOnResult: false,
     interstitialOnSeasonComplete: true,
     rewardedEraRespin: true,
     rewardedShareClean: true,
