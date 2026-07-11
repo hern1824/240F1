@@ -583,7 +583,103 @@
 </head>
 <body class="text-zinc-200 min-h-screen">
   <div id="app" class="max-w-md mx-auto px-4 py-6 pb-28"></div>
+
+  <!-- Standing site content (always in the DOM, crawlable): About + How to Play + strategy. -->
+  <section id="about" class="max-w-2xl mx-auto px-4 pt-6 pb-4 text-zinc-300 leading-relaxed">
+    <div class="border-t border-zinc-800 pt-8">
+      <h2 class="font-display text-xl text-white tracking-wide mb-3">About 24-0: Perfect Season</h2>
+      <p class="text-sm mb-3">
+        <strong class="text-white">24-0: Perfect Season</strong> is a free browser strategy game about one impossible goal:
+        winning all 24 rounds of a motorsport season without a single defeat. You take charge of a constructor across a
+        full campaign, build the package, draft the driver line-up, and then live or die by the calls you make on race
+        weekends. A flawless 24-0 season is deliberately rare. Most runs end with a handful of losses, and that is the
+        point, the tension between a dominant car and the variance of 24 races is where the game lives.
+      </p>
+      <p class="text-sm mb-3">
+        The game recreates the texture of a real season without copying any of it: circuit archetypes (power tracks,
+        technical tracks, street circuits, high-wear deserts), changing weather, safety-car risk, tyre wear, and a
+        development curve that shifts your strength across the year. Every era uses the same rules, the same 24-race
+        calendar, and the same field, so a perfect season is always earned, never handed to you.
+      </p>
+      <p class="text-xs text-zinc-500 mb-6">
+        This is an unofficial, non-commercial fan game. It is not affiliated with, endorsed by, or associated with
+        Formula 1, the FIA, or any team, driver, or championship. All team and driver references are used only as
+        historical archetypes for a fantasy simulation.
+      </p>
+
+      <h2 class="font-display text-xl text-white tracking-wide mb-3">How to Play</h2>
+      <ol class="text-sm space-y-3 list-decimal pl-5 mb-6">
+        <li>
+          <strong class="text-white">Spin an era.</strong> Each era is a constructor package with its own bias toward
+          Power, Aero, Reliability, and Strategy, plus a tier (God, Strong, or Underdog) that sets how realistic a
+          perfect season is. Re-spin until you get a package you want to build around.
+        </li>
+        <li>
+          <strong class="text-white">Draft your line-up.</strong> Pick two drivers and a team principal. Driver rating,
+          consistency, and wet-weather skill all feed your pace and your risk in the rain. The principal adds a bonus to
+          one or two departments.
+        </li>
+        <li>
+          <strong class="text-white">Allocate the budget.</strong> Split 100 points across Power Unit, Aero / Chassis,
+          Reliability, and Strategy. Weighting the budget toward your era's strengths raises your win odds, defaults are
+          a neutral baseline, not the optimal build.
+        </li>
+        <li>
+          <strong class="text-white">Spin the season.</strong> One spin locks the calendar's shape: the arc of your
+          development, tyre wear, safety-car frequency, weather, travel load, and regulation scrutiny. This is the hand
+          you build against.
+        </li>
+        <li>
+          <strong class="text-white">Set operations.</strong> Choose a season-long tyre bias (Push, Neutral, Manage),
+          a development cut-off, a lobbying stance, and a sponsor focus. These tilt your margins but never buy free pace.
+        </li>
+        <li>
+          <strong class="text-white">Race the 24 rounds.</strong> Every weekend you choose the calls yourself, nothing is
+          pre-selected: tyre plan, number of stops, engine mode, pit window, qualifying approach, and, when rain is
+          likely, the wet-weather call and which driver leads. Read the conditions on each card (wear, safety-car risk,
+          rain probability, start time) and pick accordingly.
+        </li>
+        <li>
+          <strong class="text-white">Advance at your pace.</strong> "Race" runs the next round, "To flashpoint"
+          fast-forwards routine races and stops at genuine decision points so you can make the tough calls, and
+          "Sim rest" resolves everything left.
+        </li>
+        <li>
+          <strong class="text-white">Use redos wisely.</strong> You get three taxed redos per season. Each redo faces a
+          harder field, so save them for narrow losses and retirements, not structural beatings.
+        </li>
+        <li>
+          <strong class="text-white">Share and compete.</strong> Finish the season for a debrief and a shareable result
+          card, submit your record to the leaderboard, collect trophies in the Garage, or take on the Daily Challenge,
+          one fixed hand that everyone plays on the same day.
+        </li>
+      </ol>
+
+      <h2 class="font-display text-xl text-white tracking-wide mb-3">Strategy tips</h2>
+      <ul class="text-sm space-y-2 list-disc pl-5 mb-6">
+        <li><strong class="text-white">Match spend to the track types.</strong> Power circuits reward engine budget; technical circuits reward aero and driver skill.</li>
+        <li><strong class="text-white">Respect tyre wear.</strong> High-wear, hot races (deserts, abrasive asphalt) punish an aggressive Push plan, lean on Manage.</li>
+        <li><strong class="text-white">Watch the rain percentage.</strong> A strong wet-weather driver and the right crossover call can turn a likely loss into a win.</li>
+        <li><strong class="text-white">Fund reliability.</strong> A single retirement ends a perfect season, so a fragile package needs Reliability first.</li>
+        <li><strong class="text-white">Don't over-attack.</strong> Attack engine mode adds pace but raises the risk of failure, use it only when your reliability can cover it.</li>
+      </ul>
+
+      <h2 class="font-display text-xl text-white tracking-wide mb-3">Tiers and difficulty</h2>
+      <p class="text-sm mb-3">
+        <strong style="color:#D4AF37">God tier</strong> packages are dominant, a perfect season is rare but plausible with
+        sharp play. <strong style="color:#C0C0C0">Strong</strong> packages win plenty of races but a clean sweep is hard.
+        <strong style="color:#CD7F32">Underdog</strong> packages make 24-0 folklore-level rare, the same rules, a much lower
+        baseline, and a run that needs knowledge, decisiveness, and luck all at once.
+      </p>
+      <p class="text-xs text-zinc-500">
+        Free to play. No download, no account required. Works on desktop and mobile.
+      </p>
+    </div>
+  </section>
+
   <footer id="site-footer" class="max-w-md mx-auto px-4 pb-8 pt-2 text-center text-[10px] text-zinc-600 space-x-2">
+    <a href="#about" class="hover:text-zinc-400 underline-offset-2 hover:underline">How to Play</a>
+    <span>·</span>
     <a href="privacy.html" class="hover:text-zinc-400 underline-offset-2 hover:underline">Privacy</a>
     <span>·</span>
     <a href="terms.html" class="hover:text-zinc-400 underline-offset-2 hover:underline">Terms</a>
