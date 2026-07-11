@@ -19,9 +19,16 @@
     gtag('set', 'ads_data_redaction', true);
     gtag('set', 'url_passthrough', true);
   </script>
-  <!-- AdSense + auto-loads Google certified CMP message when published in AdSense → Privacy & messaging -->
+  <!-- AdSense loader DISABLED pending AdSense re-review.
+       Loading adsbygoogle.js with the publisher ID is what lets Google Auto Ads inject
+       ads on thin/transition screens, which triggered the "Google-served ads on screens
+       without publisher-content" policy violation. Kept out until the site is approved.
+       To restore after approval: uncomment the script below AND set ads.enabled:true in config.js
+       (and turn Auto ads OFF in the AdSense dashboard).
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7522159512030116"
        crossorigin="anonymous"></script>
+  -->
+  <script>window.adsbygoogle = window.adsbygoogle || [];</script>
   <title>24-0: Perfect Season</title>
   <meta name="description" content="Spin a constructor era, draft the line-up, hunt a perfect 24–0 season. Unofficial motorsport fan game." />
   <meta name="theme-color" content="#09090b" />

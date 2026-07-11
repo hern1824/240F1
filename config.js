@@ -42,7 +42,12 @@ window.SITE_CONFIG = {
   },
 
   ads: {
-    enabled: true,
+    // DISABLED pending AdSense re-review. enabled:false → zero Google-served ads
+    // (no banner, no interstitial, no rewarded). Combined with the adsbygoogle.js loader
+    // being commented out in index.html and Auto ads turned OFF in the AdSense dashboard,
+    // this clears the "Google-served ads on screens without publisher-content" violation.
+    // After approval, set enabled:true and re-enable the loader in index.html.
+    enabled: false,
     demo: false, // live ads (H5 Games Ads); no demo placeholder boxes
     freeEraSpins: 3,
     // Display banner OFF for now — a static banner on a thin SPA screen is what tripped
