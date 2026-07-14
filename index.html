@@ -19,16 +19,11 @@
     gtag('set', 'ads_data_redaction', true);
     gtag('set', 'url_passthrough', true);
   </script>
-  <!-- AdSense loader DISABLED pending AdSense re-review.
-       Loading adsbygoogle.js with the publisher ID is what lets Google Auto Ads inject
-       ads on thin/transition screens, which triggered the "Google-served ads on screens
-       without publisher-content" policy violation. Kept out until the site is approved.
-       To restore after approval: uncomment the script below AND set ads.enabled:true in config.js
-       (and turn Auto ads OFF in the AdSense dashboard).
+  <!-- AdSense loader — required on the site so Google can verify + review it for approval.
+       No ad units render until the account is approved; own placements stay off via config.js
+       (ads.enabled:false) during review to avoid ads on thin/transition screens. -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7522159512030116"
        crossorigin="anonymous"></script>
-  -->
-  <script>window.adsbygoogle = window.adsbygoogle || [];</script>
   <title>24-0: Perfect Season</title>
   <meta name="description" content="Spin a constructor era, draft the line-up, hunt a perfect 24–0 season. Unofficial motorsport fan game." />
   <meta name="theme-color" content="#09090b" />
@@ -671,8 +666,43 @@
         <strong style="color:#CD7F32">Underdog</strong> packages make 24-0 folklore-level rare, the same rules, a much lower
         baseline, and a run that needs knowledge, decisiveness, and luck all at once.
       </p>
-      <p class="text-xs text-zinc-500">
+      <p class="text-xs text-zinc-500 mb-6">
         Free to play. No download, no account required. Works on desktop and mobile.
+      </p>
+
+      <h2 class="font-display text-xl text-white tracking-wide mb-3">Frequently asked questions</h2>
+      <div class="text-sm space-y-4 mb-6">
+        <div>
+          <h3 class="text-white font-medium">Is this an official Formula 1 game?</h3>
+          <p class="text-zinc-400">No. It is an independent, unofficial fan project and is not affiliated with or endorsed by Formula 1, the FIA, or any team or driver. Team and driver names are used only as historical archetypes for a fantasy simulation.</p>
+        </div>
+        <div>
+          <h3 class="text-white font-medium">How hard is it to actually go 24-0?</h3>
+          <p class="text-zinc-400">Very. Even a dominant package sits around a 65-90% win chance per race, and a single retirement ends the run. Across 24 rounds, variance eats most attempts, so a genuine perfect season is meant to be a rare, screenshot-worthy result rather than an expected one.</p>
+        </div>
+        <div>
+          <h3 class="text-white font-medium">What is a redo, and why is it taxed?</h3>
+          <p class="text-zinc-400">A redo lets you re-run a single weekend after a loss. You get three per season, and each one faces a progressively harder field, so redos are best saved for narrow defeats and mechanical retirements rather than structural beatings.</p>
+        </div>
+        <div>
+          <h3 class="text-white font-medium">What is the Daily Challenge?</h3>
+          <p class="text-zinc-400">A single fixed setup, the same era, calendar, and conditions, that everyone plays on a given day. You get one attempt, and results land on a shared daily leaderboard that resets at midnight UTC.</p>
+        </div>
+        <div>
+          <h3 class="text-white font-medium">Does the game save my progress?</h3>
+          <p class="text-zinc-400">Yes. An in-progress season is stored locally in your browser, so a refresh will not lose your run. Completed seasons are kept in the Garage, along with your trophies and best record per era.</p>
+        </div>
+        <div>
+          <h3 class="text-white font-medium">Do I need to pay or sign up?</h3>
+          <p class="text-zinc-400">No. The game is free and requires no account or download. Submitting to the online leaderboard is optional and only stores a nickname and your season record.</p>
+        </div>
+      </div>
+
+      <h2 class="font-display text-xl text-white tracking-wide mb-3">Contact</h2>
+      <p class="text-sm text-zinc-400 mb-2">
+        Questions, bug reports, or feedback about 24-0: Perfect Season are welcome. See the
+        <a href="privacy.html" class="text-zinc-300 underline underline-offset-2 hover:text-white">Privacy Policy</a> and
+        <a href="terms.html" class="text-zinc-300 underline underline-offset-2 hover:text-white">Terms of Use</a> for how the game handles data and the conditions of play.
       </p>
     </div>
   </section>
